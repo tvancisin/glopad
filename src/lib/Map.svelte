@@ -6,6 +6,7 @@
 
   let height;
   let map;
+  let isOverlayVisible = true; // Controls the visibility of the overlay
 
   function adjustMapForWindowSize() {
     let centerCoordinates = map.getCenter();
@@ -32,6 +33,10 @@
     }
   }
 
+  function removeOverlay() {
+    isOverlayVisible = false;
+  }
+
   onMount(() => {
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqMTJpcXF3dHJhdTVsNyJ9.P_6mX_qbcbxLDS1o_SxpFg";
@@ -51,6 +56,11 @@
 
 <div class="map-container" bind:clientHeight={height}>
   <div id="map" bind:this={map}></div>
+  {#if isOverlayVisible}
+    <div class="overlay">
+      <button class="remove-overlay" on:click={removeOverlay}>Click to Interact</button>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -68,10 +78,30 @@
     height: 100%;
   }
 
-  div {
+  .overlay {
     position: absolute;
     top: 0;
-    bottom: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+
+  .remove-overlay {
+    background-color: #252529;
+    color: white; 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .remove-overlay:hover {
+    background-color: #8f2121;
   }
 </style>
