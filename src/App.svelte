@@ -1,30 +1,13 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { getGeo } from "./utils";
   import Map from "./lib/Map.svelte";
+  import { images, sections, scrollToSection } from "./utils";
 
-  let width, height;
+  let width;
   let all_polygons;
-  let images = [
-    "./img/c1.png",
-    "./img/c2.png",
-    "./img/c3.png",
-    "./img/c4.png",
-    "./img/c5.png",
-    "./img/m1.png",
-    "./img/m2.png",
-    "./img/m4.png",
-    "./img/m5.png",
-  ];
-
-  let imageRow;
-
-  const scrollGallery = (direction) => {
-    if (imageRow) {
-      const scrollAmount = imageRow.offsetWidth / 5; // Scroll width of one image
-      imageRow.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
-    }
-  };
+  let showScrollToTop = false; // Visibility of the scroll-to-top button
+  let isMenuOpen = false; // Toggle menu visibility
 
   // Load GEOJSON
   const json_path = "/data/country_polygons.json";
@@ -32,24 +15,14 @@
     all_polygons = geo;
   });
 
-  // Scroll to a specific section
-  const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+  // RESEARCH GALLERY
+  let imageRow;
+  const scrollGallery = (direction) => {
+    if (imageRow) {
+      const scrollAmount = imageRow.offsetWidth / 5; // Scroll width of one image
+      imageRow.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
     }
   };
-
-  // Dropdown options
-  const sections = [
-    { id: "home", name: "Home" },
-    { id: "research", name: "Research" },
-    { id: "people", name: "People" },
-    { id: "map", name: "Map" },
-  ];
-
-  let isMenuOpen = false; // Toggle menu visibility
-  let showScrollToTop = false; // Visibility of the scroll-to-top button
 
   // Scroll to top function
   const scrollToTop = () => {
@@ -61,11 +34,11 @@
     showScrollToTop = window.scrollY > 300; // Trigger button visibility
   };
 
-  // Attach scroll listener on mount
+  // INIT
   onMount(() => {
     // Disable automatic scroll restoration
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
     }
 
     // Scroll to top on page load
@@ -158,7 +131,7 @@
     style="height: calc(var(--vh, 1vh) * 100);"
   >
     <h3
-      style="width: 90px; height: 25px; z-index: 5; position: absolute; background-color: red; border-radius: 2px"
+      style="width: 90px; height: 25px; z-index: 400; position: absolute; background-color: red; border-radius: 2px"
     >
       Map
     </h3>
