@@ -63,6 +63,15 @@
 
   // Attach scroll listener on mount
   onMount(() => {
+    // Disable automatic scroll restoration
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    // Scroll to top on page load
+    window.scrollTo({ top: 0, behavior: "auto" });
+
+    // Add event listener for scrolling to top
     window.addEventListener("scroll", handleScroll);
     imageRow = document.querySelector(".image-row");
 
@@ -77,7 +86,12 @@
     <img
       id="intro_logo_usa"
       alt="University of St Andrews Logo"
-      src="usa_logo.png"
+      src="uosa.png"
+    />
+    <img
+      id="intro_logo_uoe"
+      alt="University of St Andrews Logo"
+      src="uoe_white.png"
     />
 
     <!-- Navigation Menu -->
@@ -99,7 +113,7 @@
       {/if}
     </div>
 
-    <h1>Global Fragmentation Initiative</h1>
+    <h1>Global Fragmentation</h1>
     <h3>
       Understanding shifts in the geopolitical context of peace and transition
       processes
@@ -109,37 +123,6 @@
     <h3 style="width: 90px; background-color: red; border-radius: 2px">
       Research
     </h3>
-    <div id="research_info">
-      <div class="column" style="font-weight: 300;">
-        <p>
-          The PeaceRep Global Fragmentation project looks at fragmentations in
-          the global order and how these impact peace and transition
-          settlements. It explores why, when, and how different third-party
-          actors – state, intergovernmental, and non-governmental – intervene in
-          conflicts, and how they see themselves contributing to reduction of
-          conflict and risks of conflict relapse. It also asks how local actors
-          are navigating this multiplicity of mediators and peacebuilders and
-          how this is shaping conflict outcomes and post-conflict governance. In
-          an era of global fragmentation and deep uncertainty, the project
-          systematically and critically assesses the growth and diversification
-          of global and regional responses to contemporary conflicts.
-        </p>
-      </div>
-      <div class="column" style="font-weight: 300;">
-        <p>
-          There is an urgent need to understand how peacemaking practices built
-          up over the last three decades are changing in terms of which actors
-          intervene in what we might have conceived of as the peacebuilding
-          domain, in what constellations, and with what tools. This allows us to
-          better understand the possible constraints and entry points for
-          supporting conflict prevention and conflict management. The project is
-          producing dedicated case and trends studies as part of the PeaceRep
-          Global Transitions series (see below) and is developing two
-          complementary datasets: Third Parties in Peace Agreements (PAA-X)
-          dataset and Global Peace Actor (GLO-PAD) dataset.
-        </p>
-      </div>
-    </div>
     <div class="gallery-container">
       <button
         class="arrow left"
@@ -198,19 +181,57 @@
 
   #intro_logo_usa {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    height: 70px;
+    top: 2px;
+    right: 5px;
+    height: 40px;
+  }
+
+  #intro_logo_uoe {
+    position: absolute;
+    top: 50px;
+    right: 5px;
+    height: 40px;
+  }
+
+  @media only screen and (max-width: 1450px) {
+    #intro_logo_usa,
+    #intro_logo_uoe {
+      height: 40px;
+    }
+    #intro_logo_uoe {
+      top: 50px;
+    }
+  }
+
+  @media only screen and (max-width: 1200px) {
+    #intro_logo_usa,
+    #intro_logo_uoe {
+      height: 30px;
+    }
+    #intro_logo_uoe {
+      top: 40px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    #intro_logo_usa,
+    #intro_logo_uoe {
+      height: 20px;
+    }
+    #intro_logo_uoe {
+      top: 25px;
+    }
   }
 
   h1 {
     color: white;
     font-weight: 400;
+    margin-bottom: 5px;
   }
 
   h3 {
     color: white;
-    font-weight: 400;
+    font-weight: 300;
     padding: 10px;
     margin: 0px;
   }
@@ -218,7 +239,7 @@
   #home {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: 300px;
     align-content: center;
     text-align: center;
     background-color: black;
@@ -340,8 +361,10 @@
     justify-content: space-between;
     overflow: hidden;
     width: 100%;
-    height: 400px;
+    height: 70vh;
     background-color: #252529;
+    padding-bottom: 80px;
+    padding-top: 50px;
   }
 
   .image-row {
@@ -351,7 +374,7 @@
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
     width: 100%;
-    height: 300px;
+    height: 100%;
   }
 
   .image-row::-webkit-scrollbar {
