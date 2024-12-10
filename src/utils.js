@@ -13,7 +13,6 @@ export let images = [
     "./img/m1.png",
     "./img/m2.png",
     "./img/m4.png",
-    "./img/m5.png",
 ];
 
 // Dropdown options

@@ -92,8 +92,10 @@
       processes
     </h3>
   </div>
+  <!-- <hr /> -->
+
   <div id="research">
-    <h3 style="width: 90px; background-color: red; border-radius: 2px">
+    <h3 style="width: 90px; background-color: #003645; border-radius: 2px">
       Research
     </h3>
     <div class="gallery-container">
@@ -120,18 +122,25 @@
       </button>
     </div>
   </div>
+  <!-- <hr /> -->
   <div id="people">
-    <h3 style="width: 70px; background-color: red; border-radius: 2px">
+    <h3 style="width: 70px; background-color: #001C23; border-radius: 2px">
       People
     </h3>
   </div>
+  <!-- <hr /> -->
   <main
     id="map"
     bind:clientWidth={width}
     style="height: calc(var(--vh, 1vh) * 100);"
   >
     <h3
-      style="width: 90px; height: 25px; z-index: 400; position: absolute; background-color: red; border-radius: 2px"
+      style=" 
+      z-index: 400; 
+      position: absolute; 
+      background-color: #003645; 
+      text-align: left; 
+      border-radius: 2px"
     >
       Map
     </h3>
@@ -198,13 +207,13 @@
 
   h1 {
     color: white;
-    font-weight: 400;
+    font-weight: 800;
     margin-bottom: 5px;
   }
 
   h3 {
     color: white;
-    font-weight: 300;
+    font-weight: 500;
     padding: 10px;
     margin: 0px;
   }
@@ -215,7 +224,7 @@
     height: 300px;
     align-content: center;
     text-align: center;
-    background-color: black;
+    background-color: #001c23;
   }
 
   #research {
@@ -223,12 +232,12 @@
     width: 100%;
     height: auto;
     margin: 0px;
-    background-color: #252529;
+    background-color: #003645;
   }
 
   #people {
     position: relative;
-    background-color: black;
+    background-color: #001c23;
     width: 100%;
     height: 90vh;
   }
@@ -335,7 +344,7 @@
     overflow: hidden;
     width: 100%;
     height: 70vh;
-    background-color: #252529;
+    background-color: #003645;
     padding-bottom: 80px;
     padding-top: 50px;
   }
@@ -365,12 +374,12 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0, 0, 0);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     font-size: 18px;
     display: flex;
     align-items: center;
