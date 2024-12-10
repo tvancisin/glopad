@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import { getGeo } from "./utils";
   import Map from "./lib/Map.svelte";
-  import { images, sections, scrollToSection } from "./utils";
+  import { images, sections, scrollToSection, images_ppl } from "./utils";
 
   let width;
   let all_polygons;
@@ -16,11 +16,26 @@
   });
 
   // RESEARCH GALLERY
-  let imageRow;
-  const scrollGallery = (direction) => {
-    if (imageRow) {
-      const scrollAmount = imageRow.offsetWidth / 5; // Scroll width of one image
-      imageRow.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+  let imageRowResearch;
+  const scrollGalleryResearch = (direction) => {
+    if (imageRowResearch) {
+      const scrollAmount = imageRowResearch.offsetWidth / 5; // Scroll width of one image
+      imageRowResearch.scrollBy({
+        left: direction * scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // PEOPLE GALLERY
+  let imageRowPeople;
+  const scrollGalleryPeople = (direction) => {
+    if (imageRowPeople) {
+      const scrollAmount = imageRowPeople.offsetWidth / 5; // Scroll width of one image
+      imageRowPeople.scrollBy({
+        left: direction * scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -46,7 +61,8 @@
 
     // Add event listener for scrolling to top
     window.addEventListener("scroll", handleScroll);
-    imageRow = document.querySelector(".image-row");
+    imageRowResearch = document.querySelector(".image-row-research");
+    imageRowPeople = document.querySelector(".image-row-people");
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -95,27 +111,28 @@
   <!-- <hr /> -->
 
   <div id="research">
-    <h3 style="width: 90px; background-color: #003645; border-radius: 2px">
-      Research
-    </h3>
-    <div class="gallery-container">
+    <h3 style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;">Research</h3>
+    <div class="gallery-container-research">
       <button
         class="arrow left"
         aria-label="Scroll left"
-        on:click={() => scrollGallery(-1)}
+        on:click={() => scrollGalleryResearch(-1)}
       >
         <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
         ></i>
       </button>
-      <div class="image-row">
-        {#each images as image (image)}
-          <img src={image} alt="Research image" />
+      <div class="image-row-research">
+        {#each images as { src, name } (src)}
+          <div class="image-container">
+            <img {src} alt={name} />
+            <p>{name}</p>
+          </div>
         {/each}
       </div>
       <button
         class="arrow right"
         aria-label="Scroll right"
-        on:click={() => scrollGallery(1)}
+        on:click={() => scrollGalleryResearch(1)}
       >
         <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
         ></i>
@@ -124,9 +141,37 @@
   </div>
   <!-- <hr /> -->
   <div id="people">
-    <h3 style="width: 70px; background-color: #001C23; border-radius: 2px">
+    <h3
+      style="width: 100px;text-align: left; font-size:20px; border-radius: 2px"
+    >
       People
     </h3>
+    <div class="gallery-container-people">
+      <button
+        class="arrow left"
+        aria-label="Scroll left"
+        on:click={() => scrollGalleryPeople(-1)}
+      >
+        <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
+        ></i>
+      </button>
+      <div class="image-row-people">
+        {#each images_ppl as { src, name } (src)}
+          <div class="image-container">
+            <img {src} alt={name} />
+            <p>{name}</p>
+          </div>
+        {/each}
+      </div>
+      <button
+        class="arrow right"
+        aria-label="Scroll right"
+        on:click={() => scrollGalleryPeople(1)}
+      >
+        <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
+        ></i>
+      </button>
+    </div>
   </div>
   <!-- <hr /> -->
   <main
@@ -135,11 +180,12 @@
     style="height: calc(var(--vh, 1vh) * 100);"
   >
     <h3
-      style=" 
+      style="
       z-index: 400; 
       position: absolute; 
-      background-color: #003645; 
+      width: 100px;
       text-align: left; 
+      font-size: 20px;
       border-radius: 2px"
     >
       Map
@@ -336,7 +382,8 @@
     }
   }
 
-  .gallery-container {
+  .gallery-container-research,
+  .gallery-container-people {
     position: relative;
     display: flex;
     align-items: center;
@@ -345,11 +392,15 @@
     width: 100%;
     height: 70vh;
     background-color: #003645;
-    padding-bottom: 80px;
-    padding-top: 50px;
+    margin-top: 50px;
   }
 
-  .image-row {
+  .gallery-container-people {
+    background-color: #001c23;
+  }
+
+  .image-row-research,
+  .image-row-people {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
@@ -357,17 +408,35 @@
     -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
     width: 100%;
     height: 100%;
+    align-items: center; /* Center items vertically */
   }
 
-  .image-row::-webkit-scrollbar {
+  .image-row-research::-webkit-scrollbar,
+  .image-row-people::-webkit-scrollbar {
     display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
   }
 
-  .image-row img {
-    margin: 0 5px;
-    height: 100%;
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center image and text vertically within the container */
+    margin: 0 8px;
+    height: 100%; /* Ensures it takes up the full height of the row */
+  }
+
+  .image-container img {
+    height: 80%;
     object-fit: cover;
     border-radius: 3px;
+  }
+
+  .image-container p {
+    margin: 10px 0 0;
+    font-size: 1rem;
+    color: white;
+    text-align: center;
+    line-height: 1.2;
   }
 
   .arrow {

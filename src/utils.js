@@ -5,15 +5,26 @@ export async function getGeo(url) {
 }
 
 export let images = [
-    "./img/c1.png",
-    "./img/c2.png",
-    "./img/c3.png",
-    "./img/c4.png",
-    "./img/c5.png",
-    "./img/m1.png",
-    "./img/m2.png",
-    "./img/m4.png",
+    { src: "./img/c1.png", name: "" },
+    { src: "./img/c2.png", name: "" },
+    { src: "./img/c3.png", name: "" },
+    { src: "./img/c4.png", name: "" },
+    { src: "./img/c5.png", name: "" },
+    { src: "./img/m1.png", name: "" },
+    { src: "./img/m2.png", name: "" },
+    { src: "./img/m3.png", name: "" },
 ];
+
+export let images_ppl = [
+    { src: "./img/mateja.png", name: "Mateja Peter" },
+    { src: "./img/sanja.png", name: "Sanja Badanjak" },
+    { src: "./img/elisa.png", name: "Elisa D'Amico" },
+    { src: "./img/kasia.png", name: "Kasia Houghton" },
+    { src: "./img/niamh.png", name: "Niamh Henry" },
+    { src: "./img/tom.png", name: "Tomas Vancisin" },
+];
+
+
 
 // Dropdown options
 export const sections = [
