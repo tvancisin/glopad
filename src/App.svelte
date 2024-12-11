@@ -415,6 +415,10 @@
     align-items: center; /* Center items vertically */
   }
 
+  .image-row-people {
+    height: 80%;
+  }
+
   .image-row-research::-webkit-scrollbar,
   .image-row-people::-webkit-scrollbar {
     display: none; /* Hide scrollbar for Chrome, Safari, and Opera */

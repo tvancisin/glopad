@@ -128,10 +128,10 @@
         let clicked_country = e.features[0].properties.ADMIN;
         zoomToCountry(clicked_country);
       });
-    });
 
-    adjustMapForWindowSize();
-    window.addEventListener("resize", adjustMapForWindowSize);
+      adjustMapForWindowSize();
+      window.addEventListener("resize", adjustMapForWindowSize);
+    });
   }
 
   function zoomToCountry(country) {
