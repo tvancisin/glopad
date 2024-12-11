@@ -11,7 +11,6 @@
   let isOverlayVisible = true; // Controls the visibility of the overlay
   let hoveredPolygonId = null;
 
-
   function adjustMapForWindowSize() {
     let centerCoordinates = map.getCenter();
     if (window.innerWidth <= 750) {
@@ -54,7 +53,6 @@
       maxZoom: 5,
       logoPosition: "bottom-right",
     });
-
   });
 
   $: if (all_polygons && map) {
@@ -74,7 +72,6 @@
         source: "countries",
         paint: {
           "fill-color": "#39ae2a",
-          // "fill-opacity": opacity_mapbox_expression, // Initial opacity
           "fill-opacity": 0.7,
         },
         filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
@@ -133,8 +130,8 @@
       });
     });
 
-    window.addEventListener("resize", adjustMapForWindowSize);
     adjustMapForWindowSize();
+    window.addEventListener("resize", adjustMapForWindowSize);
   }
 
   function zoomToCountry(country) {
@@ -175,7 +172,7 @@
   {#if isOverlayVisible}
     <div class="overlay">
       <button class="remove-overlay" on:click={removeOverlay}
-        >Click to Interact</button
+        >Click to Explore</button
       >
     </div>
   {/if}
@@ -210,16 +207,20 @@
   }
 
   .remove-overlay {
-    background-color: #252529;
-    color: white;
-    padding: 10px 20px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.76);
+    font-family: "Montserrat", sans-serif;
+    font-size: 20px;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
   }
 
   .remove-overlay:hover {
+    cursor: pointer;
     background-color: #8f2121;
   }
 </style>
