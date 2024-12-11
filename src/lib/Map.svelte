@@ -100,7 +100,7 @@
         type: "fill",
         source: "countries",
         paint: {
-          "fill-color": "#3DB049",
+          "fill-color": "#39ae2a",
           // "fill-opacity": opacity_mapbox_expression, // Initial opacity
           "fill-opacity": 0.7,
         },

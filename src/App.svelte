@@ -102,16 +102,38 @@
       {/if}
     </div>
 
-    <h1>Global Fragmentation</h1>
+    <h1>GLO-PAD: Global Peace Actor Dataset</h1>
     <h3>
       Understanding shifts in the geopolitical context of peace and transition
       processes
     </h3>
   </div>
   <!-- <hr /> -->
+  <main
+    id="map"
+    bind:clientWidth={width}
+    style="height: calc(var(--vh, 1vh) * 100);"
+  >
+    <h3
+      style="
+      z-index: 400; 
+      position: absolute; 
+      width: 100px;
+      text-align: left; 
+      font-size: 20px;
+      border-radius: 2px"
+    >
+      Explore
+    </h3>
+    <Map {all_polygons} />
+  </main>
 
   <div id="research">
-    <h3 style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;">Research</h3>
+    <h3
+      style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
+    >
+      Research
+    </h3>
     <div class="gallery-container-research">
       <button
         class="arrow left"
@@ -144,7 +166,7 @@
     <h3
       style="width: 100px;text-align: left; font-size:20px; border-radius: 2px"
     >
-      People
+      About
     </h3>
     <div class="gallery-container-people">
       <button
@@ -174,24 +196,6 @@
     </div>
   </div>
   <!-- <hr /> -->
-  <main
-    id="map"
-    bind:clientWidth={width}
-    style="height: calc(var(--vh, 1vh) * 100);"
-  >
-    <h3
-      style="
-      z-index: 400; 
-      position: absolute; 
-      width: 100px;
-      text-align: left; 
-      font-size: 20px;
-      border-radius: 2px"
-    >
-      Map
-    </h3>
-    <Map {all_polygons} />
-  </main>
 
   <!-- Scroll to Top Button -->
   {#if showScrollToTop}
@@ -278,12 +282,12 @@
     width: 100%;
     height: auto;
     margin: 0px;
-    background-color: #003645;
+    background-color: #001c23;
   }
 
   #people {
     position: relative;
-    background-color: #001c23;
+    background-color: #003645;
     width: 100%;
     height: 90vh;
   }
@@ -341,7 +345,7 @@
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background-color: #252529;
+    background-color: #000000;
     color: white;
     border: none;
     border-radius: 50%;
@@ -395,7 +399,7 @@
     margin-top: 50px;
   }
 
-  .gallery-container-people {
+  .gallery-container-research {
     background-color: #001c23;
   }
 
