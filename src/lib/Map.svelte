@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import mapboxgl from "mapbox-gl";
   import turf from "turf";
+  import { countryNames } from "../utils";
 
   export let all_polygons;
 
@@ -10,34 +11,6 @@
   let isOverlayVisible = true; // Controls the visibility of the overlay
   let hoveredPolygonId = null;
 
-  const countryNames = [
-    "Burkina Faso",
-    "Central African Republic",
-    "Democratic Republic of Congo",
-    "Ethiopia",
-    "Libya",
-    "Mali",
-    "Mozambique",
-    "Nigeria",
-    "Somalia",
-    "South Sudan",
-    "Sudan",
-    "Western Sahara",
-    "Colombia",
-    "Haiti",
-    "Afghanistan",
-    "Myanmar",
-    "Pakistan",
-    "Philippines",
-    "Azerbaijan",
-    "Russia",
-    "Ukraine",
-    "Iraq",
-    "Israel",
-    "Syria",
-    "Turkey",
-    "Yemen",
-  ];
 
   function adjustMapForWindowSize() {
     let centerCoordinates = map.getCenter();
@@ -79,9 +52,9 @@
       zoom: 1.5,
       projection: "naturalEarth",
       maxZoom: 5,
+      logoPosition: "bottom-right",
     });
-    window.addEventListener("resize", adjustMapForWindowSize);
-    adjustMapForWindowSize();
+
   });
 
   $: if (all_polygons && map) {
@@ -159,6 +132,9 @@
         zoomToCountry(clicked_country);
       });
     });
+
+    window.addEventListener("resize", adjustMapForWindowSize);
+    adjustMapForWindowSize();
   }
 
   function zoomToCountry(country) {

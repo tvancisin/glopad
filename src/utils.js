@@ -44,3 +44,33 @@ export const scrollToSection = (sectionId) => {
 };
 
 
+export const countryNames = [
+    "Burkina Faso",
+    "Central African Republic",
+    "Democratic Republic of Congo",
+    "Ethiopia",
+    "Libya",
+    "Mali",
+    "Mozambique",
+    "Nigeria",
+    "Somalia",
+    "South Sudan",
+    "Sudan",
+    "Western Sahara",
+    "Colombia",
+    "Haiti",
+    "Afghanistan",
+    "Myanmar",
+    "Pakistan",
+    "Philippines",
+    "Azerbaijan",
+    "Russia",
+    "Ukraine",
+    "Iraq",
+    "Israel",
+    "Syria",
+    "Turkey",
+    "Yemen",
+];
+
+

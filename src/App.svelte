@@ -146,7 +146,7 @@
       <div class="image-row-research">
         {#each images as { src, name } (src)}
           <div class="image-container">
-            <img {src} alt={name} />
+            <img loading="lazy" {src} alt={name} />
             <p>{name}</p>
           </div>
         {/each}
@@ -180,7 +180,7 @@
       <div class="image-row-people">
         {#each images_ppl as { src, name } (src)}
           <div class="image-container">
-            <img {src} alt={name} />
+            <img loading="lazy" {src} alt={name} />
             <p>{name}</p>
           </div>
         {/each}
