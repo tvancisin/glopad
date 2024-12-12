@@ -57,80 +57,82 @@
 
   $: if (all_polygons && map) {
     // Ensure this block runs only after the map has fully loaded
-    map.on("load", () => {
+    map.once("idle", () => {
       //add source
-      map.addSource("countries", {
-        type: "geojson",
-        data: all_polygons,
-        generateId: true, // Ensures all features have unique IDs
-      });
+      if (!map.getSource("countries")) {
+        map.addSource("countries", {
+          type: "geojson",
+          data: all_polygons,
+          generateId: true, // Ensures all features have unique IDs
+        });
 
-      //add fill layer
-      map.addLayer({
-        id: "countries_fill",
-        type: "fill",
-        source: "countries",
-        paint: {
-          "fill-color": "#39ae2a",
-          "fill-opacity": 0.7,
-        },
-        filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
-      });
+        //add fill layer
+        map.addLayer({
+          id: "countries_fill",
+          type: "fill",
+          source: "countries",
+          paint: {
+            "fill-color": "#39ae2a",
+            "fill-opacity": 0.7,
+          },
+          filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
+        });
 
-      map.addLayer({
-        id: "countries_outline",
-        type: "line",
-        source: "countries",
-        layout: {},
-        paint: {
-          "line-color": "black",
-          "line-width": [
-            "case",
-            ["boolean", ["feature-state", "hover"], false],
-            1,
-            0,
-          ],
-        },
-        filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
-      });
+        map.addLayer({
+          id: "countries_outline",
+          type: "line",
+          source: "countries",
+          layout: {},
+          paint: {
+            "line-color": "black",
+            "line-width": [
+              "case",
+              ["boolean", ["feature-state", "hover"], false],
+              1,
+              0,
+            ],
+          },
+          filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
+        });
 
-      // highlight polygon on hover
-      map.on("mousemove", "countries_fill", (e) => {
-        map.getCanvas().style.cursor = "pointer";
-        if (e.features.length > 0) {
+        // highlight polygon on hover
+        map.on("mousemove", "countries_fill", (e) => {
+          map.getCanvas().style.cursor = "pointer";
+          if (e.features.length > 0) {
+            if (hoveredPolygonId !== null) {
+              map.setFeatureState(
+                { source: "countries", id: hoveredPolygonId },
+                { hover: false },
+              );
+            }
+            hoveredPolygonId = e.features[0].id;
+            map.setFeatureState(
+              { source: "countries", id: hoveredPolygonId },
+              { hover: true },
+            );
+          }
+        });
+
+        // on mouse leave, no highlight
+        map.on("mouseleave", "countries_fill", () => {
+          map.getCanvas().style.cursor = "";
           if (hoveredPolygonId !== null) {
             map.setFeatureState(
               { source: "countries", id: hoveredPolygonId },
               { hover: false },
             );
           }
-          hoveredPolygonId = e.features[0].id;
-          map.setFeatureState(
-            { source: "countries", id: hoveredPolygonId },
-            { hover: true },
-          );
-        }
-      });
+          hoveredPolygonId = null;
+        });
 
-      // on mouse leave, no highlight
-      map.on("mouseleave", "countries_fill", () => {
-        map.getCanvas().style.cursor = "";
-        if (hoveredPolygonId !== null) {
-          map.setFeatureState(
-            { source: "countries", id: hoveredPolygonId },
-            { hover: false },
-          );
-        }
-        hoveredPolygonId = null;
-      });
+        map.on("click", "countries_fill", (e) => {
+          let clicked_country = e.features[0].properties.ADMIN;
+          zoomToCountry(clicked_country);
+        });
 
-      map.on("click", "countries_fill", (e) => {
-        let clicked_country = e.features[0].properties.ADMIN;
-        zoomToCountry(clicked_country);
-      });
-
-      adjustMapForWindowSize();
-      window.addEventListener("resize", adjustMapForWindowSize);
+        adjustMapForWindowSize();
+        window.addEventListener("resize", adjustMapForWindowSize);
+      }
     });
   }
 

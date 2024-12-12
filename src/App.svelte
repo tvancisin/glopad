@@ -70,140 +70,146 @@
   });
 </script>
 
-<div id="wrapper" bind:clientWidth={width}>
-  <div id="home">
-    <img
-      id="intro_logo_usa"
-      alt="University of St Andrews Logo"
-      src="uosa.png"
-    />
-    <img
-      id="intro_logo_uoe"
-      alt="University of St Andrews Logo"
-      src="uoe_white.png"
-    />
+{#if all_polygons}
+  <div id="wrapper" bind:clientWidth={width}>
+    <div id="home">
+      <img
+        id="intro_logo_usa"
+        alt="University of St Andrews Logo"
+        src="uosa.png"
+      />
+      <img
+        id="intro_logo_uoe"
+        alt="University of St Andrews Logo"
+        src="uoe_white.png"
+      />
 
-    <!-- Navigation Menu -->
-    <div id="navigation">
-      <i
-        class="fa fa-bars"
-        aria-hidden="true"
-        on:click={() => (isMenuOpen = !isMenuOpen)}
-      ></i>
+      <!-- Navigation Menu -->
+      <div id="navigation">
+        <i
+          class="fa fa-bars"
+          aria-hidden="true"
+          on:click={() => (isMenuOpen = !isMenuOpen)}
+        ></i>
 
-      {#if isMenuOpen}
-        <ul class="dropdown">
-          {#each sections as section}
-            <li on:click={() => scrollToSection(section.id)}>
-              {section.name}
-            </li>
-          {/each}
-        </ul>
-      {/if}
+        {#if isMenuOpen}
+          <ul class="dropdown">
+            {#each sections as section}
+              <li on:click={() => scrollToSection(section.id)}>
+                {section.name}
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+
+      <h1>GLO-PAD: Global Peace Actor Dataset</h1>
+      <h3>
+        Understanding shifts in the geopolitical context of peace and transition
+        processes
+      </h3>
     </div>
-
-    <h1>GLO-PAD: Global Peace Actor Dataset</h1>
-    <h3>
-      Understanding shifts in the geopolitical context of peace and transition
-      processes
-    </h3>
-  </div>
-  <!-- <hr /> -->
-  <main
-    id="map"
-    bind:clientWidth={width}
-    style="height: calc(var(--vh, 1vh) * 100);"
-  >
-    <h3
-      style="
+    <!-- <hr /> -->
+    <main
+      id="map"
+      bind:clientWidth={width}
+      style="height: calc(var(--vh, 1vh) * 100);"
+    >
+      <h3
+        style="
       z-index: 400; 
       position: absolute; 
       width: 100px;
       text-align: left; 
       font-size: 20px;
       border-radius: 2px"
-    >
-      Explore
-    </h3>
-    <Map {all_polygons} />
-  </main>
+      >
+        Explore
+      </h3>
+      <Map {all_polygons} />
+    </main>
 
-  <div id="research">
-    <h3
-      style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
-    >
-      Research
-    </h3>
-    <div class="gallery-container-research">
-      <button
-        class="arrow left"
-        aria-label="Scroll left"
-        on:click={() => scrollGalleryResearch(-1)}
+    <div id="research">
+      <h3
+        style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
       >
-        <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
-        ></i>
-      </button>
-      <div class="image-row-research">
-        {#each images as { src, name } (src)}
-          <div class="image-container">
-            <img loading="lazy" {src} alt={name} />
-            <p>{name}</p>
-          </div>
-        {/each}
+        Research
+      </h3>
+      <div class="gallery-container-research">
+        <button
+          class="arrow left"
+          aria-label="Scroll left"
+          on:click={() => scrollGalleryResearch(-1)}
+        >
+          <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
+          ></i>
+        </button>
+        <div class="image-row-research">
+          {#each images as { src, name } (src)}
+            <div class="image-container">
+              <img loading="lazy" {src} alt={name} />
+              <p>{name}</p>
+            </div>
+          {/each}
+        </div>
+        <button
+          class="arrow right"
+          aria-label="Scroll right"
+          on:click={() => scrollGalleryResearch(1)}
+        >
+          <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
+          ></i>
+        </button>
       </div>
-      <button
-        class="arrow right"
-        aria-label="Scroll right"
-        on:click={() => scrollGalleryResearch(1)}
-      >
-        <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
-        ></i>
-      </button>
     </div>
-  </div>
-  <!-- <hr /> -->
-  <div id="people">
-    <h3
-      style="width: 100px;text-align: left; font-size:20px; border-radius: 2px"
-    >
-      About
-    </h3>
-    <div class="gallery-container-people">
-      <button
-        class="arrow left"
-        aria-label="Scroll left"
-        on:click={() => scrollGalleryPeople(-1)}
+    <!-- <hr /> -->
+    <div id="people">
+      <h3
+        style="width: 100px;text-align: left; font-size:20px; border-radius: 2px"
       >
-        <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
-        ></i>
-      </button>
-      <div class="image-row-people">
-        {#each images_ppl as { src, name } (src)}
-          <div class="image-container">
-            <img loading="lazy" {src} alt={name} />
-            <p>{name}</p>
-          </div>
-        {/each}
+        About
+      </h3>
+      <div class="gallery-container-people">
+        <button
+          class="arrow left"
+          aria-label="Scroll left"
+          on:click={() => scrollGalleryPeople(-1)}
+        >
+          <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
+          ></i>
+        </button>
+        <div class="image-row-people">
+          {#each images_ppl as { src, name } (src)}
+            <div class="image-container">
+              <img loading="lazy" {src} alt={name} />
+              <p>{name}</p>
+            </div>
+          {/each}
+        </div>
+        <button
+          class="arrow right"
+          aria-label="Scroll right"
+          on:click={() => scrollGalleryPeople(1)}
+        >
+          <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
+          ></i>
+        </button>
       </div>
-      <button
-        class="arrow right"
-        aria-label="Scroll right"
-        on:click={() => scrollGalleryPeople(1)}
-      >
-        <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
-        ></i>
-      </button>
     </div>
-  </div>
-  <!-- <hr /> -->
+    <!-- <hr /> -->
 
-  <!-- Scroll to Top Button -->
-  {#if showScrollToTop}
-    <button id="scrollToTop" on:click={scrollToTop} aria-label="Scroll to top">
-      <i class="fa fa-arrow-up" style="color: yellow;" aria-hidden="true"></i>
-    </button>
-  {/if}
-</div>
+    <!-- Scroll to Top Button -->
+    {#if showScrollToTop}
+      <button
+        id="scrollToTop"
+        on:click={scrollToTop}
+        aria-label="Scroll to top"
+      >
+        <i class="fa fa-arrow-up" style="color: yellow;" aria-hidden="true"></i>
+      </button>
+    {/if}
+  </div>
+{/if}
 
 <style>
   /* General styling */
