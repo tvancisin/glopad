@@ -173,14 +173,13 @@
         <div class="column left"><img src="./img/mateja-min.png" /></div>
         <div class="column right">
           <p>
-            Dr Mateja Peter is leading Global Transitions, PeaceRep’s non-ODA
-            work strand. She is also Lecturer in International Relations and
-            Director of the Centre for Global Law and Governance at the
-            University of St Andrews. Mateja’s research seeks to better
-            understand theoretical and policy implications of the shift from
-            short-term to sustained third-party engagements in contemporary
-            interventions; and the subsequent push-back against these
-            developments. Her work employs archival research and fieldwork.
+            <strong>Dr Mateja Peter</strong> is leading Global Transitions, PeaceRep’s
+            non-ODA work strand. She is also Lecturer in International Relations
+            and Director of the Centre for Global Law and Governance at the University
+            of St Andrews. Mateja’s research seeks to better understand theoretical
+            and policy implications of the shift from short-term to sustained third-party
+            engagements in contemporary interventions; and the subsequent push-back
+            against these developments. Her work employs archival research and fieldwork.
           </p>
         </div>
       </div>
@@ -189,14 +188,14 @@
         <div class="column left"><img src="./img/sanja-min.png" /></div>
         <div class="column right">
           <p>
-            Dr Sanja Badanjak is a Chancellor’s Fellow in Global Challenges at
-            the University of Edinburgh School of Law, PeaceRep’s Data Director,
-            and Data Manager for the PA-X Peace Agreements Database and Dataset.
-            Her research interests include the applications of quantitative and
-            text-as-data methods in the study of institutions, elections, and
-            peace processes. She completed her PhD in political science at the
-            University of Wisconsin – Madison, and holds and MA in political
-            science from the Central European University.
+            <strong>Dr Sanja Badanjak</strong> is a Chancellor’s Fellow in Global
+            Challenges at the University of Edinburgh School of Law, PeaceRep’s Data
+            Director, and Data Manager for the PA-X Peace Agreements Database and
+            Dataset. Her research interests include the applications of quantitative
+            and text-as-data methods in the study of institutions, elections, and
+            peace processes. She completed her PhD in political science at the University
+            of Wisconsin – Madison, and holds and MA in political science from the
+            Central European University.
           </p>
         </div>
       </div>
@@ -205,14 +204,13 @@
         <div class="column left"><img src="./img/elisa-min.png" /></div>
         <div class="column right">
           <p>
-            Dr Elisa D’Amico currently serves as a Postdoctoral Research Fellow
-            within the School of International Relations at the University of St
-            Andrews. Her primary focus lies within the Global Fragmentation
+            <strong>Dr Elisa D’Amico</strong> currently serves as a Postdoctoral
+            Research Fellow within the School of International Relations at the University
+            of St Andrews. Her primary focus lies within the Global Fragmentation
             project, where her role is building the mediation event database. In
-            addition to her scholarly contributions in conflict resolution and
-            mediation, her research extends to examining the intricate dynamics
-            of the climate-migration-conflict nexus via rigorous quantitative
-            methodology.
+            addition to her scholarly contributions in conflict resolution and mediation,
+            her research extends to examining the intricate dynamics of the climate-migration-conflict
+            nexus via rigorous quantitative methodology.
           </p>
         </div>
       </div>
@@ -221,15 +219,14 @@
         <div class="column left"><img src="./img/kasia-min.png" /></div>
         <div class="column right">
           <p>
-            Kasia Houghton is an ESRC Doctoral Researcher in International
-            Relations at the University of St Andrews, researching Russian
-            intervention in the Syrian conflict. She is a researcher on the
-            PeaceRep Global Transitions project, working on the third-party
-            mediation database. She is also a tutor of international relations
-            at Durham University. Kasia is a fellow of the Centre for Global Law
-            and Governance, Institute for Middle Eastern, Central Asian, and
-            Caucasus Studies, and Centre for Syrian Studies at the University of
-            St Andrews.
+            <strong>Dr Kasia Houghton</strong> is an ESRC Doctoral Researcher in
+            International Relations at the University of St Andrews, researching
+            Russian intervention in the Syrian conflict. She is a researcher on the
+            PeaceRep Global Transitions project, working on the third-party mediation
+            database. She is also a tutor of international relations at Durham University.
+            Kasia is a fellow of the Centre for Global Law and Governance, Institute
+            for Middle Eastern, Central Asian, and Caucasus Studies, and Centre for
+            Syrian Studies at the University of St Andrews.
           </p>
         </div>
       </div>
@@ -238,7 +235,7 @@
         <div class="column left"><img src="./img/niamh-min.png" /></div>
         <div class="column right">
           <p>
-            Niamh Henry is a Data Engineer with the Peace and Conflict
+            <strong>Niamh Henry</strong> is a Data Engineer with the Peace and Conflict
             Resolution Evidence Programme (PeaceRep) at the University of
             Edinburgh. She works on the organisation and extension of peace and
             conflict data and develops innovative PeaceTech tools to support
@@ -255,7 +252,7 @@
         <div class="column left"><img src="./img/tom-min.png" /></div>
         <div class="column right">
           <p>
-            Dr Tomas Vancisin is an Information Visualization and Digital
+            <strong>Dr Tomas Vancisin</strong> is an Information Visualization and Digital
             Humanities researcher. At PeaceRep, he focuses on visualization of
             transition trajectories, and the mediation space of peace and
             transition processes. Tomas recently finished his PhD in Computer
@@ -366,9 +363,10 @@
 
   #about {
     position: relative;
-    width: 100%;
+    width: 80%;
     display: flex; /* Enable flexbox layout */
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    margin: auto;
   }
 
   .row {
@@ -389,15 +387,13 @@
   .column img {
     height: 350px;
     border-radius: 3px;
-    -webkit-box-shadow: 0 0 5px #22222293;
-    box-shadow: 0 0 5px #22222293;
+    -webkit-box-shadow: 0 0 10px #22222293;
+    box-shadow: 0 0 10px #22222293;
   }
 
   .right p {
     text-align: left;
     line-height: 1.5;
-    margin-right: 40px;
-    margin-left: 40px;
   }
 
   @media (max-width: 768px) {
