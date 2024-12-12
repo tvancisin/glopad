@@ -168,34 +168,107 @@
     >
       About
     </h3>
-    <div class="gallery-container-people">
-      <button
-        class="arrow left"
-        aria-label="Scroll left"
-        on:click={() => scrollGalleryPeople(-1)}
-      >
-        <i class="fa fa-arrow-left" style="color: yellow;" aria-hidden="true"
-        ></i>
-      </button>
-      <div class="image-row-people">
-        {#each images_ppl as { src, name } (src)}
-          <div class="image-container">
-            <img loading="lazy" {src} alt={name} />
-            <p>{name}</p>
-          </div>
-        {/each}
+    <div id="about">
+      <div class="row">
+        <div class="column left"><img src="./img/mateja-min.png" /></div>
+        <div class="column right">
+          <p>
+            Dr Mateja Peter is leading Global Transitions, PeaceRep’s non-ODA
+            work strand. She is also Lecturer in International Relations and
+            Director of the Centre for Global Law and Governance at the
+            University of St Andrews. Mateja’s research seeks to better
+            understand theoretical and policy implications of the shift from
+            short-term to sustained third-party engagements in contemporary
+            interventions; and the subsequent push-back against these
+            developments. Her work employs archival research and fieldwork.
+          </p>
+        </div>
       </div>
-      <button
-        class="arrow right"
-        aria-label="Scroll right"
-        on:click={() => scrollGalleryPeople(1)}
-      >
-        <i class="fa fa-arrow-right" style="color: yellow;" aria-hidden="true"
-        ></i>
-      </button>
+      <hr />
+      <div class="row">
+        <div class="column left"><img src="./img/sanja-min.png" /></div>
+        <div class="column right">
+          <p>
+            Dr Sanja Badanjak is a Chancellor’s Fellow in Global Challenges at
+            the University of Edinburgh School of Law, PeaceRep’s Data Director,
+            and Data Manager for the PA-X Peace Agreements Database and Dataset.
+            Her research interests include the applications of quantitative and
+            text-as-data methods in the study of institutions, elections, and
+            peace processes. She completed her PhD in political science at the
+            University of Wisconsin – Madison, and holds and MA in political
+            science from the Central European University.
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="column left"><img src="./img/elisa-min.png" /></div>
+        <div class="column right">
+          <p>
+            Dr Elisa D’Amico currently serves as a Postdoctoral Research Fellow
+            within the School of International Relations at the University of St
+            Andrews. Her primary focus lies within the Global Fragmentation
+            project, where her role is building the mediation event database. In
+            addition to her scholarly contributions in conflict resolution and
+            mediation, her research extends to examining the intricate dynamics
+            of the climate-migration-conflict nexus via rigorous quantitative
+            methodology.
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="column left"><img src="./img/kasia-min.png" /></div>
+        <div class="column right">
+          <p>
+            Kasia Houghton is an ESRC Doctoral Researcher in International
+            Relations at the University of St Andrews, researching Russian
+            intervention in the Syrian conflict. She is a researcher on the
+            PeaceRep Global Transitions project, working on the third-party
+            mediation database. She is also a tutor of international relations
+            at Durham University. Kasia is a fellow of the Centre for Global Law
+            and Governance, Institute for Middle Eastern, Central Asian, and
+            Caucasus Studies, and Centre for Syrian Studies at the University of
+            St Andrews.
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="column left"><img src="./img/niamh-min.png" /></div>
+        <div class="column right">
+          <p>
+            Niamh Henry is a Data Engineer with the Peace and Conflict
+            Resolution Evidence Programme (PeaceRep) at the University of
+            Edinburgh. She works on the organisation and extension of peace and
+            conflict data and develops innovative PeaceTech tools to support
+            better understanding peace and transition processes. Niamh is a
+            co-creator of the PA-X Tracker, a new Peace And Transition Process
+            Tracker. Niamh holds an MS in Information Science from the
+            University of Amsterdam, and an MA in Digital Media and Information
+            Studies from the University of Glasgow.
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="column left"><img src="./img/tom-min.png" /></div>
+        <div class="column right">
+          <p>
+            Dr Tomas Vancisin is an Information Visualization and Digital
+            Humanities researcher. At PeaceRep, he focuses on visualization of
+            transition trajectories, and the mediation space of peace and
+            transition processes. Tomas recently finished his PhD in Computer
+            Science. He holds an MSc in Computing and Information Technology,
+            and MA(Hons) in Comparative Literature and Russian, all from the
+            University of St Andrews. Before joining PeaceRep, Tomas worked on
+            his PhD, focusing on the visualization of historical textual
+            collections from the University of St Andrews dating back to 1579.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- <hr /> -->
 
   <!-- Scroll to Top Button -->
   {#if showScrollToTop}
@@ -289,7 +362,48 @@
     position: relative;
     background-color: #003645;
     width: 100%;
-    height: 90vh;
+  }
+
+  #about {
+    position: relative;
+    width: 100%;
+    display: flex; /* Enable flexbox layout */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+
+  .row {
+    display: flex; /* Create a flex row for each pair of columns */
+    flex-wrap: wrap; /* Allow wrapping for responsive design */
+    width: 100%; /* Ensure rows take full width */
+    margin-bottom: 30px; /* Add spacing between rows */
+  }
+
+  .column {
+    flex: 1; /* Equal width for left and right columns */
+    padding: 10px; /* Add spacing inside columns */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    text-align: center; /* Center-align content (optional) */
+    color: white; /* Text color for better contrast */
+  }
+
+  .column img {
+    height: 350px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 5px #22222293;
+    box-shadow: 0 0 5px #22222293;
+  }
+
+  .right p {
+    text-align: left;
+    line-height: 1.5;
+    margin-right: 40px;
+    margin-left: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .column {
+      flex-basis: 100%; /* Stack columns vertically on smaller screens */
+    }
   }
 
   main {
@@ -367,27 +481,7 @@
     font-size: 20px;
   }
 
-  #research_info {
-    display: flex;
-    flex-wrap: wrap; /* Allows wrapping for small screens */
-    gap: 20px; /* Adds space between columns */
-    margin-left: 50px;
-    margin-right: 50px;
-  }
-
-  #research_info > * {
-    flex: 1 1 calc(50% - 20px); /* Two columns with equal width */
-    box-sizing: border-box; /* Ensures padding and border don't affect width */
-  }
-
-  @media (max-width: 768px) {
-    #research_info > * {
-      flex: 1 1 100%; /* Full width on small screens */
-    }
-  }
-
-  .gallery-container-research,
-  .gallery-container-people {
+  .gallery-container-research {
     position: relative;
     display: flex;
     align-items: center;
@@ -403,8 +497,7 @@
     background-color: #001c23;
   }
 
-  .image-row-research,
-  .image-row-people {
+  .image-row-research {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
@@ -415,12 +508,7 @@
     align-items: center; /* Center items vertically */
   }
 
-  .image-row-people {
-    height: 80%;
-  }
-
-  .image-row-research::-webkit-scrollbar,
-  .image-row-people::-webkit-scrollbar {
+  .image-row-research::-webkit-scrollbar {
     display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
   }
 
@@ -475,5 +563,13 @@
 
   .arrow:hover {
     background: rgba(0, 0, 0, 0.8);
+  }
+
+  hr {
+    width: 80%;
+    height: 1px;
+    border: 0;
+    border-top: 2px solid #001c23;
+    padding-bottom: 30px;
   }
 </style>

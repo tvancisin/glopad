@@ -5,23 +5,23 @@ export async function getGeo(url) {
 }
 
 export let images = [
-    { src: "./img/c1.png", name: "" },
-    { src: "./img/c2.png", name: "" },
-    { src: "./img/c3.png", name: "" },
-    { src: "./img/c4.png", name: "" },
-    { src: "./img/c5.png", name: "" },
-    { src: "./img/m1.png", name: "" },
-    { src: "./img/m2.png", name: "" },
-    { src: "./img/m3.png", name: "" },
+    { src: "./img/c1-min.png", name: "" },
+    { src: "./img/c2-min.png", name: "" },
+    { src: "./img/c3-min.png", name: "" },
+    { src: "./img/c4-min.png", name: "" },
+    { src: "./img/c5-min.png", name: "" },
+    { src: "./img/m1-min.png", name: "" },
+    { src: "./img/m2-min.png", name: "" },
+    { src: "./img/m3-min.png", name: "" },
 ];
 
 export let images_ppl = [
-    { src: "./img/mateja.png", name: "Mateja Peter" },
-    { src: "./img/sanja.png", name: "Sanja Badanjak" },
-    { src: "./img/elisa.png", name: "Elisa D'Amico" },
-    { src: "./img/kasia.png", name: "Kasia Houghton" },
-    { src: "./img/niamh.png", name: "Niamh Henry" },
-    { src: "./img/tom.png", name: "Tomas Vancisin" },
+    { src: "./img/mateja-min.png", name: "Mateja Peter" },
+    { src: "./img/sanja-min.png", name: "Sanja Badanjak" },
+    { src: "./img/elisa-min.png", name: "Elisa D'Amico" },
+    { src: "./img/kasia-min.png", name: "Kasia Houghton" },
+    { src: "./img/niamh-min.png", name: "Niamh Henry" },
+    { src: "./img/tom-min.png", name: "Tomas Vancisin" },
 ];
 
 
