@@ -15,7 +15,9 @@
     let mediations;
     let actors;
     let neighbor;
+    let sudan_ucdp;
     let processedData = [];
+    let ucdp_final = [];
     let processedM = [];
     let result = [];
     let agreements = [];
@@ -67,10 +69,8 @@
         actors = glopad[0];
         mena = glopad[1];
         let mend = glopad[2];
-        let sudan_ucdp = glopad[3];
-        console.log(sudan_ucdp);
-        
-        
+        sudan_ucdp = glopad[3];
+
         if (country === "Sudan") {
             mediations = mend.filter((d) => d.conflict_country === "Sudan");
         } else if (country === "Libya") {
@@ -85,9 +85,10 @@
         country &&
         mediations?.length > 0 &&
         actors?.length > 0 &&
-        mena?.length > 0
+        mena?.length > 0 &&
+        sudan_ucdp?.length > 0
     ) {
-        // count actors
+        //// ACTOR TYPES
         const thirdPartyCounts = {};
 
         // Iterate through the array
@@ -155,7 +156,7 @@
             return item;
         });
 
-        // filter to 2023 and 2024
+        // FILTER TO 2023 and 2024
         const filteredData = mediations.filter(
             (d) => d.Year === "2023" || d.Year === "2024",
         );
@@ -177,8 +178,6 @@
             });
             agt_processed = [...agt_processed]; // Ensure reactivity
         });
-        console.log(agreements);
-        
 
         // TOP MEDIAITON LOCATIONS
         const locationCounts = filteredData.reduce((acc, item) => {
@@ -197,6 +196,35 @@
             location: item.location === "" ? "Unknown/Virtual" : item.location,
         }));
 
+        // UCDP PER MONTH
+        const ucdp_group_date = d3.groups(
+            sudan_ucdp,
+            (d) => d.year,
+            (d) => d.month,
+        );
+
+        // Ensure all months are present
+        const filled_ucdp_group_date = ucdp_group_date.map(([year, months]) => {
+            // Convert months to a Map for quick lookup
+            const monthMap = new Map(months);
+
+            // Create an array with all 12 months
+            const fullMonths = Array.from({ length: 12 }, (_, i) => {
+                const month = (i + 1).toString(); // Convert 1-12 to string (if needed)
+                return [month, monthMap.get(month) || []]; // Use existing data or empty array
+            });
+
+            return [year, fullMonths];
+        });
+
+        // formatted ucdp data
+        filled_ucdp_group_date.forEach(([year, months]) => {
+            months.forEach(([month, count]) => {
+                ucdp_final.push({ year, month, count });
+            });
+            ucdp_final = [...ucdp_final]; // Ensure reactivity
+        });
+
         // MEDIATIONS PER MONTH
         const groupedData = d3.groups(
             filteredData,
@@ -210,6 +238,7 @@
             });
             processedData = [...processedData]; // Ensure reactivity
         });
+
         // only M
         const only_m_grouped = d3.groups(
             only_M,
@@ -313,6 +342,18 @@
             .restart();
     }
 
+    // UCDP XScale
+    $: ucdp_xScale = d3
+        .scaleBand()
+        .domain(ucdp_final.map((d) => `${d.year}-${d.month}`))
+        .range([0, innerWidthAdjusted])
+        .padding(0.1);
+
+    $: ucdp_yScale = d3
+        .scaleLinear()
+        .domain([0, Math.max(...ucdp_final.map((d) => d.count.length))])
+        .range([innerHeight, 0]);
+
     // X Scale
     $: xScale = d3
         .scaleBand()
@@ -323,7 +364,7 @@
     // Y Scale
     $: yScale = d3
         .scaleLinear()
-        .domain([0, 50]) // Adjust the domain as needed
+        .domain([0, Math.max(...processedData.map((d) => d.count.length))])
         .range([innerHeight, 0]);
 
     // Scales Horizontal
@@ -344,8 +385,23 @@
         .range([0, innerHeight])
         .padding(0.1);
 
+    // Line Generator
+    $: line = d3
+        .line()
+        .x(
+            (d) =>
+                ucdp_xScale(`${d.year}-${d.month}`) +
+                ucdp_xScale.bandwidth() / 2,
+        )
+        .y((d) => ucdp_yScale(d.count.length))
+        .curve(d3.curveMonotoneX); // Smooth curve
+
+    // Path Data
+    $: pathData = line(ucdp_final);
+
     // Axis
     let xAxisGroup;
+    let yAxisGroup;
     let xAxisGroup1;
     let xAxisGroup2;
     $: {
@@ -355,6 +411,10 @@
                 return `${month}/${year}`; // Format ticks as "MM/YYYY"
             });
             d3.select(xAxisGroup).call(xAxis);
+        }
+        if (yAxisGroup) {
+            const yAxis = d3.axisLeft(yScale);
+            d3.select(yAxisGroup).call(yAxis);
         }
     }
     $: {
@@ -393,6 +453,7 @@
                     bind:this={xAxisGroup}
                     transform={`translate(0, ${innerHeight})`}
                 />
+                <g bind:this={yAxisGroup} transform={`translate(${0}, 0)`} />
 
                 <!-- Bars for Processed Data -->
                 {#each processedData as d}
@@ -415,6 +476,25 @@
                         height={innerHeight - yScale(m.count.length)}
                         fill="white"
                         rx="2"
+                    />
+                {/each}
+
+                <!-- Line Path -->
+                <path
+                    d={pathData}
+                    fill="none"
+                    stroke="#b3b3b3"
+                    stroke-width="1.5"
+                />
+
+                <!-- Data Points -->
+                {#each ucdp_final as d}
+                    <circle
+                        cx={ucdp_xScale(`${d.year}-${d.month}`) +
+                            ucdp_xScale.bandwidth() / 2}
+                        cy={ucdp_yScale(d.count.length)}
+                        r="4"
+                        fill="red"
                     />
                 {/each}
             </g>
@@ -480,6 +560,9 @@
     <!-- top mediation locations -->
     <div class="mediation_location" bind:clientWidth={width}>
         <h2>Mediation Locations</h2>
+        <div class="location_map">
+            <Heatmap {mediations} />
+        </div>
         <svg {width} {height}>
             <g transform={`translate(${margin.left}, ${margin.top})`}>
                 {#each locationList as { location, count }}
@@ -489,6 +572,7 @@
                         width={horizontal_xScale(count)}
                         height={horizontal_yScale.bandwidth()}
                         fill="steelblue"
+                        rx="2"
                     />
                 {/each}
                 {#each locationList as { location, count }}
@@ -517,9 +601,6 @@
                 {/each}
             </g>
         </svg>
-        <div class="location_map">
-            <Heatmap {mediations} />
-        </div>
         <div class="mediation_text">
             <p class="text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -547,9 +628,16 @@
 
             <!-- Rows -->
             {#each agreements as row}
-                <div>{row.agmt_name}</div>
-                <!-- <div>PA-X</div> -->
-                <div>{row.third_party_id_GLOPAD}</div>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center;"
+                >
+                    <span style="text-align: left;">{row.agmt_name}</span>
+                    <img
+                        src={row.agmt_id_PAX === "" ? "new.png" : "pax.jpg"}
+                        style="height: 30px;"
+                    />
+                </div>
+                <div>{row.third_party}</div>
                 <div>{row.groupings_mechanisms}</div>
             {/each}
         </div>
