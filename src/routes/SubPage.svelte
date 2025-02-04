@@ -4,7 +4,7 @@
     import { getCSV, getGeo } from "../utils";
     import Heatmap from "../lib/Heatmap.svelte";
 
-    let manyBodyStrength = 5;
+    let manyBodyStrength = 2;
     let xStrength = 0.1;
     let nodeStrokeWidth = 1;
     let xKey = "category";
@@ -106,6 +106,13 @@
             value,
         }));
 
+        const updatedIdValues = resultz.map((item) => {
+            const match = actors.find((actor) => actor.GLOPAD_ID === item.id);
+            return { ...item, name: match ? match.ActorName : item.id };
+        });
+
+        resultz = updatedIdValues;
+
         // Create a lookup table from actors
         const categoryLookup = actors.reduce((acc, actor) => {
             acc[actor.GLOPAD_ID] =
@@ -163,6 +170,8 @@
 
         // MEDIATION TYPES
         const only_M = filteredData.filter((d) => d.med_type === "M");
+        console.log(only_M);
+        
         const only_MR = filteredData.filter((d) => d.med_type === "MR");
 
         // AGREEMENTS
@@ -264,8 +273,6 @@
                     : [],
             );
 
-            // mediators.push(allIds);
-
             // Remove duplicates
             const uniqueIds = [...new Set(allIds)];
 
@@ -285,14 +292,25 @@
                 test.push(mediator);
             });
         });
+
         mediators = [...test];
+        // Count mediators
         mediator_counts = mediators.reduce((acc, value) => {
             acc[value] = (acc[value] || 0) + 1;
             return acc;
         }, {});
+        console.log(mediator_counts);
+        
         top_ten_mediators = Object.entries(mediator_counts)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 10);
+
+        const updatedIdCounts = top_ten_mediators.map(([id, count]) => {
+            const match = actors.find((actor) => actor.GLOPAD_ID === id);
+            return [match ? match.ActorName : id, count];
+        });
+
+        top_ten_mediators = updatedIdCounts;
     }
 
     $: initialNodes = finalData.map((d) => ({ ...d }));
@@ -322,7 +340,7 @@
                     .x((d) => {
                         return x_circle(d["category"]);
                     })
-                    .strength(0.1),
+                    .strength(0.2),
             )
             .force(
                 "center",
@@ -634,7 +652,7 @@
                     <span style="text-align: left;">{row.agmt_name}</span>
                     <img
                         src={row.agmt_id_PAX === "" ? "new.png" : "pax.jpg"}
-                        style="height: 30px;"
+                        style="height: 30px; margin-left: auto;"
                     />
                 </div>
                 <div>{row.third_party}</div>
@@ -760,8 +778,29 @@
                         cx={point.x}
                         cy={point.y}
                     >
-                        <!-- <title>{point[$custom.title]}</title> -->
                     </circle>
+                    {#if point.value > 10}
+                        <text
+                            x={point.x}
+                            y={point.y}
+                            dy=".35em"
+                            font-size="12"
+                            text-anchor="middle"
+                            fill="white"
+                        >
+                            {point.name}
+                        </text>
+                    {/if}
+                {/each}
+                {#each categories as category}
+                    <text
+                        x={x_circle(category)}
+                        y={height - 30}
+                        dy=".35em"
+                        font-size="12"
+                        text-anchor="start"
+                        fill="white">{category}</text
+                    >
                 {/each}
             </g>
         </svg>
@@ -842,11 +881,11 @@
     .table {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr; /* Adjust columns as needed */
-        border: 1px solid #ccc;
+        border: 1px solid #595959;
     }
     .table div {
         padding: 8px;
-        border: 1px solid #ddd;
+        border: 1px solid #605f5f;
         text-align: left;
         word-break: break-word; /* Break long words */
         overflow-wrap: anywhere; /* Allow breaking at any point */
@@ -864,6 +903,6 @@
 
     .table_header {
         font-weight: bold;
-        /* background-color: #f4f4f4; */
+        background-color: #424242;
     }
 </style>

@@ -106,7 +106,7 @@
             {/if}
         </div>
 
-        <h1>MEND</h1>
+        <h1>MEND: Mediation Events and Negotiators Database</h1>
         <h3>
             Understanding shifts in the geopolitical context of peace and
             transition processes

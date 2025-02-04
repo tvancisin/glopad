@@ -125,7 +125,7 @@
     {#if isOverlayVisible}
         <div class="overlay">
             <button class="remove-overlay" onclick={removeOverlay}
-                >Click to Explore</button
+                >Interact</button
             >
         </div>
     {/if}
@@ -154,19 +154,21 @@
         height: 100%;
         background-color: rgba(0, 0, 0, 0);
         display: flex;
-        justify-content: center;
-        align-items: center;
+        /* justify-content: center; */
+        /* align-items: center; */
         z-index: 100;
     }
 
     .remove-overlay {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
+        position: absolute;
+        bottom: 0px;
+        width: 110px;
+        height: 35px;
+        border-radius: 3px;
         border: none;
-        background-color: rgba(0, 0, 0, 0.76);
+        background-color: #991F30;
         font-family: "Montserrat", sans-serif;
-        font-size: 20px;
+        font-size: 16px;
         font-optical-sizing: auto;
         font-weight: 400;
         font-style: normal;
@@ -174,6 +176,6 @@
 
     .remove-overlay:hover {
         cursor: pointer;
-        background-color: #8f2121;
+        background-color: #dc3939;
     }
 </style>
