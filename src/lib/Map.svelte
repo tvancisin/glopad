@@ -76,7 +76,6 @@
               "fill-color": "#39ae2a",
               "fill-opacity": 0.7,
             },
-            filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
           });
 
           map.addLayer({

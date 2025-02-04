@@ -5,6 +5,6 @@
 </script>
 
 <Router>
-  <Route path="/glopad/" component={Home} />
+  <Route basePath="/glopad/" component={Home} />
   <Route path="/glopad/:dynamicPath" component={SubPage} />
 </Router>

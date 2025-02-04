@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { getGeo, images, sections, scrollToSection } from "../utils";
     import Map from "../lib/Map.svelte";
+    import { navigate } from "svelte5-router";
 
     let width;
     let all_polygons;
@@ -9,9 +10,10 @@
     let isMenuOpen = false; // Toggle menu visibility
 
     // Load GEOJSON
-    const json_path = "/data/country_polygons.json";
+    const json_path = "/data/geojson.json";
     getGeo(json_path).then((geo) => {
         all_polygons = geo;
+        
     });
 
     // RESEARCH GALLERY
@@ -132,7 +134,8 @@
         <Map
             {all_polygons}
             inflate={(data) => {
-                window.open("/glopad/" + data, "_blank");
+                navigate("/glopad/" + data);
+                // window.open("/glopad/" + data, "_blank");
             }}
         />
     </main>
