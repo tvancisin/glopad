@@ -10,12 +10,14 @@
     let xKey = "category";
     let rKey = "value";
     let finalData = [];
+    let mediatorNames = [];
     let country;
     let mena;
     let mediations;
     let actors;
     let neighbor;
     let sudan_ucdp;
+    let mediations_only = [];
     let processedData = [];
     let ucdp_final = [];
     let processedM = [];
@@ -110,6 +112,53 @@
             const match = actors.find((actor) => actor.GLOPAD_ID === item.id);
             return { ...item, name: match ? match.ActorName : item.id };
         });
+        console.log(actors);
+
+        const mediatorIDs = [
+            "CON_82",
+            "GP-85",
+            "IGO_87",
+            "IGO_312",
+            "IGO_346",
+            "IGO_5",
+            "CON_81",
+            "CON_19",
+            "CON_3",
+            "CON_591",
+            "CON_419",
+            "CON_159",
+            "CON_173",
+            "CON_7",
+            "CON_2",
+            "CON_157",
+            "CON_486",
+            "IGO_49",
+            "IGO_386",
+            "GP-6",
+            "CON_76",
+            "CON_562",
+            "GP-19",
+            "NGO_201",
+            "CON_172",
+            "CON_248",
+            "CON_272",
+            "CON_358",
+            "CON_176",
+            "IGO_616",
+            "IGO_831",
+            "CON_285",
+            "CON_202",
+        ];
+
+        // Create a lookup map for faster access
+        const actorLookup = new Map(
+            actors.map((actor) => [actor.GLOPAD_ID, actor.ActorName]),
+        );
+
+        // Replace mediatorIDs with corresponding ActorNames, keeping the ID if not found
+        mediatorNames = mediatorIDs.map((id) => actorLookup.get(id) || id);
+
+        console.log(mediatorNames); // Check the result in the console
 
         resultz = updatedIdValues;
 
@@ -170,9 +219,9 @@
 
         // MEDIATION TYPES
         const only_M = filteredData.filter((d) => d.med_type === "M");
-        console.log(only_M);
-        
         const only_MR = filteredData.filter((d) => d.med_type === "MR");
+
+        mediations_only = only_M;
 
         // AGREEMENTS
         agreements = filteredData.filter((d) => d.agmt === "1");
@@ -229,7 +278,12 @@
         // formatted ucdp data
         filled_ucdp_group_date.forEach(([year, months]) => {
             months.forEach(([month, count]) => {
-                ucdp_final.push({ year, month, count });
+                let best_count = 0;
+
+                count.forEach((c) => {
+                    best_count += +c.best;
+                });
+                ucdp_final.push({ year, month, best_count });
             });
             ucdp_final = [...ucdp_final]; // Ensure reactivity
         });
@@ -299,8 +353,7 @@
             acc[value] = (acc[value] || 0) + 1;
             return acc;
         }, {});
-        console.log(mediator_counts);
-        
+
         top_ten_mediators = Object.entries(mediator_counts)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 10);
@@ -369,20 +422,23 @@
 
     $: ucdp_yScale = d3
         .scaleLinear()
-        .domain([0, Math.max(...ucdp_final.map((d) => d.count.length))])
+        .domain([0, Math.max(...ucdp_final.map((d) => d.best_count))])
+        // .domain([0, Math.max(...processedData.map((d) => d.count.length * 5))])
         .range([innerHeight, 0]);
 
     // X Scale
     $: xScale = d3
         .scaleBand()
         .domain(processedData.map((d) => `${d.year}-${d.month}`))
-        .range([0, innerWidthAdjusted])
+        .range([0, innerWidthAdjusted - margin.right])
         .padding(0.1);
 
     // Y Scale
     $: yScale = d3
         .scaleLinear()
-        .domain([0, Math.max(...processedData.map((d) => d.count.length))])
+        // .domain([0, Math.max(...processedData.map((d) => d.count.length))])
+        .domain([0, 100])
+        // .domain([0, Math.max(...ucdp_final.map((d) => d.best_count))])
         .range([innerHeight, 0]);
 
     // Scales Horizontal
@@ -411,15 +467,46 @@
                 ucdp_xScale(`${d.year}-${d.month}`) +
                 ucdp_xScale.bandwidth() / 2,
         )
-        .y((d) => ucdp_yScale(d.count.length))
+        .y((d) => ucdp_yScale(d.best_count))
         .curve(d3.curveMonotoneX); // Smooth curve
 
     // Path Data
     $: pathData = line(ucdp_final);
 
+    $: xMed = d3
+        .scaleBand()
+        .domain(mediations_only.map((d) => d.med_event_ID))
+        .range([margin.left*2, innerWidthAdjusted - margin.right]);
+
+    $: yMed = d3
+        .scaleBand()
+        .domain(Object.keys(mediator_counts)) // Extracts keys as an array
+        .range([innerHeight, 0]);
+
+    $: console.log(mediations_only);
+
+    $: grouping_array_first = Array.from(
+        new Set(
+            mediations_only.flatMap((d) =>
+                d.groupings_mechanisms
+                    ? d.groupings_mechanisms
+                          .toLowerCase()
+                          .split(";")
+                          .map((g) => g.trim().replace(/\s+/g, ""))
+                          .filter((g) => g !== "")
+                    : [],
+            ),
+        ),
+    );
+    $: grouping_array = ["nogrouping", ...grouping_array_first];
+
+    let selectedGrouping = ""; // To store selected option
+
     // Axis
     let xAxisGroup;
     let yAxisGroup;
+    let yMedAxisGroup;
+    let yUCDPAxisGroup;
     let xAxisGroup1;
     let xAxisGroup2;
     $: {
@@ -433,6 +520,13 @@
         if (yAxisGroup) {
             const yAxis = d3.axisLeft(yScale);
             d3.select(yAxisGroup).call(yAxis);
+        }
+        if (yUCDPAxisGroup) {
+            const yAxis = d3.axisRight(ucdp_yScale);
+            d3.select(yUCDPAxisGroup)
+                .call(yAxis)
+                .selectAll("text")
+                .style("fill", "red");
         }
     }
     $: {
@@ -451,6 +545,28 @@
                 return `${month}/${year}`; // Format ticks as "MM/YYYY"
             });
             d3.select(xAxisGroup2).call(xAxis2);
+        }
+    }
+
+    $: {
+        if (yMedAxisGroup) {
+            const yAxis = d3
+                .axisLeft(yMed)
+                .tickSize(-innerWidthAdjusted + margin.right * 3)
+                .tickFormat((d, i) => mediatorNames[i] || d); // Map tick positions to mediator names
+
+            d3.select(yMedAxisGroup)
+                .call(yAxis)
+                .selectAll(".tick line") // Select tick lines
+                .attr("stroke", "#333333"); // Set tick color to gray
+
+            d3.select(yMedAxisGroup)
+                .selectAll(".tick text") // Select tick labels
+                .attr("fill", "gray"); // Set tick label color to gray
+
+            d3.select(yMedAxisGroup)
+                .select(".domain") // Select the axis domain line
+                .style("display", "none"); // Hide the domain path
         }
     }
 </script>
@@ -472,6 +588,10 @@
                     transform={`translate(0, ${innerHeight})`}
                 />
                 <g bind:this={yAxisGroup} transform={`translate(${0}, 0)`} />
+                <g
+                    bind:this={yUCDPAxisGroup}
+                    transform={`translate(${innerWidthAdjusted - margin.right}, 0)`}
+                />
 
                 <!-- Bars for Processed Data -->
                 {#each processedData as d}
@@ -501,7 +621,7 @@
                 <path
                     d={pathData}
                     fill="none"
-                    stroke="#b3b3b3"
+                    stroke="red"
                     stroke-width="1.5"
                 />
 
@@ -510,7 +630,7 @@
                     <circle
                         cx={ucdp_xScale(`${d.year}-${d.month}`) +
                             ucdp_xScale.bandwidth() / 2}
-                        cy={ucdp_yScale(d.count.length)}
+                        cy={ucdp_yScale(d.best_count)}
                         r="4"
                         fill="red"
                     />
@@ -816,6 +936,64 @@
             </p>
         </div>
     </div>
+    <!-- text circle packing -->
+    <div class="actor_types" bind:clientWidth={width}>
+        <h2>Actor Types</h2>
+        <!-- Dropdown List -->
+        <select bind:value={selectedGrouping}>
+            <option value="">Select Grouping</option>
+            {#each grouping_array as grouping}
+                <option value={grouping}>{grouping}</option>
+            {/each}
+        </select>
+        <svg {width} {height}>
+            <g transform={`translate(${margin.left}, ${margin.top})`}>
+                <g
+                    bind:this={yMedAxisGroup}
+                    transform={`translate(${margin.left+30}, 0)`}
+                />
+                {#each mediations_only as d}
+                    {#each d.third_party_id_GLOPAD
+                        .split(";")
+                        .filter((m) => m.trim() !== "") as mediator}
+                        <rect
+                            x={xMed(d.med_event_ID)}
+                            y={yMed(mediator)}
+                            width={8}
+                            height={8}
+                            fill={(() => {
+                                const groupClasses = d.groupings_mechanisms
+                                    .toLowerCase()
+                                    .split(";")
+                                    .map(
+                                        (g) =>
+                                            g.trim().replace(/\s+/g, "") ||
+                                            "nogrouping",
+                                    ); // Assign "nogrouping" if empty
+
+                                return selectedGrouping &&
+                                    groupClasses.includes(selectedGrouping)
+                                    ? "yellow"
+                                    : "steelblue";
+                            })()}
+                            stroke="black"
+                        />
+                    {/each}
+                {/each}
+            </g>
+        </svg>
+        <div class="mediation_text">
+            <p class="text">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -904,5 +1082,9 @@
     .table_header {
         font-weight: bold;
         background-color: #424242;
+    }
+
+    .nogrouping {
+        fill: yellow;
     }
 </style>
