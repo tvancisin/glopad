@@ -9,15 +9,15 @@ export async function getGeo(url) {
 export async function getIndividualCSV(path) {
     let loadedData = await d3.csv(path);
     return loadedData;
-  }
-  
-  export async function getCSV(paths) {
+}
+
+export async function getCSV(paths) {
     const promises = paths.map(path => getIndividualCSV(path));
     const results = await Promise.all(promises);
     return results;
     // let loadedData = await d3.csv(path);
     // return loadedData
-  }
+}
 
 export let images = [
     { src: "./img/c1-min.png", name: "" },
@@ -88,4 +88,32 @@ export const countryNames = [
     "Yemen"
 ];
 
+export function fillMissingMonths(data) {
+    if (data.length === 0) return [];
+
+    let completeData = [];
+    let minYear = Math.min(...data.map((d) => +d.year));
+    let maxYear = Math.max(...data.map((d) => +d.year));
+
+    for (let year = minYear; year <= maxYear; year++) {
+        for (let month = 1; month <= 12; month++) {
+            let monthStr = String(month); // Keep as number format for matching
+            let existingEntry = data.find(
+                (d) => d.year == year && d.month == monthStr,
+            );
+
+            if (existingEntry) {
+                completeData.push(existingEntry);
+            } else {
+                completeData.push({
+                    year: String(year),
+                    month: String(month),
+                    count: [],
+                }); // Add empty count
+            }
+        }
+    }
+
+    return completeData;
+}
 

@@ -96,13 +96,13 @@
                         0.2,
                         "rgb(103,169,207)",
                         0.4,
-                        "rgb(209,229,240)",
+                        "steelblue",
                         0.6,
                         "rgb(253,219,199)",
                         0.8,
-                        "rgb(239,138,98)",
+                        "gray",
                         1,
-                        "rgb(178,24,43)",
+                        "white",
                     ],
                     "heatmap-radius": [
                         "interpolate",
@@ -125,7 +125,7 @@
     {#if isOverlayVisible}
         <div class="overlay">
             <button class="remove-overlay" onclick={removeOverlay}
-                >Interact</button
+                >Zoom</button
             >
         </div>
     {/if}
