@@ -73,8 +73,8 @@
             type: "fill",
             source: "countries",
             paint: {
-              "fill-color": "#39ae2a",
-              "fill-opacity": 0.7,
+              "fill-color": "steelblue",
+              "fill-opacity": 0.9,
             },
           });
 

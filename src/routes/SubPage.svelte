@@ -244,17 +244,30 @@
             agt_processed = [...agt_processed]; // Ensure reactivity
         });
 
+        let unknown_count = 0;
+
         // TOP MEDIAITON LOCATIONS
         const locationCounts = filteredData.reduce((acc, item) => {
             let location = item["med_location - MULTISELECT"]; // Use bracket notation for the field name
+            let location2 = item["med_loc_x"];
             if (location != "") {
                 if (location.includes("Virtual")) {
                     location = "Virtual";
                 }
                 acc[location] = (acc[location] || 0) + 1; // Count occurrences
             }
+            if (
+                (location2 === "" && location !== "Virtual") ||
+                (location2 === null && location !== "Virtual") ||
+                (location2 === " " && location !== "Virtual")
+            ) {
+                unknown_count += 1;
+            }
+
             return acc;
         }, {});
+
+        locationCounts["Unknown"] = unknown_count;
 
         locationList = Object.entries(locationCounts)
             .map(([location, count]) => ({ location, count }))
@@ -500,15 +513,12 @@
         mediations_only = [...filtered];
     }
 
-    $: console.log(mediations_only);
     // Create a count map for events per Year-Month
     $: eventCounts = d3.rollup(
         mediations_only,
         (v) => v.length, // Count occurrences
         (d) => `${d.Year}-${d.Month}`, // Group by Year-Month
     );
-
-    $: console.log(eventCounts);
 
     // Get min and max count values for scaling
     $: eventMin = d3.min(eventCounts.values());
@@ -683,12 +693,23 @@
             ? colorOptions[index % colorOptions.length]
             : "steelblue";
     }
-    let events = {};
-    //         event: "Ouster of Omar al-Bashir"	11/4/2019
-    // Coup against the civilian government led by Abdalla Hamdok 	25/10/2021
-    // Eruption of a civil war between two major rival factions of the military government	15/4/2023
-
-    $: console.log(agt_processed);
+    let historical_events = [
+        {
+            name: "Ouster of Omar al-Bashir",
+            year: "2019",
+            month: "4",
+        },
+        {
+            name: "Coup",
+            year: "2021",
+            month: "10",
+        },
+        {
+            name: "Civil War",
+            year: "2023",
+            month: "4",
+        },
+    ];
 </script>
 
 <div class="wrapper">
@@ -712,6 +733,25 @@
                     bind:this={yUCDPAxisGroup}
                     transform={`translate(${innerWidthAdjusted - margin.right}, 0)`}
                 />
+
+                {#each historical_events as event}
+                    <line
+                        x1={xScale(`${event.year}-${event.month}`)}
+                        y1={10}
+                        x2={xScale(`${event.year}-${event.month}`)}
+                        y2={innerHeight}
+                        stroke="gray"
+                        stroke-width="1"
+                        stroke-dasharray="4 2"
+                    />
+                    <text
+                        x={xScale(`${event.year}-${event.month}`)}
+                        y={0}
+                        fill="white"
+                    >
+                        {event.name}
+                    </text>
+                {/each}
 
                 <!-- Bars for Processed Data -->
                 {#each processedData as d}
@@ -775,6 +815,24 @@
                     bind:this={xAxisGroup1}
                     transform={`translate(0, ${innerHeight})`}
                 />
+                {#each historical_events as event}
+                    <line
+                        x1={xScale(`${event.year}-${event.month}`)}
+                        y1={10}
+                        x2={xScale(`${event.year}-${event.month}`)}
+                        y2={innerHeight}
+                        stroke="gray"
+                        stroke-width="1"
+                        stroke-dasharray="4 2"
+                    />
+                    <text
+                        x={xScale(`${event.year}-${event.month}`)}
+                        y={0}
+                        fill="white"
+                    >
+                        {event.name}
+                    </text>
+                {/each}
                 {#each result as d}
                     <rect
                         x={xScale(`${d.year}-${d.month}`)}
@@ -862,18 +920,36 @@
     <!-- agreements per month -->
     <div class="agreement_per_month" bind:clientWidth={width}>
         <h2>Agreements per Month</h2>
-        <svg {width} {height}>
+        <svg {width} height={height - 100}>
             <g transform={`translate(${margin.left}, ${margin.top})`}>
                 <g
                     bind:this={xAxisGroup2}
-                    transform={`translate(0, ${innerHeight})`}
+                    transform={`translate(0, ${innerHeight - 100})`}
                 />
+                {#each historical_events as event}
+                    <line
+                        x1={xScale(`${event.year}-${event.month}`)}
+                        y1={10}
+                        x2={xScale(`${event.year}-${event.month}`)}
+                        y2={innerHeight - 110}
+                        stroke="gray"
+                        stroke-width="1"
+                        stroke-dasharray="4 2"
+                    />
+                    <text
+                        x={xScale(`${event.year}-${event.month}`)}
+                        y={0}
+                        fill="white"
+                    >
+                        {event.name}
+                    </text>
+                {/each}
                 {#each agt_processed as d}
                     {#each d.count as _, i}
                         <circle
                             cx={xScale(`${d.year}-${d.month}`) +
                                 xScale.bandwidth() / 2}
-                            cy={innerHeight - 10 - i * 20}
+                            cy={innerHeight - 110 - i * 13}
                             r={5}
                             fill="steelblue"
                         />

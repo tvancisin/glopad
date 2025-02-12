@@ -6,6 +6,7 @@
 
     let heat_geojson;
     let isOverlayVisible = true; // Controls the visibility of the overlay
+    let unknown_count;
 
     function removeOverlay() {
         isOverlayVisible = false;
@@ -15,21 +16,29 @@
         return {
             type: "FeatureCollection",
             features: data
-                .filter((d) => d.med_loc_x && d.med_loc_y) // Exclude null or empty values
-                .map((d) => ({
-                    type: "Feature",
-                    properties: {
-                        med_event_ID: d.med_event_ID,
-                        intensity: parseInt(d.num_med) || 1, // Optional: Set heatmap weight
-                    },
-                    geometry: {
-                        type: "Point",
-                        coordinates: [
-                            parseFloat(d.med_loc_x), // Longitude
-                            parseFloat(d.med_loc_y), // Latitude
-                        ],
-                    },
-                })),
+                .filter((d) => {
+                    return (
+                        d.med_loc_x !== null &&
+                        d.med_loc_x !== "" &&
+                        d.med_loc_x !== " "
+                    );
+                })
+                .map((d) => {
+                    return {
+                        type: "Feature",
+                        properties: {
+                            med_event_ID: d.med_event_ID,
+                            intensity: parseInt(d.num_med) || 1, // Optional: Set heatmap weight
+                        },
+                        geometry: {
+                            type: "Point",
+                            coordinates: [
+                                parseFloat(d.med_loc_x), // Longitude
+                                parseFloat(d.med_loc_y), // Latitude
+                            ],
+                        },
+                    };
+                }),
         };
     }
 
@@ -124,9 +133,7 @@
     <div id="map" bind:this={map}></div>
     {#if isOverlayVisible}
         <div class="overlay">
-            <button class="remove-overlay" onclick={removeOverlay}
-                >Zoom</button
-            >
+            <button class="remove-overlay" onclick={removeOverlay}>Zoom</button>
         </div>
     {/if}
 </div>
@@ -166,7 +173,7 @@
         height: 35px;
         border-radius: 3px;
         border: none;
-        background-color: #991F30;
+        background-color: #991f30;
         font-family: "Montserrat", sans-serif;
         font-size: 16px;
         font-optical-sizing: auto;
