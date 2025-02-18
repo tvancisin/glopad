@@ -1,6 +1,12 @@
 <script>
     import { onMount } from "svelte";
-    import { getGeo, images, sections, scrollToSection } from "../utils";
+    import {
+        getGeo,
+        images,
+        sections,
+        scrollToSection,
+        images_ppl,
+    } from "../utils";
     import Map from "../lib/Map.svelte";
     import { navigate } from "svelte5-router";
 
@@ -8,37 +14,58 @@
     let all_polygons;
     let showScrollToTop = false; // Visibility of the scroll-to-top button
     let isMenuOpen = false; // Toggle menu visibility
+    let isSmallScreen = false; // Check if screen size is small
 
     // Load GEOJSON
     const json_path = "/data/geojson.json";
     getGeo(json_path).then((geo) => {
         all_polygons = geo;
-        
     });
 
     // RESEARCH GALLERY
     let imageRowResearch;
     const scrollGalleryResearch = (direction) => {
-        if (imageRowResearch) {
-            const scrollAmount = imageRowResearch.offsetWidth / 5; // Scroll width of one image
-            imageRowResearch.scrollBy({
-                left: direction * scrollAmount,
-                behavior: "smooth",
-            });
-        }
+        if (!imageRowResearch) return;
+
+        const imageWidth = imageRowResearch.scrollWidth / images_ppl.length; // Ensure exact image width scroll
+        let targetScroll = imageRowResearch.scrollLeft + direction * imageWidth;
+
+        animateScroll(imageRowResearch, targetScroll, 500); // 500ms smooth scroll
     };
 
     // PEOPLE GALLERY
     let imageRowPeople;
-    const scrollGalleryPeople = (direction) => {
-        if (imageRowPeople) {
-            const scrollAmount = imageRowPeople.offsetWidth / 5; // Scroll width of one image
-            imageRowPeople.scrollBy({
-                left: direction * scrollAmount,
-                behavior: "smooth",
-            });
+    function scrollGalleryPeople(direction) {
+        if (!imageRowPeople) return;
+
+        const imageWidth = imageRowPeople.scrollWidth / images_ppl.length; // Ensure exact image width scroll
+        let targetScroll = imageRowPeople.scrollLeft + direction * imageWidth;
+
+        animateScroll(imageRowPeople, targetScroll, 500); // 500ms smooth scroll
+    }
+
+    function animateScroll(element, to, duration) {
+        const start = element.scrollLeft;
+        const change = to - start;
+        const startTime = performance.now();
+
+        function step(currentTime) {
+            let progress = (currentTime - startTime) / duration;
+            if (progress > 1) progress = 1;
+
+            element.scrollLeft = start + change * easeInOutQuad(progress);
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
         }
-    };
+
+        requestAnimationFrame(step);
+    }
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
 
     // Scroll to top function
     const scrollToTop = () => {
@@ -50,8 +77,15 @@
         showScrollToTop = window.scrollY > 300; // Trigger button visibility
     };
 
+    function checkScreenSize() {
+        isSmallScreen = window.innerWidth < 768; // Adjust breakpoint as needed
+    }
+
     // INIT
     onMount(() => {
+        checkScreenSize();
+        window.addEventListener("resize", checkScreenSize);
+
         // Disable automatic scroll restoration
         if ("scrollRestoration" in history) {
             history.scrollRestoration = "manual";
@@ -67,37 +101,40 @@
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("resize", checkScreenSize);
         };
     });
 </script>
 
 <div id="wrapper" bind:clientWidth={width}>
     <div id="home">
-        <img
-            id="intro_logo_usa"
-            alt="University of St Andrews Logo"
-            src="uosa.png"
-        />
-        <img
-            id="intro_logo_uoe"
-            alt="University of St Andrews Logo"
-            src="uoe_white.png"
-        />
-        <img
-            id="intro_logo_peace"
-            alt="PeaceRep Logo"
-            src="peacerep_logo.jpg"
-        />
+        <div class="logos">
+            <img alt="University of St Andrews Logo" src="uosa.png" />
+            <img alt="University of St Andrews Logo" src="uoe_white.png" />
+            <img alt="PeaceRep Logo" src="peacerep_logo.jpg" />
+        </div>
 
-        <!-- Navigation Menu -->
         <div id="navigation">
-            <i
-                class="fa fa-bars"
-                aria-hidden="true"
+            <!-- Hamburger Icon (Mobile) -->
+            <i style="padding: 5px;"
+                class="fa fa-bars menu-icon"
                 on:click={() => (isMenuOpen = !isMenuOpen)}
             ></i>
 
-            {#if isMenuOpen}
+            <!-- Individual Buttons (Desktop) -->
+            {#if !isSmallScreen}
+                {#each sections as section}
+                    <button
+                        class="menu-button"
+                        on:click={() => scrollToSection(section.id)}
+                    >
+                        {section.name}
+                    </button>
+                {/each}
+            {/if}
+
+            <!-- Dropdown Menu (Mobile) -->
+            {#if isSmallScreen && isMenuOpen}
                 <ul class="dropdown">
                     {#each sections as section}
                         <li on:click={() => scrollToSection(section.id)}>
@@ -151,12 +188,13 @@
         <div class="gallery-container-research">
             <button
                 class="arrow left"
+                style="border: 2px solid white;"
                 aria-label="Scroll left"
                 on:click={() => scrollGalleryResearch(-1)}
             >
                 <i
                     class="fa fa-arrow-left"
-                    style="color: yellow;"
+                    style="color: white;"
                     aria-hidden="true"
                 ></i>
             </button>
@@ -171,133 +209,59 @@
             <button
                 class="arrow right"
                 aria-label="Scroll right"
+                style="border: 2px solid white;"
                 on:click={() => scrollGalleryResearch(1)}
             >
                 <i
                     class="fa fa-arrow-right"
-                    style="color: yellow;"
+                    style="color: white;"
                     aria-hidden="true"
                 ></i>
             </button>
         </div>
     </div>
 
-    <!-- people section -->
     <div id="people">
         <h3
-            style="width: 100px;text-align: left; font-size:20px; border-radius: 2px"
+            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
         >
-            About
+            Team
         </h3>
-        <div id="about">
-            <div class="row">
-                <div class="column left">
-                    <img src="./img/mateja-min.png" />
-                </div>
-                <div class="column right">
-                    <p>
-                        <strong>Dr Mateja Peter</strong> is leading Global Transitions,
-                        PeaceRep’s non-ODA work strand. She is also Lecturer in International
-                        Relations and Director of the Centre for Global Law and Governance
-                        at the University of St Andrews. Mateja's research seeks
-                        to better understand theoretical and policy implications
-                        of the shift from short-term to sustained third-party engagements
-                        in contemporary interventions; and the subsequent push-back
-                        against these developments. Her work employs archival research
-                        and fieldwork.
-                    </p>
-                </div>
+        <div class="gallery-container-people">
+            <button
+                class="arrow left"
+                style="border: 2px solid white;"
+                aria-label="Scroll left"
+                on:click={() => scrollGalleryPeople(-1)}
+            >
+                <i
+                    class="fa fa-arrow-left"
+                    style="color: white;"
+                    aria-hidden="true"
+                ></i>
+            </button>
+            <div class="image-row-people">
+                {#each images_ppl as { src, name } (src)}
+                    <div class="image-container">
+                        <img loading="lazy" {src} alt={name} />
+                        <p>{name}</p>
+                    </div>
+                {/each}
             </div>
-            <hr />
-            <div class="row">
-                <div class="column left"><img src="./img/sanja-min.png" /></div>
-                <div class="column right">
-                    <p>
-                        <strong>Dr Sanja Badanjak</strong> is a Chancellor’s Fellow
-                        in Global Challenges at the University of Edinburgh School
-                        of Law, PeaceRep’s Data Director, and Data Manager for the
-                        PA-X Peace Agreements Database and Dataset. Her research
-                        interests include the applications of quantitative and text-as-data
-                        methods in the study of institutions, elections, and peace
-                        processes. She completed her PhD in political science at
-                        the University of Wisconsin – Madison, and holds and MA in
-                        political science from the Central European University.
-                    </p>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="column left"><img src="./img/elisa-min.png" /></div>
-                <div class="column right">
-                    <p>
-                        <strong>Dr Elisa D’Amico</strong> currently serves as a Postdoctoral
-                        Research Fellow within the School of International Relations
-                        at the University of St Andrews. Her primary focus lies within
-                        the Global Fragmentation project, where her role is building
-                        the mediation event database. In addition to her scholarly
-                        contributions in conflict resolution and mediation, her research
-                        extends to examining the intricate dynamics of the climate-migration-conflict
-                        nexus via rigorous quantitative methodology.
-                    </p>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="column left"><img src="./img/kasia-min.png" /></div>
-                <div class="column right">
-                    <p>
-                        <strong>Dr Kasia Houghton</strong> is an ESRC Doctoral Researcher
-                        in International Relations at the University of St Andrews,
-                        researching Russian intervention in the Syrian conflict.
-                        She is a researcher on the PeaceRep Global Transitions project,
-                        working on the third-party mediation database. She is also
-                        a tutor of international relations at Durham University.
-                        Kasia is a fellow of the Centre for Global Law and Governance,
-                        Institute for Middle Eastern, Central Asian, and Caucasus
-                        Studies, and Centre for Syrian Studies at the University
-                        of St Andrews.
-                    </p>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="column left"><img src="./img/niamh-min.png" /></div>
-                <div class="column right">
-                    <p>
-                        <strong>Niamh Henry</strong> is a Data Engineer with the
-                        Peace and Conflict Resolution Evidence Programme (PeaceRep)
-                        at the University of Edinburgh. She works on the organisation
-                        and extension of peace and conflict data and develops innovative
-                        PeaceTech tools to support better understanding peace and
-                        transition processes. Niamh is a co-creator of the PA-X Tracker,
-                        a new Peace And Transition Process Tracker. Niamh holds an
-                        MS in Information Science from the University of Amsterdam,
-                        and an MA in Digital Media and Information Studies from the
-                        University of Glasgow.
-                    </p>
-                </div>
-            </div>
-            <hr />
-            <div class="row">
-                <div class="column left"><img src="./img/tom-min.png" /></div>
-                <div class="column right">
-                    <p>
-                        <strong>Dr Tomas Vancisin</strong> is an Information Visualization
-                        and Digital Humanities researcher. At PeaceRep, he focuses
-                        on visualization of transition trajectories, and the mediation
-                        space of peace and transition processes. Tomas recently finished
-                        his PhD in Computer Science. He holds an MSc in Computing
-                        and Information Technology, and MA(Hons) in Comparative Literature
-                        and Russian, all from the University of St Andrews. Before
-                        joining PeaceRep, Tomas worked on his PhD, focusing on the
-                        visualization of historical textual collections from the
-                        University of St Andrews dating back to 1579.
-                    </p>
-                </div>
-            </div>
+            <button
+                class="arrow right"
+                style="border: 2px solid white;"
+                aria-label="Scroll right"
+                on:click={() => scrollGalleryPeople(1)}
+            >
+                <i
+                    class="fa fa-arrow-right"
+                    style="color: white;"
+                    aria-hidden="true"
+                ></i>
+            </button>
         </div>
     </div>
-
     <!-- Scroll to Top Button -->
     {#if showScrollToTop}
         <button
@@ -317,67 +281,17 @@
         width: 100%;
     }
 
-    #intro_logo_usa {
+    .logos {
+        display: flex;
+        gap: 5px;
         position: absolute;
-        top: 2px;
+        top: 5px;
         right: 5px;
-        height: 40px;
     }
 
-    #intro_logo_uoe {
-        position: absolute;
-        top: 50px;
-        right: 5px;
-        height: 40px;
-    }
-
-    #intro_logo_peace {
-        position: absolute;
-        top: 100px;
-        right: 5px;
-        height: 40px;
-    }
-
-    @media only screen and (max-width: 1450px) {
-        #intro_logo_usa,
-        #intro_logo_uoe,
-        #intro_logo_peace {
-            height: 40px;
-        }
-        #intro_logo_uoe {
-            top: 50px;
-        }
-        #intro_logo_peace {
-            top: 100px;
-        }
-    }
-
-    @media only screen and (max-width: 1200px) {
-        #intro_logo_usa,
-        #intro_logo_uoe,
-        #intro_logo_peace {
-            height: 30px;
-        }
-        #intro_logo_uoe {
-            top: 40px;
-        }
-        #intro_logo_peace {
-            top: 80px;
-        }
-    }
-
-    @media only screen and (max-width: 768px) {
-        #intro_logo_usa,
-        #intro_logo_uoe,
-        #intro_logo_peace {
-            height: 20px;
-        }
-        #intro_logo_uoe {
-            top: 25px;
-        }
-        #intro_logo_peace {
-            top: 50px;
-        }
+    img {
+        height: 30px;
+        margin-left: 5px;
     }
 
     h1 {
@@ -402,60 +316,6 @@
         background-color: #001c23;
     }
 
-    #research {
-        position: relative;
-        width: 100%;
-        height: auto;
-        margin: 0px;
-        background-color: #001c23;
-    }
-
-    #people {
-        position: relative;
-        background-color: #003645;
-        width: 100%;
-    }
-
-    #about {
-        position: relative;
-        width: 80%;
-        display: flex; /* Enable flexbox layout */
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        margin: auto;
-    }
-
-    .row {
-        display: flex; /* Create a flex row for each pair of columns */
-        flex-wrap: wrap; /* Allow wrapping for responsive design */
-        width: 100%; /* Ensure rows take full width */
-        margin-bottom: 30px; /* Add spacing between rows */
-    }
-
-    .column {
-        flex: 1; /* Equal width for left and right columns */
-        padding: 10px; /* Add spacing inside columns */
-        box-sizing: border-box; /* Ensure padding doesn't affect width */
-        text-align: center; /* Center-align content (optional) */
-        color: white; /* Text color for better contrast */
-    }
-
-    .column img {
-        height: 350px;
-        border-radius: 3px;
-        -webkit-box-shadow: 0 0 10px #22222293;
-        box-shadow: 0 0 10px #22222293;
-    }
-
-    .right p {
-        text-align: left;
-        line-height: 1.5;
-    }
-
-    @media (max-width: 768px) {
-        .column {
-            flex-basis: 100%; /* Stack columns vertically on smaller screens */
-        }
-    }
 
     main {
         width: 100%;
@@ -464,48 +324,59 @@
         text-align: center;
     }
 
-    /* Navigation Menu */
     #navigation {
         position: absolute;
-        top: 10px;
-        left: 20px;
-        z-index: 10;
+        top: 0px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
     }
 
-    #navigation .fa-bars {
-        font-size: 24px;
-        color: white;
+    .menu-button {
+        font-family: "Montserrat", sans-serif;
+        background: rgb(46, 46, 46);
+        border: none;
+        padding: 5px;
+        width: 110px;
+        font-size: 18px;
         cursor: pointer;
+        color: white;
+    }
+
+    .menu-button:hover {
+        background: rgb(78, 78, 78);
+        color: white;
     }
 
     .dropdown {
-        position: absolute;
-        top: 30px;
-        left: 0;
-        text-align: left;
-        background-color: #252529;
-        border-radius: 1px;
         list-style: none;
-        padding: 0;
-        margin: 0;
-        z-index: 10;
+        position: absolute;
+        background: black;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        top: 30px;
+        left: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .dropdown li {
-        all: unset;
-        font-weight: 300;
-        padding: 10px 20px;
-        color: white;
+    .menu-icon {
+        display: none;
         cursor: pointer;
-        display: block;
-        text-align: left;
+        font-size: 24px;
     }
 
-    .dropdown li:hover {
-        background-color: #042645;
+    @media (max-width: 767px) {
+        .menu-button {
+            display: none;
+        }
+
+        .menu-icon {
+            display: block;
+        }
     }
 
-    /* Scroll to Top Button */
     #scrollToTop {
         position: fixed;
         bottom: 20px;
@@ -532,7 +403,22 @@
         font-size: 20px;
     }
 
-    .gallery-container-research {
+    #research,
+    #people {
+        position: relative;
+        width: 100%;
+        /* padding-top: 50px; */
+    }
+
+    #research {
+        background-color: #001c23;
+    }
+    #people {
+        background-color: #003645;
+    }
+
+    .gallery-container-research,
+    .gallery-container-people {
         position: relative;
         display: flex;
         align-items: center;
@@ -540,15 +426,19 @@
         overflow: hidden;
         width: 100%;
         height: 70vh;
-        background-color: #003645;
-        margin-top: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
     }
 
     .gallery-container-research {
         background-color: #001c23;
     }
+    .gallery-container-people {
+        background-color: #003645;
+    }
 
-    .image-row-research {
+    .image-row-research,
+    .image-row-people {
         display: flex;
         overflow-x: auto;
         scroll-behavior: smooth;
@@ -614,13 +504,5 @@
 
     .arrow:hover {
         background: rgba(0, 0, 0, 0.8);
-    }
-
-    hr {
-        width: 80%;
-        height: 1px;
-        border: 0;
-        border-top: 2px solid #001c23;
-        padding-bottom: 30px;
     }
 </style>
