@@ -40,6 +40,10 @@
     isOverlayVisible = false;
   }
 
+  $effect(() => {
+    console.log(all_polygons);
+  });
+
   onMount(() => {
     mapboxgl.accessToken =
       "pk.eyJ1Ijoic2FzaGFnYXJpYmFsZHkiLCJhIjoiY2xyajRlczBlMDhqMTJpcXF3dHJhdTVsNyJ9.P_6mX_qbcbxLDS1o_SxpFg";
@@ -67,17 +71,28 @@
             generateId: true, // Ensures all features have unique IDs
           });
 
-          //add fill layer
+          // Add fill layer with conditional color
           map.addLayer({
             id: "countries_fill",
             type: "fill",
             source: "countries",
             paint: {
-              "fill-color": "steelblue",
+              "fill-color": [
+                "match",
+                ["get", "ADMIN"], // Get the country name from properties.ADMIN
+                "Sudan",
+                "steelblue",
+                "Libya",
+                "steelblue",
+                "Israel",
+                "steelblue",
+                "Syria",
+                "steelblue",
+                "#b3b3b3", // Default color for all other countries
+              ],
               "fill-opacity": 0.9,
             },
           });
-
           map.addLayer({
             id: "countries_outline",
             type: "line",

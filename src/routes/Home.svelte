@@ -263,7 +263,7 @@
         </div>
     </div>
     <!-- Scroll to Top Button -->
-    {#if showScrollToTop}
+    <!-- {#if showScrollToTop}
         <button
             id="scrollToTop"
             on:click={scrollToTop}
@@ -272,7 +272,7 @@
             <i class="fa fa-arrow-up" style="color: yellow;" aria-hidden="true"
             ></i>
         </button>
-    {/if}
+    {/if} -->
 </div>
 
 <style>

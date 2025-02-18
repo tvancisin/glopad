@@ -7,13 +7,10 @@
     import Select from "svelte-select";
 
     let manyBodyStrength = 2;
-    let xStrength = 0.1;
     let only_M = [];
     let nodeStrokeWidth = 1;
-    let xKey = "category";
     let rKey = "value";
     let finalData = [];
-    let mediatorNames = [];
     let country;
     let mena;
     let mediations;
@@ -36,6 +33,7 @@
     let minYear = 2018;
     let maxYear = 2024;
     let selectedYears = [2018, 2024];
+    let selectedYearsAgt = [2018, 2024];
     let categories = [
         "international",
         "regional",
@@ -122,50 +120,12 @@
             return { ...item, name: match ? match.ActorName : item.id };
         });
 
-        const mediatorIDs = [
-            "CON_82",
-            "GP-85",
-            "IGO_87",
-            "IGO_312",
-            "IGO_346",
-            "IGO_5",
-            "CON_81",
-            "CON_19",
-            "CON_3",
-            "CON_591",
-            "CON_419",
-            "CON_159",
-            "CON_173",
-            "CON_7",
-            "CON_2",
-            "CON_157",
-            "CON_486",
-            "IGO_49",
-            "IGO_386",
-            "GP-6",
-            "CON_76",
-            "CON_562",
-            "GP-19",
-            "NGO_201",
-            "CON_172",
-            "CON_248",
-            "CON_272",
-            "CON_358",
-            "CON_176",
-            "IGO_616",
-            "IGO_831",
-            "CON_285",
-            "CON_202",
-        ];
-
         // Create a lookup map for faster access
         const actorLookup = new Map(
             actors.map((actor) => [actor.GLOPAD_ID, actor.ActorName]),
         );
 
         // Replace mediatorIDs with corresponding ActorNames, keeping the ID if not found
-        mediatorNames = mediatorIDs.map((id) => actorLookup.get(id) || id);
-
         resultz = updatedIdValues;
 
         // Create a lookup table from actors
@@ -237,6 +197,7 @@
             (d) => d.Year,
             (d) => d.Month,
         );
+
         agreements_per_year.forEach(([year, months]) => {
             months.forEach(([month, count]) => {
                 agt_processed.push({ year, month, count });
@@ -440,6 +401,15 @@
             .restart();
     }
 
+    $: categoryPositions = categories.map(category => {
+        let categoryNodes = nodes.filter(node => node.category === category);
+        let avgX = categoryNodes.length > 0
+            ? d3.mean(categoryNodes, d => d.x) // Compute average X position
+            : x_circle(category); // Fallback to scale if no nodes exist
+
+        return { category, x: avgX };
+    });
+
     // UCDP XScale
     $: ucdp_xScale = d3
         .scaleBand()
@@ -513,20 +483,10 @@
         mediations_only = [...filtered];
     }
 
-    // Create a count map for events per Year-Month
-    $: eventCounts = d3.rollup(
-        mediations_only,
-        (v) => v.length, // Count occurrences
-        (d) => `${d.Year}-${d.Month}`, // Group by Year-Month
-    );
-
-    // Get min and max count values for scaling
-    $: eventMin = d3.min(eventCounts.values());
-    $: eventMax = d3.max(eventCounts.values());
-    $: opacityScale = d3
-        .scaleLinear()
-        .domain([eventMin, eventMax]) // Min to max count of events
-        .range([0.3, 1]); // Define opacity range (adjust as needed)
+    $: filteredAgreements = agreements.filter((d) => {
+        const year = +d.Year;
+        return year >= selectedYearsAgt[0] && year <= selectedYearsAgt[1];
+    });
 
     $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
     $: allYearMonthPairs = years.flatMap((year) =>
@@ -962,6 +922,17 @@
     <!-- peace agreements -->
     <div class="agreement_list" bind:clientWidth={width}>
         <h2>List of Agreements</h2>
+        <div class="slider-container">
+            <RangeSlider
+                bind:values={selectedYearsAgt}
+                min={minYear}
+                max={maxYear}
+                step={1}
+                pips
+                range
+                all="label"
+            />
+        </div>
         <div class="table">
             <!-- Header -->
             <div class="table_header">Date</div>
@@ -971,7 +942,7 @@
             <div class="table_header">Grouping/Mechanism</div>
 
             <!-- Rows -->
-            {#each agreements as row}
+            {#each filteredAgreements as row}
                 <div>{row.Day + "/" + row.Month + "/" + row.Year}</div>
                 <div
                     style="display: flex; justify-content: space-between; align-items: center;"
@@ -986,9 +957,6 @@
                 <div>{row.groupings_mechanisms}</div>
             {/each}
         </div>
-        <!-- {#each locationList as { location, count }}
-            <p style="font-size: {count}px;">{location} : {count}</p>
-        {/each} -->
         <div class="agreement_text">
             <p class="text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -1049,43 +1017,43 @@
     <div class="actor_types" bind:clientWidth={width}>
         <h2>Mediators by Actor Type</h2>
         <svg {width} {height}>
-            <g transform={`translate(${50}, ${margin.top})`}>
-                {#each nodes as point}
-                    <circle
-                        class="node"
-                        r={r_scale(point[rKey])}
-                        fill="steelblue"
-                        cx={point.x}
-                        cy={point.y}
-                        ><title>{point.name}</title>
-                    </circle>
-                {/each}
-                {#each nodes as point}
-                    {#if point.value > 10}
-                        <text
-                            x={point.x}
-                            y={point.y}
-                            dy=".35em"
-                            font-size="12"
-                            text-anchor="middle"
-                            font-weight="500"
-                            fill="white"
-                        >
-                            {point.name}
-                        </text>
-                    {/if}
-                {/each}
-                {#each categories as category}
+            {#each nodes as point}
+                <circle
+                    class="node"
+                    r={r_scale(point[rKey])}
+                    fill="steelblue"
+                    cx={point.x}
+                    cy={point.y}
+                    ><title>{point.name}</title>
+                </circle>
+            {/each}
+            {#each nodes as point}
+                {#if point.value > 10}
                     <text
-                        x={x_circle(category)}
-                        y={height - 30}
+                        x={point.x}
+                        y={point.y}
                         dy=".35em"
                         font-size="12"
-                        text-anchor="start"
-                        fill="white">{category}</text
+                        text-anchor="middle"
+                        font-weight="500"
+                        fill="white"
                     >
-                {/each}
-            </g>
+                        {point.name}
+                    </text>
+                {/if}
+            {/each}
+            {#each categoryPositions as { category, x }}
+            <text
+                x={x}
+                y={height - 20}
+                text-anchor="middle"
+                font-size="14"
+                font-weight="600"
+                fill="white"
+            >
+                {category}
+            </text>
+        {/each}
         </svg>
         <div class="mediation_text">
             <p class="text">
