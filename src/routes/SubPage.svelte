@@ -232,7 +232,7 @@
             return acc;
         }, {});
 
-        locationCounts["Unknown"] = unknown_count;
+        // locationCounts["Unknown"] = unknown_count;
 
         locationList = Object.entries(locationCounts)
             .map(([location, count]) => ({ location, count }))
@@ -243,6 +243,7 @@
             ...item,
             location: item.location === "" ? "Unknown/Virtual" : item.location,
         }));
+
 
         // UCDP PER MONTH
         const ucdp_group_date = d3.groups(
@@ -415,6 +416,7 @@
         return { category, x: avgX };
     });
 
+
     // UCDP XScale
     $: ucdp_xScale = d3
         .scaleBand()
@@ -492,7 +494,6 @@
         const year = +d.Year;
         return year >= selectedYearsAgt[0] && year <= selectedYearsAgt[1];
     });
-
 
     $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
     $: allYearMonthPairs = years.flatMap((year) =>
@@ -702,16 +703,16 @@
         <h2>Mediation Events per Month</h2>
         <div class="legend">
             <div class="legend-item">
-                <div class="color-box steelblue"></div>
-                <span>Mediation Related</span>
-            </div>
-            <div class="legend-item">
                 <div class="color-box white"></div>
                 <span>Mediation</span>
             </div>
             <div class="legend-item">
+                <div class="color-box steelblue"></div>
+                <span>Mediation-related</span>
+            </div>
+            <div class="legend-item">
                 <div class="red-line"></div>
-                <span>Fatalities (UCDP)</span>
+                <span>Battle-related deaths (UCDP)</span>
             </div>
         </div>
         <svg {width} {height}>
@@ -789,13 +790,32 @@
         </svg>
         <div class="mediation_type_text">
             <p class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <strong>Mediation events</strong>: non-coercive facilitation of
+                communication or negotiation between disputing parties to help
+                them reach a mutually acceptable agreement or resolution to
+                their conflict by an external third-party. Mediation always
+                involves at least two (local) conflict stakeholders, at least
+                one of them needing to be a belligerent. <br /><br />
+
+                <strong style="color: steelblue;"
+                    >Mediation-related events</strong
+                >: non-coercive measures to facilitate the mediation. These
+                measures are aimed at (1) encouraging a conflict party or
+                parties to come to/continue with the negotiation; (2) expanding
+                the range of actors directly or indirectly included in the
+                mediation; (3) coordinating among third-parties; (4) monitoring
+                and advising on implementation as part of formal follow-up
+                mechanisms.<br /><br />
+
+                <strong style="color: red;"
+                    >Best estimate of battle-related deaths</strong
+                >: the most reliable assessment of fatalities resulting directly
+                from combat between armed actors. Source:
+                <a
+                    target="_blank"
+                    href="https://ucdp.uu.se/downloads/index.html#ged_global"
+                    >Uppsala Conflict Data Program (UCDP)</a
+                >
             </p>
         </div>
     </div>
@@ -894,17 +914,6 @@
                 {/each}
             </g>
         </svg>
-        <div class="mediation_text">
-            <p class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-        </div>
     </div>
 
     <h1>Agreements</h1>
@@ -912,6 +921,16 @@
     <!-- agreements per month -->
     <div class="agreement_per_month" bind:clientWidth={width}>
         <h2>Agreements per Month</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="color-box-2 red"></div>
+                <span>MEND</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box-2 steelblue"></div>
+                <span>PA-X</span>
+            </div>
+        </div>
         <!-- Tooltip -->
         {#if hoveredCircle}
             <div
@@ -981,7 +1000,6 @@
             <!-- Header -->
             <div class="table_header">Date</div>
             <div class="table_header">Name</div>
-            <!-- <div class="table_header">PA-X</div> -->
             <div class="table_header">Third-Party Actors</div>
             <div class="table_header">Grouping/Mechanism</div>
 
@@ -1001,24 +1019,13 @@
                 <div>{row.groupings_mechanisms}</div>
             {/each}
         </div>
-        <div class="agreement_text">
-            <p class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-        </div>
     </div>
 
     <h1>Mediation</h1>
 
     <!-- top mediators -->
     <div class="mediators" bind:clientWidth={width}>
-        <h2>Top Mediators</h2>
+        <h2>Top Mediators (2018-2024)</h2>
         <svg {width} {height}>
             <g transform={`translate(${margin.left}, ${margin.top})`}>
                 {#each top_ten_mediators as mediator}
@@ -1099,45 +1106,29 @@
                 </text>
             {/each}
         </svg>
-        <div class="mediation_text">
-            <p class="text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-        </div>
     </div>
 
     <!-- peace agreements -->
-    <div class="agreement_list" bind:clientWidth={width}>
+    <!-- <div class="agreement_list" bind:clientWidth={width}>
         <h2>Key Processes (2018-2024)</h2>
         <div class="table">
-            <!-- Header -->
             <div class="table_header">Date</div>
             <div class="table_header">Name</div>
-            <!-- <div class="table_header">PA-X</div> -->
             <div class="table_header">Third-Party Actors</div>
             <div class="table_header">Local Actors</div>
-
-            <!-- Rows -->
             {#each processes as row}
-            <div>
-                {row.Start_mth}/{row.Start_y} - 
-                {row.End_y ? (row.End_mth ? row.End_mth + "/" : "") + row.End_y : "Present"}
-            </div>
+                <div>
+                    {row.Start_mth}/{row.Start_y} -
+                    {row.End_y
+                        ? (row.End_mth ? row.End_mth + "/" : "") + row.End_y
+                        : "Present"}
+                </div>
                 <div>{row.process}</div>
                 <div>{row.third_parties}</div>
                 <div>{row.local}</div>
             {/each}
         </div>
-        <!-- {#each locationList as { location, count }}
-            <p style="font-size: {count}px;">{location} : {count}</p>
-        {/each} -->
-    </div>
+    </div> -->
 
     <!-- actors and mediations over time -->
     <div class="actor_types" bind:clientWidth={width}>
@@ -1155,7 +1146,7 @@
             />
         </div>
         <!-- Dropdown List -->
-        <div class="select_group">
+        <!-- <div class="select_group">
             <Select
                 --border-radius="3px"
                 --placeholder-color="white"
@@ -1175,10 +1166,9 @@
             >
                 <div slot="item" let:item>
                     {item.label}
-                    <!-- Display the label of each item -->
                 </div>
             </Select>
-        </div>
+        </div> -->
 
         <svg {width} {height}>
             <g transform={`translate(${margin.left}, ${margin.top})`}>
@@ -1435,12 +1425,24 @@
         border-radius: 2px;
     }
 
+    .color-box-2 {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 1px solid black;
+    }
+
     .steelblue {
         background-color: steelblue;
     }
     .white {
         background-color: white;
     }
+
+    .red {
+        background-color: red;
+    }
+
     .red-line {
         width: 20px;
         height: 2px;

@@ -39,11 +39,10 @@ export let images_ppl = [
     { src: "./img/tom-min.png", name: "Tomas Vancisin", position: "Research Associate" },
 ];
 
-
-
 // Dropdown options
 export const sections = [
     { id: "home", name: "Home" },
+    { id: "about", name: "About" },
     { id: "map", name: "VIS" },
     { id: "research", name: "Research" },
     { id: "people", name: "Team" },

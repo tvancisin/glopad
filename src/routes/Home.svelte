@@ -153,6 +153,74 @@
             transition processes
         </h3>
     </div>
+    <div id="about">
+        <h3
+            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
+        >
+            About
+        </h3>
+        <p style="padding-left: 50px; padding-right: 50px;">
+            Our research explores fragmentations in the global order and how
+            these impact peace and transition settlements. We seek to better
+            understand why and how different third-party actors – state,
+            intergovernmental, and non-governmental actors – intervene in
+            conflicts, and how they see themselves contributing to reduction of
+            conflict and risks of conflict relapse. We also study how local
+            actors are navigating this multiplicity of mediators and
+            peacebuilders and how this is shaping conflict outcomes and
+            post-conflict governance.
+        </p>
+        <p style="padding-left: 50px; padding-right: 50px;">
+            The project produces dedicated case and trends studies as part of
+            the PeaceRep Global Transitions series and is developing two
+            complementary datasets.
+        </p>
+        <p style="padding-left: 70px; padding-right: 70px;">
+            • Third Parties in Peace Agreements dataset. Most formal agreements
+            in peace processes are supported by parties external to the armed
+            conflict, in the form of third-party signature to the agreement. In
+            the PA-X collection of peace agreements, two thirds of agreements
+            feature a signatory which is not one of the main conflict parties,
+            and half of all agreements feature an international third-party
+            signatory. This dataset is the only existing data resource on
+            third-party signatories in peace agreements allowing for an in-depth
+            examination of the patterns of engagement in peace agreements. It
+            provides valuable insights into what actors are necessary for
+            conflict parties to commit to a formal, written agreement. This data
+            is instrumental in discerning the regional priorities of individual
+            interveners over time giving us insight into the types of agreements
+            supported by individual third parties.
+        </p>
+        <p style="padding-left: 70px; padding-right: 70px;">
+            • Mediation Event and Negotiators Database (MEND) is a new and
+            growing resource for researchers and practitioners with a focus on
+            peace and conflict resolution. The dataset comprehensively covers
+            broader peacemaking efforts within armed conflicts, tracking all
+            mediation and mediation-related events involving external
+            third-party actors. It captures mediation as part of formal peace
+            initiatives and mediation attempts running in support or in parallel
+            to these. Each record corresponds to a unique event, providing
+            detailed metadata about location, third parties, local actors, and
+            individuals involved. The MEND dataset facilitates a nuanced
+            understanding of the roles various actors play in brokering
+            agreements and enables the identification of unsuccessful or spoiler
+            mediation attempts that may still have influenced the ongoing
+            conflict management. In an era marked by global fragmentation, this
+            data plays a crucial role in providing insights into when, how, and
+            why actors engage in mediation activities, allowing for the mapping
+            of network dynamics between international and local actors, and
+            identification of the mediation conditions conducive to the eventual
+            signing of agreements.
+        </p>
+        <p style="padding-left: 50px; padding-right: 50px;">
+            Our research is supported by the Peace and Conflict Resolution
+            Evidence Platform (PeaceRep), funded by UK International Development
+            from the UK government. However, the views expressed are those of
+            the authors and do not necessarily reflect the UK government’s
+            official policies. We receive additional support from the
+            Universities of St Andrews and Edinburgh.
+        </p>
+    </div>
 
     <main
         id="map"
@@ -246,7 +314,7 @@
                     <div class="image-container">
                         <img loading="lazy" {src} alt={name} />
                         <p>{name}</p>
-                        <p >{position}</p>
+                        <p>{position}</p>
                     </div>
                 {/each}
             </div>
@@ -315,7 +383,8 @@
         height: 300px;
         align-content: center;
         text-align: center;
-        background-color: #001c23;
+
+        background-color: #003645;
     }
 
     main {
@@ -335,11 +404,12 @@
 
     .menu-button {
         font-family: "Montserrat", sans-serif;
-        background: rgb(46, 46, 46);
+        background: #252525;
+        border-radius: 2px;
         border: none;
         padding: 5px;
         width: 110px;
-        font-size: 18px;
+        font-size: 16px;
         cursor: pointer;
         color: white;
     }
@@ -405,7 +475,8 @@
     }
 
     #research,
-    #people {
+    #people,
+    #about {
         position: relative;
         width: 100%;
         /* padding-top: 50px; */
@@ -416,6 +487,12 @@
     }
     #people {
         background-color: #003645;
+    }
+    #about {
+        position: relative;
+        background-color: #001c23;
+        padding-bottom: 20px;
+        font-weight: 200;
     }
 
     .gallery-container-research,

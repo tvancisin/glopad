@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import mapboxgl from "mapbox-gl";
   import turf from "turf";
-  import { countryNames } from "../utils";
 
   let { inflate, all_polygons } = $props();
 
@@ -40,9 +39,9 @@
     isOverlayVisible = false;
   }
 
-  $effect(() => {
-    console.log(all_polygons);
-  });
+  // $effect(() => {
+  //   console.log(all_polygons);
+  // });
 
   onMount(() => {
     mapboxgl.accessToken =
@@ -93,6 +92,7 @@
               "fill-opacity": 0.9,
             },
           });
+
           map.addLayer({
             id: "countries_outline",
             type: "line",
@@ -107,37 +107,68 @@
                 0,
               ],
             },
-            filter: ["in", ["get", "ADMIN"], ["literal", countryNames]],
           });
 
-          // highlight polygon on hover
+          const filteredCountries = ["Sudan", "Libya", "Israel", "Syria"];
+
+          // Create a tooltip element
+          const tooltip = document.createElement("div");
+          tooltip.style.position = "absolute";
+          tooltip.style.background = "rgba(0, 0, 0, 0.7)";
+          tooltip.style.color = "white";
+          tooltip.style.padding = "5px 10px";
+          tooltip.style.borderRadius = "5px";
+          tooltip.style.fontSize = "12px";
+          tooltip.style.pointerEvents = "none";
+          tooltip.style.display = "none";
+          document.body.appendChild(tooltip);
+
           map.on("mousemove", "countries_fill", (e) => {
             map.getCanvas().style.cursor = "pointer";
+
             if (e.features.length > 0) {
+              const countryName = e.features[0].properties.ADMIN;
+
               if (hoveredPolygonId !== null) {
                 map.setFeatureState(
                   { source: "countries", id: hoveredPolygonId },
                   { hover: false },
                 );
               }
+
               hoveredPolygonId = e.features[0].id;
               map.setFeatureState(
                 { source: "countries", id: hoveredPolygonId },
                 { hover: true },
               );
+
+              // Check if country is in the list
+              if (!filteredCountries.includes(countryName)) {
+                tooltip.innerText = "Coming Soon";
+                tooltip.style.display = "block";
+                tooltip.style.left = `${e.originalEvent.pageX + 10}px`;
+                tooltip.style.top = `${e.originalEvent.pageY + 10}px`;
+              } else {
+                tooltip.innerText = "Explore";
+                tooltip.style.display = "block";
+                tooltip.style.left = `${e.originalEvent.pageX + 10}px`;
+                tooltip.style.top = `${e.originalEvent.pageY + 10}px`;
+              }
             }
           });
 
-          // on mouse leave, no highlight
           map.on("mouseleave", "countries_fill", () => {
             map.getCanvas().style.cursor = "";
+
             if (hoveredPolygonId !== null) {
               map.setFeatureState(
                 { source: "countries", id: hoveredPolygonId },
                 { hover: false },
               );
             }
+
             hoveredPolygonId = null;
+            tooltip.style.display = "none";
           });
 
           map.on("click", "countries_fill", (e) => {
