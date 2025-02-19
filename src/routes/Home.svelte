@@ -116,7 +116,8 @@
 
         <div id="navigation">
             <!-- Hamburger Icon (Mobile) -->
-            <i style="padding: 5px;"
+            <i
+                style="padding: 5px;"
                 class="fa fa-bars menu-icon"
                 on:click={() => (isMenuOpen = !isMenuOpen)}
             ></i>
@@ -241,10 +242,11 @@
                 ></i>
             </button>
             <div class="image-row-people">
-                {#each images_ppl as { src, name } (src)}
+                {#each images_ppl as { src, name, position } (src)}
                     <div class="image-container">
                         <img loading="lazy" {src} alt={name} />
                         <p>{name}</p>
+                        <p >{position}</p>
                     </div>
                 {/each}
             </div>
@@ -315,7 +317,6 @@
         text-align: center;
         background-color: #001c23;
     }
-
 
     main {
         width: 100%;

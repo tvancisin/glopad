@@ -5,6 +5,7 @@
     import Heatmap from "../lib/Heatmap.svelte";
     import RangeSlider from "svelte-range-slider-pips";
     import Select from "svelte-select";
+    import filter from "svelte-select/filter";
 
     let manyBodyStrength = 2;
     let only_M = [];
@@ -18,6 +19,7 @@
     let neighbor;
     let sudan_ucdp;
     let processes = [];
+    let countries = [];
     let mediations_only = [];
     let processedData = [];
     let ucdp_final = [];
@@ -72,6 +74,7 @@
         "./data/mend_full.csv",
         "./data/ucdp.csv",
         "./data/processes.csv",
+        "./data/countries.csv",
     ];
     getCSV(path).then((glopad) => {
         actors = glopad[0];
@@ -79,6 +82,7 @@
         let mend = glopad[2];
         sudan_ucdp = glopad[3];
         processes = glopad[4];
+        countries = glopad[5];
 
         if (country === "Sudan") {
             mediations = mend.filter((d) => d.conflict_country === "Sudan");
@@ -401,11 +405,12 @@
             .restart();
     }
 
-    $: categoryPositions = categories.map(category => {
-        let categoryNodes = nodes.filter(node => node.category === category);
-        let avgX = categoryNodes.length > 0
-            ? d3.mean(categoryNodes, d => d.x) // Compute average X position
-            : x_circle(category); // Fallback to scale if no nodes exist
+    $: categoryPositions = categories.map((category) => {
+        let categoryNodes = nodes.filter((node) => node.category === category);
+        let avgX =
+            categoryNodes.length > 0
+                ? d3.mean(categoryNodes, (d) => d.x) // Compute average X position
+                : x_circle(category); // Fallback to scale if no nodes exist
 
         return { category, x: avgX };
     });
@@ -487,6 +492,7 @@
         const year = +d.Year;
         return year >= selectedYearsAgt[0] && year <= selectedYearsAgt[1];
     });
+
 
     $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
     $: allYearMonthPairs = years.flatMap((year) =>
@@ -670,6 +676,20 @@
             month: "4",
         },
     ];
+
+    let hoveredCircle = null; // Stores the hovered circle's data
+
+    function showTooltip(event, name) {
+        hoveredCircle = {
+            x: event.clientX,
+            y: event.clientY,
+            name,
+        };
+    }
+
+    function hideTooltip() {
+        hoveredCircle = null;
+    }
 </script>
 
 <div class="wrapper">
@@ -680,6 +700,20 @@
     <!-- mediations per month -->
     <div class="mediation_type" bind:clientWidth={width}>
         <h2>Mediation Events per Month</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="color-box steelblue"></div>
+                <span>Mediation Related</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box white"></div>
+                <span>Mediation</span>
+            </div>
+            <div class="legend-item">
+                <div class="red-line"></div>
+                <span>Fatalities (UCDP)</span>
+            </div>
+        </div>
         <svg {width} {height}>
             <!-- Group containing the chart -->
             <g transform={`translate(${margin.left}, ${margin.top})`}>
@@ -835,8 +869,6 @@
                         fill="steelblue"
                         rx="2"
                     />
-                {/each}
-                {#each locationList as { location, count }}
                     <text
                         x={horizontal_xScale(count) - 20}
                         y={horizontal_yScale(location) +
@@ -880,6 +912,16 @@
     <!-- agreements per month -->
     <div class="agreement_per_month" bind:clientWidth={width}>
         <h2>Agreements per Month</h2>
+        <!-- Tooltip -->
+        {#if hoveredCircle}
+            <div
+                class="tooltip"
+                style="top: {hoveredCircle.y + 10}px; left: {hoveredCircle.x +
+                    10}px;"
+            >
+                {hoveredCircle.name}
+            </div>
+        {/if}
         <svg {width} height={height - 100}>
             <g transform={`translate(${margin.left}, ${margin.top})`}>
                 <g
@@ -905,13 +947,15 @@
                     </text>
                 {/each}
                 {#each agt_processed as d}
-                    {#each d.count as _, i}
+                    {#each d.count as item, i}
                         <circle
                             cx={xScale(`${d.year}-${d.month}`) +
                                 xScale.bandwidth() / 2}
                             cy={innerHeight - 110 - i * 13}
                             r={5}
-                            fill="steelblue"
+                            fill={item.agmt_id_PAX === "" ? "red" : "steelblue"}
+                            on:mouseover={(e) => showTooltip(e, item.agmt_name)}
+                            on:mouseleave={hideTooltip}
                         />
                     {/each}
                 {/each}
@@ -1043,17 +1087,17 @@
                 {/if}
             {/each}
             {#each categoryPositions as { category, x }}
-            <text
-                x={x}
-                y={height - 20}
-                text-anchor="middle"
-                font-size="14"
-                font-weight="600"
-                fill="white"
-            >
-                {category}
-            </text>
-        {/each}
+                <text
+                    {x}
+                    y={height - 20}
+                    text-anchor="middle"
+                    font-size="14"
+                    font-weight="600"
+                    fill="white"
+                >
+                    {category}
+                </text>
+            {/each}
         </svg>
         <div class="mediation_text">
             <p class="text">
@@ -1081,15 +1125,10 @@
 
             <!-- Rows -->
             {#each processes as row}
-                <div>
-                    {row.Start_mth +
-                        "/" +
-                        row.Start_y +
-                        "-" +
-                        row.End_mth +
-                        "/" +
-                        row.End_y}
-                </div>
+            <div>
+                {row.Start_mth}/{row.Start_y} - 
+                {row.End_y ? (row.End_mth ? row.End_mth + "/" : "") + row.End_y : "Present"}
+            </div>
                 <div>{row.process}</div>
                 <div>{row.third_parties}</div>
                 <div>{row.local}</div>
@@ -1369,5 +1408,52 @@
 
     :global(.pipVal) {
         color: white;
+    }
+
+    .legend {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        align-self: flex-start; /* Aligns to the left */
+        width: 100%; /* Optional: Ensures it spans the container */
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        font-family: "Montserrat", sans-serif;
+    }
+
+    .color-box {
+        width: 20px;
+        height: 20px;
+        border: 1px solid black;
+        border-radius: 2px;
+    }
+
+    .steelblue {
+        background-color: steelblue;
+    }
+    .white {
+        background-color: white;
+    }
+    .red-line {
+        width: 20px;
+        height: 2px;
+        background-color: red;
+    }
+
+    .tooltip {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        pointer-events: none; /* Prevents tooltip from interfering with hover */
     }
 </style>
