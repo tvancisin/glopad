@@ -2,10 +2,18 @@
     import * as d3 from "d3";
     import { onMount } from "svelte";
     import { getCSV, getGeo, fillMissingMonths } from "../utils";
-    import Heatmap from "../lib/Heatmap.svelte";
     import RangeSlider from "svelte-range-slider-pips";
     import Select from "svelte-select";
     import filter from "svelte-select/filter";
+    import First from "./First.svelte";
+    import Second from "./Second.svelte";
+    import Third from "./Third.svelte";
+    import Fourth from "./Fourth.svelte";
+    import Fifth from "./Fifth.svelte";
+    import Sixth from "./Sixth.svelte";
+    import Seventh from "./Seventh.svelte";
+    import Eight from "./Eight.svelte";
+    import Nine from "./Nine.svelte";
 
     let manyBodyStrength = 2;
     let only_M = [];
@@ -244,7 +252,6 @@
             location: item.location === "" ? "Unknown/Virtual" : item.location,
         }));
 
-
         // UCDP PER MONTH
         const ucdp_group_date = d3.groups(
             sudan_ucdp,
@@ -406,17 +413,6 @@
             .restart();
     }
 
-    $: categoryPositions = categories.map((category) => {
-        let categoryNodes = nodes.filter((node) => node.category === category);
-        let avgX =
-            categoryNodes.length > 0
-                ? d3.mean(categoryNodes, (d) => d.x) // Compute average X position
-                : x_circle(category); // Fallback to scale if no nodes exist
-
-        return { category, x: avgX };
-    });
-
-
     // UCDP XScale
     $: ucdp_xScale = d3
         .scaleBand()
@@ -490,21 +486,12 @@
         mediations_only = [...filtered];
     }
 
-    $: filteredAgreements = agreements.filter((d) => {
-        const year = +d.Year;
-        return year >= selectedYearsAgt[0] && year <= selectedYearsAgt[1];
-    });
-
     $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
     $: allYearMonthPairs = years.flatMap((year) =>
         Array.from({ length: 12 }, (_, i) => `${year}-${i + 1}`),
     );
     $: uniqueYears = [...new Set(mediations_only.map((d) => d.Year))];
 
-    // $: xMed = d3
-    //     .scaleBand()
-    //     .domain(mediations_only.map((d) => d.med_event_ID))
-    //     .range([margin.left + 5, innerWidthAdjusted - margin.right]);
 
     $: xMed = d3
         .scaleBand()
@@ -540,91 +527,12 @@
             group.slice(1).replace(/([a-z])([A-Z])/g, "$1 $2"),
     }));
 
-    let filterText = ""; // For searching/filtering items
-    let selectedGroupings = []; // To store selected items
-
-    // Handle the addition of a new value (when not found in the list)
-    function handleFilter(e) {
-        if (selectedGroupings?.find((i) => i.label === filterText)) return; // Prevent adding duplicates
-        if (e.detail.length === 0 && filterText.length > 0) {
-            // Add a new item if the filter text is not in the items list
-            grouping_array = [
-                ...grouping_array,
-                { value: filterText, label: filterText },
-            ];
-        }
-    }
-
-    // Handle change when items are selected/deselected
-    function handleChange(e) {
-        // group= .map((i) => {
-        //     delete i.created;
-        //     return i;
-        // });
-    }
-
     // Axis
     let xAxisGroup;
     let yAxisGroup;
     let yMedAxisGroup;
     let yUCDPAxisGroup;
     let xAxisGroup1;
-    let xAxisGroup2;
-    $: {
-        if (xAxisGroup) {
-            const tickValues = xScale.domain().filter((_, i) => i % 3 === 0); // Show every second tick
-            const xAxis = d3
-                .axisBottom(xScale)
-                .tickValues(tickValues) // Manually set which ticks to show
-                .tickFormat((d) => {
-                    const [year, month] = d.split("-");
-                    return `${month}/${year}`; // Format as "MM/YYYY"
-                });
-
-            d3.select(xAxisGroup).call(xAxis);
-        }
-        if (yAxisGroup) {
-            const yAxis = d3.axisLeft(yScale);
-            d3.select(yAxisGroup).call(yAxis);
-        }
-        if (yUCDPAxisGroup) {
-            const yAxis = d3.axisRight(ucdp_yScale);
-            d3.select(yUCDPAxisGroup)
-                .call(yAxis)
-                .selectAll("text")
-                .style("fill", "red");
-
-            d3.select(yUCDPAxisGroup)
-                .selectAll(".domain, line")
-                .style("stroke", "red");
-        }
-    }
-    $: {
-        if (xAxisGroup1) {
-            const tickValues = xScale.domain().filter((_, i) => i % 3 === 0); // Show every second tick
-            const xAxis1 = d3
-                .axisBottom(xScale)
-                .tickValues(tickValues) // Manually set which ticks to show
-                .tickFormat((d) => {
-                    const [year, month] = d.split("-");
-                    return `${month}/${year}`; // Format ticks as "MM/YYYY"
-                });
-            d3.select(xAxisGroup1).call(xAxis1);
-        }
-    }
-    $: {
-        if (xAxisGroup2) {
-            const tickValues = xScale.domain().filter((_, i) => i % 3 === 0); // Show every second tick
-            const xAxis2 = d3
-                .axisBottom(xScale)
-                .tickValues(tickValues)
-                .tickFormat((d) => {
-                    const [year, month] = d.split("-");
-                    return `${month}/${year}`; // Format ticks as "MM/YYYY"
-                });
-            d3.select(xAxisGroup2).call(xAxis2);
-        }
-    }
 
     $: {
         if (yMedAxisGroup) {
@@ -677,625 +585,100 @@
             month: "4",
         },
     ];
-
-    let hoveredCircle = null; // Stores the hovered circle's data
-
-    function showTooltip(event, name) {
-        hoveredCircle = {
-            x: event.clientX,
-            y: event.clientY,
-            name,
-        };
-    }
-
-    function hideTooltip() {
-        hoveredCircle = null;
-    }
 </script>
 
-<div class="wrapper">
+<div class="wrapper" bind:clientWidth={width}>
     <div class="header">
         <h1 style="font-size: 50px;">{country + " 2018-2024"}</h1>
     </div>
-
     <!-- mediations per month -->
-    <div class="mediation_type" bind:clientWidth={width}>
-        <h2>Mediation Events per Month</h2>
-        <div class="legend">
-            <div class="legend-item">
-                <div class="color-box white"></div>
-                <span>Mediation</span>
-            </div>
-            <div class="legend-item">
-                <div class="color-box steelblue"></div>
-                <span>Mediation-related</span>
-            </div>
-            <div class="legend-item">
-                <div class="red-line"></div>
-                <span>Battle-related deaths (UCDP)</span>
-            </div>
-        </div>
-        <svg {width} {height}>
-            <!-- Group containing the chart -->
-            <g transform={`translate(${margin.left}, ${margin.top})`}>
-                <!-- X-Axis -->
-                <g
-                    bind:this={xAxisGroup}
-                    transform={`translate(0, ${innerHeight})`}
-                />
-                <g bind:this={yAxisGroup} transform={`translate(${0}, 0)`} />
-                <g
-                    bind:this={yUCDPAxisGroup}
-                    transform={`translate(${innerWidthAdjusted - margin.right}, 0)`}
-                />
-
-                {#each historical_events as event}
-                    <line
-                        x1={xScale(`${event.year}-${event.month}`)}
-                        y1={10}
-                        x2={xScale(`${event.year}-${event.month}`)}
-                        y2={innerHeight}
-                        stroke="gray"
-                        stroke-width="1"
-                        stroke-dasharray="4 2"
-                    />
-                    <text
-                        x={xScale(`${event.year}-${event.month}`)}
-                        y={0}
-                        fill="white"
-                    >
-                        {event.name}
-                    </text>
-                {/each}
-
-                <!-- Bars for Processed Data -->
-                {#each processedData as d}
-                    <rect
-                        x={xScale(`${d.year}-${d.month}`)}
-                        y={yScale(d.count.length)}
-                        width={xScale.bandwidth()}
-                        height={innerHeight - yScale(d.count.length)}
-                        fill="steelblue"
-                        rx="2"
-                    />
-                {/each}
-
-                <!-- Bars for Processed M -->
-                {#each processedM as m}
-                    <rect
-                        x={xScale(`${m.year}-${m.month}`)}
-                        y={yScale(m.count.length)}
-                        width={xScale.bandwidth()}
-                        height={innerHeight - yScale(m.count.length)}
-                        fill="white"
-                        rx="2"
-                    />
-                {/each}
-
-                <!-- Line Path -->
-                <path d={pathData} fill="none" stroke="red" stroke-width="2" />
-
-                <!-- Data Points -->
-                {#each ucdp_final as d}
-                    <circle
-                        cx={ucdp_xScale(`${d.year}-${d.month}`) +
-                            ucdp_xScale.bandwidth() / 2}
-                        cy={ucdp_yScale(d.best_count)}
-                        r="4"
-                        fill="red"
-                        stroke="black"
-                    />
-                {/each}
-            </g>
-        </svg>
-        <div class="mediation_type_text">
-            <p class="text">
-                <strong>Mediation events</strong>: non-coercive facilitation of
-                communication or negotiation between disputing parties to help
-                them reach a mutually acceptable agreement or resolution to
-                their conflict by an external third-party. Mediation always
-                involves at least two (local) conflict stakeholders, at least
-                one of them needing to be a belligerent. <br /><br />
-
-                <strong style="color: steelblue;"
-                    >Mediation-related events</strong
-                >: non-coercive measures to facilitate the mediation. These
-                measures are aimed at (1) encouraging a conflict party or
-                parties to come to/continue with the negotiation; (2) expanding
-                the range of actors directly or indirectly included in the
-                mediation; (3) coordinating among third-parties; (4) monitoring
-                and advising on implementation as part of formal follow-up
-                mechanisms.<br /><br />
-
-                <strong style="color: red;"
-                    >Best estimate of battle-related deaths</strong
-                >: the most reliable assessment of fatalities resulting directly
-                from combat between armed actors. Source:
-                <a
-                    target="_blank"
-                    href="https://ucdp.uu.se/downloads/index.html#ged_global"
-                    >Uppsala Conflict Data Program (UCDP)</a
-                >
-            </p>
-        </div>
-    </div>
-
+    <First
+        {innerWidthAdjusted}
+        {innerHeight}
+        {width}
+        {height}
+        {margin}
+        {xScale}
+        {yScale}
+        {ucdp_xScale}
+        {ucdp_yScale}
+        {historical_events}
+        {processedData}
+        {processedM}
+        {pathData}
+        {ucdp_final}
+    />
     <!-- unique actors -->
-    <div class="unique_actors" bind:clientWidth={width}>
-        <h2>Unique Mediators per Month</h2>
-        <svg {width} {height}>
-            <g transform={`translate(${margin.left}, ${margin.top})`}>
-                <g
-                    bind:this={xAxisGroup1}
-                    transform={`translate(0, ${innerHeight})`}
-                />
-                {#each historical_events as event}
-                    <line
-                        x1={xScale(`${event.year}-${event.month}`)}
-                        y1={10}
-                        x2={xScale(`${event.year}-${event.month}`)}
-                        y2={innerHeight}
-                        stroke="gray"
-                        stroke-width="1"
-                        stroke-dasharray="4 2"
-                    />
-                    <text
-                        x={xScale(`${event.year}-${event.month}`)}
-                        y={0}
-                        fill="white"
-                    >
-                        {event.name}
-                    </text>
-                {/each}
-                {#each result as d}
-                    <rect
-                        x={xScale(`${d.year}-${d.month}`)}
-                        y={yScale(d.count)}
-                        width={xScale.bandwidth()}
-                        height={innerHeight - yScale(d.count)}
-                        fill="steelblue"
-                        rx="2"
-                    />
-                    <text
-                        x={xScale(`${d.year}-${d.month}`) +
-                            xScale.bandwidth() / 2}
-                        y={yScale(d.count) - 10}
-                        dy=".35em"
-                        font-size="10"
-                        text-anchor="middle"
-                        fill="white"
-                    >
-                        {d.count}</text
-                    >
-                {/each}
-            </g>
-        </svg>
-    </div>
+    <Second
+        {width}
+        {height}
+        {innerHeight}
+        {margin}
+        {xScale}
+        {yScale}
+        {historical_events}
+        {result}
+    />
 
-    <!-- top mediation locations -->
-    <div class="mediation_location" bind:clientWidth={width}>
-        <h2>Mediation Locations</h2>
-        <div class="location_map">
-            <Heatmap {mediations} />
-        </div>
-        <svg {width} {height}>
-            <g transform={`translate(${margin.left}, ${margin.top})`}>
-                {#each locationList as { location, count }}
-                    <rect
-                        x={0}
-                        y={horizontal_yScale(location)}
-                        width={horizontal_xScale(count)}
-                        height={horizontal_yScale.bandwidth()}
-                        fill="steelblue"
-                        rx="2"
-                    />
-                    <text
-                        x={horizontal_xScale(count) - 20}
-                        y={horizontal_yScale(location) +
-                            horizontal_yScale.bandwidth() / 2}
-                        dy=".35em"
-                        font-size="12"
-                        text-anchor="start"
-                        fill="white"
-                    >
-                        {count}
-                    </text>
-                    <text
-                        x={horizontal_xScale(count) + 5}
-                        y={horizontal_yScale(location) +
-                            horizontal_yScale.bandwidth() / 2}
-                        dy=".35em"
-                        font-size="12"
-                        text-anchor="start"
-                        fill="white"
-                    >
-                        {location}
-                    </text>
-                {/each}
-            </g>
-        </svg>
-    </div>
+    <!-- mediation locations -->
+    <Third
+        {mediations}
+        {width}
+        {height}
+        {margin}
+        {locationList}
+        {horizontal_xScale}
+        {horizontal_yScale}
+    />
 
     <h1>Agreements</h1>
 
-    <!-- agreements per month -->
-    <div class="agreement_per_month" bind:clientWidth={width}>
-        <h2>Agreements per Month</h2>
-        <div class="legend">
-            <div class="legend-item">
-                <div class="color-box-2 red"></div>
-                <span>MEND</span>
-            </div>
-            <div class="legend-item">
-                <div class="color-box-2 steelblue"></div>
-                <span>PA-X</span>
-            </div>
-        </div>
-        <!-- Tooltip -->
-        {#if hoveredCircle}
-            <div
-                class="tooltip"
-                style="top: {hoveredCircle.y + 10}px; left: {hoveredCircle.x +
-                    10}px;"
-            >
-                {hoveredCircle.name}
-            </div>
-        {/if}
-        <svg {width} height={height - 100}>
-            <g transform={`translate(${margin.left}, ${margin.top})`}>
-                <g
-                    bind:this={xAxisGroup2}
-                    transform={`translate(0, ${innerHeight - 100})`}
-                />
-                {#each historical_events as event}
-                    <line
-                        x1={xScale(`${event.year}-${event.month}`)}
-                        y1={10}
-                        x2={xScale(`${event.year}-${event.month}`)}
-                        y2={innerHeight - 110}
-                        stroke="gray"
-                        stroke-width="1"
-                        stroke-dasharray="4 2"
-                    />
-                    <text
-                        x={xScale(`${event.year}-${event.month}`)}
-                        y={0}
-                        fill="white"
-                    >
-                        {event.name}
-                    </text>
-                {/each}
-                {#each agt_processed as d}
-                    {#each d.count as item, i}
-                        <circle
-                            cx={xScale(`${d.year}-${d.month}`) +
-                                xScale.bandwidth() / 2}
-                            cy={innerHeight - 110 - i * 13}
-                            r={5}
-                            fill={item.agmt_id_PAX === "" ? "red" : "steelblue"}
-                            on:mouseover={(e) => showTooltip(e, item.agmt_name)}
-                            on:mouseleave={hideTooltip}
-                        />
-                    {/each}
-                {/each}
-            </g>
-        </svg>
-    </div>
+    <Fourth
+        {width}
+        {height}
+        {innerHeight}
+        {margin}
+        {historical_events}
+        {xScale}
+        {agt_processed}
+    />
 
-    <!-- peace agreements -->
-    <div class="agreement_list" bind:clientWidth={width}>
-        <h2>List of Agreements</h2>
-        <div class="slider-container">
-            <RangeSlider
-                bind:values={selectedYearsAgt}
-                min={minYear}
-                max={maxYear}
-                step={1}
-                pips
-                range
-                all="label"
-            />
-        </div>
-        <div class="table">
-            <!-- Header -->
-            <div class="table_header">Date</div>
-            <div class="table_header">Name</div>
-            <div class="table_header">Third-Party Actors</div>
-            <div class="table_header">Grouping/Mechanism</div>
-
-            <!-- Rows -->
-            {#each filteredAgreements as row}
-                <div>{row.Day + "/" + row.Month + "/" + row.Year}</div>
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center;"
-                >
-                    <span style="text-align: left;">{row.agmt_name}</span>
-                    <img
-                        src={row.agmt_id_PAX === "" ? "new.png" : "pax.jpg"}
-                        style="height: 30px; margin-left: auto;"
-                    />
-                </div>
-                <div>{row.third_party}</div>
-                <div>{row.groupings_mechanisms}</div>
-            {/each}
-        </div>
-    </div>
+    <Fifth {width} {agreements} />
 
     <h1>Mediation</h1>
 
-    <!-- top mediators -->
-    <div class="mediators" bind:clientWidth={width}>
-        <h2>Top Mediators (2018-2024)</h2>
-        <svg {width} {height}>
-            <g transform={`translate(${margin.left}, ${margin.top})`}>
-                {#each top_ten_mediators as mediator}
-                    <rect
-                        x={0}
-                        y={horizontal_mediator_yScale(mediator[0])}
-                        rx="2"
-                        width={horizontal_xScale(mediator[1])}
-                        height={horizontal_yScale.bandwidth()}
-                        fill="steelblue"
-                    />
-                    <text
-                        x={horizontal_xScale(mediator[1]) - 20}
-                        y={horizontal_mediator_yScale(mediator[0]) +
-                            horizontal_yScale.bandwidth() / 2}
-                        dy=".35em"
-                        font-size="12"
-                        text-anchor="start"
-                        fill="white"
-                    >
-                        {mediator[1]}
-                    </text>
-                    <text
-                        x={horizontal_xScale(mediator[1]) + 10}
-                        y={horizontal_mediator_yScale(mediator[0]) +
-                            horizontal_yScale.bandwidth() / 2}
-                        dy=".35em"
-                        font-size="12"
-                        text-anchor="start"
-                        fill="white"
-                    >
-                        {mediator[0]}
-                    </text>
-                {/each}
-            </g>
-        </svg>
-    </div>
+    <Sixth
+        {width}
+        {height}
+        {margin}
+        {top_ten_mediators}
+        {horizontal_xScale}
+        {horizontal_yScale}
+        {horizontal_mediator_yScale}
+    />
 
-    <!-- text circle packing -->
-    <div class="actor_types" bind:clientWidth={width}>
-        <h2>Mediators by Actor Type</h2>
-        <svg {width} {height}>
-            {#each nodes as point}
-                <circle
-                    class="node"
-                    r={r_scale(point[rKey])}
-                    fill="steelblue"
-                    cx={point.x}
-                    cy={point.y}
-                    ><title>{point.name}</title>
-                </circle>
-            {/each}
-            {#each nodes as point}
-                {#if point.value > 10}
-                    <text
-                        x={point.x}
-                        y={point.y}
-                        dy=".35em"
-                        font-size="12"
-                        text-anchor="middle"
-                        font-weight="500"
-                        fill="white"
-                    >
-                        {point.name}
-                    </text>
-                {/if}
-            {/each}
-            {#each categoryPositions as { category, x }}
-                <text
-                    {x}
-                    y={height - 20}
-                    text-anchor="middle"
-                    font-size="14"
-                    font-weight="600"
-                    fill="white"
-                >
-                    {category}
-                </text>
-            {/each}
-        </svg>
-    </div>
+    <Seventh {width} {height} {nodes} {r_scale} {categories} {x_circle} />
 
-    <!-- peace agreements -->
-    <!-- <div class="agreement_list" bind:clientWidth={width}>
-        <h2>Key Processes (2018-2024)</h2>
-        <div class="table">
-            <div class="table_header">Date</div>
-            <div class="table_header">Name</div>
-            <div class="table_header">Third-Party Actors</div>
-            <div class="table_header">Local Actors</div>
-            {#each processes as row}
-                <div>
-                    {row.Start_mth}/{row.Start_y} -
-                    {row.End_y
-                        ? (row.End_mth ? row.End_mth + "/" : "") + row.End_y
-                        : "Present"}
-                </div>
-                <div>{row.process}</div>
-                <div>{row.third_parties}</div>
-                <div>{row.local}</div>
-            {/each}
-        </div>
-    </div> -->
+    <!-- <Eight {width} {processes} /> -->
 
-    <!-- actors and mediations over time -->
-    <div class="actor_types" bind:clientWidth={width}>
-        <h2>Mediation Timeline</h2>
-        <!-- Slider UI -->
-        <div class="slider-container">
-            <RangeSlider
-                bind:values={selectedYears}
-                min={minYear}
-                max={maxYear}
-                step={1}
-                pips
-                range
-                all="label"
-            />
-        </div>
-        <!-- Dropdown List -->
-        <!-- <div class="select_group">
-            <Select
-                --border-radius="3px"
-                --placeholder-color="white"
-                --background="#003645"
-                --list-background="#003645"
-                --border="none"
-                --multi-item-color="black"
-                --item-hover-bg="gray"
-                on:change={handleChange}
-                multiple
-                bind:value={selectedGroupings}
-                items={grouping_array}
-                itemId="value"
-                label="label"
-                on:filter={handleFilter}
-                bind:filterText
-            >
-                <div slot="item" let:item>
-                    {item.label}
-                </div>
-            </Select>
-        </div> -->
-
-        <svg {width} {height}>
-            <g transform={`translate(${margin.left}, ${margin.top})`}>
-                <g
-                    bind:this={yMedAxisGroup}
-                    transform={`translate(${margin.left}, 0)`}
-                />
-                {#each uniqueYears as year}
-                    <line
-                        x1={xMed(`${year}-1`)}
-                        x2={xMed(`${year}-1`)}
-                        y1={0}
-                        y2={innerHeight}
-                        stroke="white"
-                        stroke-width="1"
-                        opacity="0.3"
-                    />
-                    <g transform={`rotate(-30, ${xMed(`${year}-1`)}, 0)`}>
-                        <text
-                            x={xMed(`${year}-1`)}
-                            y={0}
-                            text-anchor="start"
-                            font-size="12px"
-                            fill="white"
-                        >
-                            {year}
-                        </text>
-                    </g>
-                {/each}
-                {#each mediations_only as d, i}
-                    <!-- {#if i === 0 || mediations_only[i - 1].Month !== d.Month}
-                        <rect
-                            x={xMed(d.med_event_ID)}
-                            y={0}
-                            width="1"
-                            height={innerHeight}
-                            fill={d.Month == "1" ? "white" : "#404040"}
-                        />
-                        <text
-                            x={xMed(d.med_event_ID)}
-                            y={0}
-                            font-size="10"
-                            fill={d.Month == "1" ? "white" : "gray"}
-                            transform={`rotate(-35, ${xMed(d.med_event_ID)}, -5)`}
-                            text-anchor="start"
-                        >
-                            {d.Month == "1" ? d.Year : d.Month}
-                        </text>
-                    {/if} -->
-                    <!-- {#each d.third_party_id_GLOPAD
-                        .split(";")
-                        .filter((m) => m.trim() !== "") as mediator}
-                        <rect
-                            x={xMed(d.med_event_ID)}
-                            y={yMed(mediator)}
-                            width={xMed.bandwidth()}
-                            height={5}
-                            fill={(() => {
-                                const groupClasses = d.groupings_mechanisms
-                                    .toLowerCase()
-                                    .split(";")
-                                    .map(
-                                        (g) =>
-                                            g.trim().replace(/\s+/g, "") ||
-                                            "nogrouping",
-                                    );
-
-                                if (Array.isArray(selectedGroupings)) {
-                                    let selectedGroup = selectedGroupings.find(
-                                        (group) =>
-                                            groupClasses.includes(
-                                                group.value.toLowerCase(),
-                                            ),
-                                    );
-                                    return selectedGroup
-                                        ? getColor(selectedGroup.value)
-                                        : "steelblue";
-                                }
-                                return "steelblue";
-                            })()}
-                            stroke="none"
-                        />
-                    {/each} -->
-                    {#each d.third_party_id_GLOPAD
-                        .split(";")
-                        .filter((m) => m.trim() !== "") as mediator}
-                        <rect
-                            x={xMed(`${d.Year}-${d.Month}`)}
-                            y={yMed(mediator)}
-                            width={xMed.bandwidth()}
-                            height={5}
-                            fill-opacity="0.35"
-                            fill={(() => {
-                                const groupClasses = d.groupings_mechanisms
-                                    .toLowerCase()
-                                    .split(";")
-                                    .map(
-                                        (g) =>
-                                            g.trim().replace(/\s+/g, "") ||
-                                            "nogrouping",
-                                    );
-
-                                if (Array.isArray(selectedGroupings)) {
-                                    let selectedGroup = selectedGroupings.find(
-                                        (group) =>
-                                            groupClasses.includes(
-                                                group.value.toLowerCase(),
-                                            ),
-                                    );
-                                    return selectedGroup
-                                        ? getColor(selectedGroup.value)
-                                        : "white";
-                                }
-                                return "white";
-                            })()}
-                            stroke="none"
-                        />
-                    {/each}
-                {/each}
-            </g>
-        </svg>
-    </div>
+    <Nine
+        {width}
+        {height}
+        {innerHeight}
+        {innerWidthAdjusted}
+        {margin}
+        {uniqueYears}
+        {grouping_array}
+        {xMed}
+        {yMed}
+        {mediations_only}
+        {only_M}
+    />
 </div>
 
 <style>
     .wrapper {
-        width: 100%;
+        width: calc(100% - 100px); /* Ensures a margin of 50px on both sides */
         box-sizing: border-box; /* Ensures padding and borders are included in the width */
         text-align: center;
         margin: 0 auto;
@@ -1314,148 +697,11 @@
         text-align: center;
     }
 
-    .mediation_type,
-    .unique_actors,
-    .mediation_location,
-    .agreement_list,
-    .agreement_per_month,
-    .mediators,
-    .actor_types {
-        max-width: calc(
-            100% - 100px
-        ); /* Ensures a margin of 50px on both sides */
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
-        justify-content: center;
-        align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Adds padding for better visuals */
-        box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
-    }
-
-    .location_map {
-        width: 100%;
-        height: 500px;
-        background-color: #001c23;
-        margin: 20px auto;
-    }
-
-    .text {
-        max-width: 800px; /* Optional: Restricts text width for better readability */
-        margin: 20px auto;
-        padding: 10px;
-        line-height: 1.6;
-        text-align: justify; /* Ensures text is evenly aligned */
-    }
-
-    .table {
-        display: grid;
-        grid-template-columns: 0.5fr 2fr 1fr 1fr; /* Adjust columns as needed */
-        border: 1px solid #595959;
-    }
-    .table div {
-        padding: 8px;
-        border: 1px solid #605f5f;
-        text-align: left;
-        word-break: break-word; /* Break long words */
-        overflow-wrap: anywhere; /* Allow breaking at any point */
-        white-space: normal; /* Allow wrapping */
-    }
-
-    /* Optional: Explicitly tell it to break on semicolons */
-    .table div {
-        word-break: break-word;
-    }
-
-    .table div::before {
-        content: "\200B"; /* Insert a zero-width space before */
-    }
-
-    .table_header {
-        font-weight: bold;
-        background-color: #424242;
-    }
-
-    .slider-container {
-        width: 90%;
-        margin: 10px auto;
-    }
-
     :global(.rangeSlider) {
         font-size: 14px;
     }
 
-    .select_group {
-        width: 90%;
-        margin-bottom: 20px;
-        text-align: left;
-    }
-
     :global(.pipVal) {
         color: white;
-    }
-
-    .legend {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-        align-self: flex-start; /* Aligns to the left */
-        width: 100%; /* Optional: Ensures it spans the container */
-    }
-
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 12px;
-        font-family: "Montserrat", sans-serif;
-    }
-
-    .color-box {
-        width: 20px;
-        height: 20px;
-        border: 1px solid black;
-        border-radius: 2px;
-    }
-
-    .color-box-2 {
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        border: 1px solid black;
-    }
-
-    .steelblue {
-        background-color: steelblue;
-    }
-    .white {
-        background-color: white;
-    }
-
-    .red {
-        background-color: red;
-    }
-
-    .red-line {
-        width: 20px;
-        height: 2px;
-        background-color: red;
-    }
-
-    .tooltip {
-        position: fixed;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        pointer-events: none; /* Prevents tooltip from interfering with hover */
     }
 </style>

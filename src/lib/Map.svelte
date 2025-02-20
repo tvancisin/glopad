@@ -175,6 +175,7 @@
             let clicked_country = e.features[0].properties.ADMIN;
             zoomToCountry(clicked_country);
             inflate(clicked_country);
+            tooltip.style.display = "none";
           });
 
           adjustMapForWindowSize();
