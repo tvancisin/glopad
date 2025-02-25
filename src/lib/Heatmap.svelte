@@ -20,7 +20,8 @@
                     return (
                         d.med_loc_x !== null &&
                         d.med_loc_x !== "" &&
-                        d.med_loc_x !== " "
+                        d.med_loc_x !== " " &&
+                        d.med_loc_y !== "Virtual"
                     );
                 })
                 .map((d) => {

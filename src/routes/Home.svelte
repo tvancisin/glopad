@@ -147,81 +147,12 @@
         </div>
 
         <!-- <h1>MEND: Mediation Events and Negotiators Database</h1> -->
-        <h1>Global Fragmentation PeaceHub</h1>
+        <h1>Global PeaceHub</h1>
         <h3>
             Understanding shifts in the geopolitical context of peace and
             transition processes
         </h3>
     </div>
-    <div id="about">
-        <h3
-            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
-        >
-            About
-        </h3>
-        <p style="padding-left: 50px; padding-right: 50px;">
-            Our research explores fragmentations in the global order and how
-            these impact peace and transition settlements. We seek to better
-            understand why and how different third-party actors – state,
-            intergovernmental, and non-governmental actors – intervene in
-            conflicts, and how they see themselves contributing to reduction of
-            conflict and risks of conflict relapse. We also study how local
-            actors are navigating this multiplicity of mediators and
-            peacebuilders and how this is shaping conflict outcomes and
-            post-conflict governance.
-        </p>
-        <p style="padding-left: 50px; padding-right: 50px;">
-            The project produces dedicated case and trends studies as part of
-            the PeaceRep Global Transitions series and is developing two
-            complementary datasets.
-        </p>
-        <p style="padding-left: 70px; padding-right: 70px;">
-            • Third Parties in Peace Agreements dataset. Most formal agreements
-            in peace processes are supported by parties external to the armed
-            conflict, in the form of third-party signature to the agreement. In
-            the PA-X collection of peace agreements, two thirds of agreements
-            feature a signatory which is not one of the main conflict parties,
-            and half of all agreements feature an international third-party
-            signatory. This dataset is the only existing data resource on
-            third-party signatories in peace agreements allowing for an in-depth
-            examination of the patterns of engagement in peace agreements. It
-            provides valuable insights into what actors are necessary for
-            conflict parties to commit to a formal, written agreement. This data
-            is instrumental in discerning the regional priorities of individual
-            interveners over time giving us insight into the types of agreements
-            supported by individual third parties.
-        </p>
-        <p style="padding-left: 70px; padding-right: 70px;">
-            • Mediation Event and Negotiators Database (MEND) is a new and
-            growing resource for researchers and practitioners with a focus on
-            peace and conflict resolution. The dataset comprehensively covers
-            broader peacemaking efforts within armed conflicts, tracking all
-            mediation and mediation-related events involving external
-            third-party actors. It captures mediation as part of formal peace
-            initiatives and mediation attempts running in support or in parallel
-            to these. Each record corresponds to a unique event, providing
-            detailed metadata about location, third parties, local actors, and
-            individuals involved. The MEND dataset facilitates a nuanced
-            understanding of the roles various actors play in brokering
-            agreements and enables the identification of unsuccessful or spoiler
-            mediation attempts that may still have influenced the ongoing
-            conflict management. In an era marked by global fragmentation, this
-            data plays a crucial role in providing insights into when, how, and
-            why actors engage in mediation activities, allowing for the mapping
-            of network dynamics between international and local actors, and
-            identification of the mediation conditions conducive to the eventual
-            signing of agreements.
-        </p>
-        <p style="padding-left: 50px; padding-right: 50px;">
-            Our research is supported by the Peace and Conflict Resolution
-            Evidence Platform (PeaceRep), funded by UK International Development
-            from the UK government. However, the views expressed are those of
-            the authors and do not necessarily reflect the UK government’s
-            official policies. We receive additional support from the
-            Universities of St Andrews and Edinburgh.
-        </p>
-    </div>
-
     <main
         id="map"
         bind:clientWidth={width}
@@ -246,6 +177,66 @@
             }}
         />
     </main>
+
+    <div id="people">
+        <h3
+            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
+        >
+            Team
+        </h3>
+        <div class="image-grid">
+            {#each images_ppl as { src, name, position } (src)}
+                <div class="image-container-people">
+                    <img loading="lazy" {src} alt={name} />
+                    <p>{name}</p>
+                    <p>{position}</p>
+                </div>
+            {/each}
+        </div>
+    </div>
+
+    <!-- <div id="people">
+        <h3
+            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
+        >
+            Team
+        </h3>
+        <div class="gallery-container-people">
+            <button
+                class="arrow left"
+                style="border: 2px solid white;"
+                aria-label="Scroll left"
+                on:click={() => scrollGalleryPeople(-1)}
+            >
+                <i
+                    class="fa fa-arrow-left"
+                    style="color: white;"
+                    aria-hidden="true"
+                ></i>
+            </button>
+            <div class="image-row-people">
+                {#each images_ppl as { src, name, position } (src)}
+                    <div class="image-container">
+                        <img loading="lazy" {src} alt={name} />
+                        <p>{name}</p>
+                        <p>{position}</p>
+                    </div>
+                {/each}
+            </div>
+            <button
+                class="arrow right"
+                style="border: 2px solid white;"
+                aria-label="Scroll right"
+                on:click={() => scrollGalleryPeople(1)}
+            >
+                <i
+                    class="fa fa-arrow-right"
+                    style="color: white;"
+                    aria-hidden="true"
+                ></i>
+            </button>
+        </div>
+    </div> -->
 
     <!-- research section -->
     <div id="research">
@@ -288,50 +279,185 @@
                 ></i>
             </button>
         </div>
+
+        <div id="publications">
+            <h3>2025</h3>
+            <p>
+                Elisa D’Amico (2025) Conflict in a Warming World: How Climate
+                Shocks Impact Rebel Demands and Peace Agreement Outcomes.
+                [Climate & Natural Resources Series]. PeaceRep: The Peace and
+                Conflict Resolution Evidence Platform, University of Edinburgh.
+            </p>
+            <h3>2024</h3>
+            <p>
+                Mateja Peter (2024) ‘Global fragmentation and collective
+                security instruments: Weakening the liberal international order
+                from within.’ Politics and Governance, 12 (7357), 1-15.
+            </p>
+            <p>
+                Sanja Badanjak and Mateja Peter (2024) ‘Diversification and
+                Congestion in Peacemaking: What the Data Says’. in Theresa
+                Whitfield (ed.), Still time to talk: Adaptation and innovation
+                in peace mediation, Accord 30. London: Conciliation Resources.
+            </p>
+            <p>
+                Mateja Peter and Kasia Houghton (2024) Russia and China in
+                Liberal Peacebuilding: Perceptions and Engagement with the
+                Dayton Peace Process in Bosnia and Herzegovina. [Global
+                Transitions Series]. PeaceRep: The Peace and Conflict Resolution
+                Evidence Platform, University of Edinburgh.
+            </p>
+            <p>
+                Niamh Henry (2024) Extracting Named Actors from Text: Using
+                Named Entity Recognition (NER) in Peace and Conflict Studies
+                [Peace Analytics Series]. PeaceRep: The Peace and Conflict
+                Resolution Evidence Platform, University of Edinburgh.
+            </p>
+            <p>
+                Elisa D’Amico (2024) Semi-Automated Coding for Conflict
+                Mediation Research: Database Development. Peace Analytics
+                Series, University of Edinburgh: Peace and Conflict Resolution
+                Evidence Platform: November 2024.
+            </p>
+            <p>
+                Kasia Houghton (2024). ‘The Competition over Norms: The Case of
+                the Syrian Conflict.’ In Benjamin Houghton and Kasia Houghton
+                (eds.) China, Russia and the USA in the Middle East: The Contest
+                for Supremacy. London: Routledge, 46-
+            </p>
+            <p>
+                Mateja Peter and Ruoxi Wang (2024) ‘China’s Approach to Human
+                Security within and outside UN Peacekeeping: Drawing Lessons
+                from South Sudan.’ Journal of International Peacekeeping, 27(1),
+                85-114.
+            </p>
+            <h3>2023</h3>
+            <p>
+                Mateja Peter and Kasia Houghton (2023) Congestion and
+                Diversification of Third-Party Mediation in Sudan and South
+                Sudan: First Look at some Longer-Term Trends. [Global
+                Transitions Series]. PeaceRep: The Peace and Conflict Resolution
+                Evidence Platform, University of Edinburgh.
+            </p>
+            <p>
+                Mateja Peter and Marcel Plichta (2023) China and Russia in
+                Sudan: Surveying data on economic and military engagement.
+                [Global Transitions Series]. PeaceRep: The Peace and Conflict
+                Resolution Evidence Platform, University of Edinburgh.th Sudan.’
+                Journal of International Peacekeeping, 27(1), 85-114.
+            </p>
+            <p>
+                Sanja Badanjak (2023) Third Parties in Peace Agreements: First
+                Look at New Data and Key Trends. [Global Transitions Series].
+                PeaceRep: The Peace and Conflict Resolution Evidence Platform,
+                University of Edinburgh.
+            </p>
+            <p>
+                Sanja Badanjak (2023) EU External Action and Development
+                Spending in a Time of Covid-19. [Covid-19 Series]. PeaceRep: The
+                Peace and Conflict Resolution Evidence Platform, University of
+                Edinburgh.
+            </p>
+            <h3>2022</h3>
+            <p>
+                Mateja Peter and Haley Rice (2022) Non-Western approaches to
+                peacemaking and peacebuilding: State-of-the-art and an agenda
+                for research. [Global Transitions Series]. PeaceRep: The Peace
+                and Conflict Resolution Evidence Platform, University of
+                Edinburgh.
+            </p>
+            <h3>Global Transitions Series</h3>
+            <p>
+                As part of the PeaceRep consortium, the project also produces
+                the <a
+                    target="_blank"
+                    href="https://peacerep.org/research/geopolitical-transitions/"
+                    >Global Transitions</a
+                > series, edited by Mateja Peter. This includes publications by the
+                core team and further studies produced in the wider consortium.
+            </p>
+        </div>
     </div>
 
-    <div id="people">
+    <div id="about">
         <h3
             style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
         >
-            Team
+            About
         </h3>
-        <div class="gallery-container-people">
-            <button
-                class="arrow left"
-                style="border: 2px solid white;"
-                aria-label="Scroll left"
-                on:click={() => scrollGalleryPeople(-1)}
-            >
-                <i
-                    class="fa fa-arrow-left"
-                    style="color: white;"
-                    aria-hidden="true"
-                ></i>
-            </button>
-            <div class="image-row-people">
-                {#each images_ppl as { src, name, position } (src)}
-                    <div class="image-container">
-                        <img loading="lazy" {src} alt={name} />
-                        <p>{name}</p>
-                        <p>{position}</p>
-                    </div>
-                {/each}
-            </div>
-            <button
-                class="arrow right"
-                style="border: 2px solid white;"
-                aria-label="Scroll right"
-                on:click={() => scrollGalleryPeople(1)}
-            >
-                <i
-                    class="fa fa-arrow-right"
-                    style="color: white;"
-                    aria-hidden="true"
-                ></i>
-            </button>
+        <div id="about_content">
+            <p>
+                Our research explores fragmentations in the global order and how
+                these impact peace and transition processes. We seek to better
+                understand why and how different third-party actors – state,
+                intergovernmental, and non-governmental actors – intervene in
+                attempts to broker peace, and how they see themselves
+                contributing to reduction of conflict and risks of conflict
+                relapse. We also study how local actors are navigating this
+                multiplicity of mediators and peacebuilders and how this is
+                shaping conflict outcomes and post-conflict governance.
+            </p>
+            <p>
+                The project produces dedicated case and trends studies as part
+                of the PeaceRep Global Transitions series and is developing two
+                complementary datasets.
+            </p>
+            <p style="margin-left: 30px; margin-right: 30px;">
+                • Third Parties in Peace Agreements dataset. Most formal
+                agreements in peace processes are supported by parties external
+                to the armed conflict, in the form of third-party signature to
+                the agreement. In the PA-X collection of peace agreements that
+                address inter- and intra- state, or mixed conflicts, around
+                sixty percent of agreements feature a signatory which is not one
+                of the main conflict parties, and around one-third of all
+                agreements feature an international third-party signatory. The
+                Third Parties in Peace Agreements dataset draws on the Peace
+                Agreement Actors Dataset (PAA-X) and is the only existing data
+                resource on third-party signatories in peace agreements. It
+                allows for an in-depth examination of the patterns of engagement
+                in peace agreements and provides valuable insights into what
+                actors are necessary for conflict parties to commit to a formal,
+                written agreement. This data is instrumental in discerning the
+                regional and topical priorities of individual interveners since
+                1990, giving us insight into the types of agreements supported
+                by individual third parties.
+            </p>
+            <p style="margin-left: 30px; margin-right: 30px;">
+                • Mediation Event and Negotiators Database (MEND) is a new and
+                growing resource for researchers and practitioners with a focus
+                on peace and conflict resolution. The dataset comprehensively
+                covers broader peacemaking efforts within major armed conflicts,
+                tracking all mediation and mediation-related events involving
+                external third-party actors, regardless of whether these events
+                result in a formal peace agreement. It captures mediation as
+                part of formal peace initiatives and mediation efforts running
+                in support or in parallel to these. Each record corresponds to a
+                unique event, providing detailed metadata about location, third
+                parties, local actors, and individuals involved. The MEND
+                dataset facilitates a nuanced understanding of the roles various
+                actors play in contributing to the peace processes and in
+                brokering agreements. It also enables the identification of
+                unsuccessful or spoiler mediation efforts that may still have
+                influenced the ongoing conflict management. In an era marked by
+                global fragmentation, this data plays a crucial role in
+                providing insights into where, when, how, and why actors engage
+                in mediation activities, allowing for the mapping of network
+                dynamics between international and local actors, and
+                identification of the mediation conditions conducive to the
+                eventual signing of agreements.
+            </p>
+            <h3>Funding</h3>
+            <p>
+                Our research is supported by the Peace and Conflict Resolution
+                Evidence Platform (PeaceRep), funded by UK International
+                Development from the UK government. However, the views expressed
+                are those of the authors and do not necessarily reflect the UK
+                government’s official policies. We receive additional support
+                from the Universities of St Andrews and Edinburgh.
+            </p>
         </div>
     </div>
+
     <!-- Scroll to Top Button -->
     <!-- {#if showScrollToTop}
         <button
@@ -384,7 +510,7 @@
         align-content: center;
         text-align: center;
 
-        background-color: #003645;
+        background-color: #001c23;
     }
 
     main {
@@ -478,20 +604,31 @@
     #people,
     #about {
         position: relative;
-        width: 100%;
-        /* padding-top: 50px; */
+    }
+
+    #about_content {
+        position: relative;
+        margin: auto;
+        width: 80%;
     }
 
     #research {
-        background-color: #001c23;
+        background-color: #003645;
     }
     #people {
-        background-color: #003645;
+        background-color: #001c23;
     }
     #about {
         position: relative;
         background-color: #001c23;
         padding-bottom: 20px;
+        font-weight: 200;
+    }
+    #publications {
+        position: relative;
+        margin: auto;
+        width: 80%;
+        padding: 20px;
         font-weight: 200;
     }
 
@@ -509,10 +646,10 @@
     }
 
     .gallery-container-research {
-        background-color: #001c23;
+        background-color: #003645;
     }
     .gallery-container-people {
-        background-color: #003645;
+        background-color: #001c23;
     }
 
     .image-row-research,
@@ -541,7 +678,7 @@
     }
 
     .image-container img {
-        height: 80%;
+        height: 100%;
         object-fit: cover;
         border-radius: 3px;
     }
@@ -552,6 +689,57 @@
         color: white;
         text-align: center;
         line-height: 1.2;
+    }
+
+    #people {
+        text-align: center;
+    }
+
+    .image-grid {
+        display: grid;
+        gap: 20px;
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+
+        /* Default: 1 column (mobile first) */
+        grid-template-columns: 1fr;
+    }
+
+    /* Medium screens: 2 rows of 3 */
+    @media (min-width: 600px) {
+        .image-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    /* Large screens: 1 row of 6 */
+    @media (min-width: 1024px) {
+        .image-grid {
+            grid-template-columns: repeat(6, 1fr);
+        }
+    }
+
+    .image-container-people {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .image-container-people img {
+        width: 100%;
+        height: auto;
+        border-radius: 3px;
+    }
+
+    .image-container-people p {
+        margin: 10px 0 0;
+        font-size: 13px;
+        color: white;
+        line-height: 1;
     }
 
     .arrow {

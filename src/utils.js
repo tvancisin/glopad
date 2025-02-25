@@ -42,10 +42,10 @@ export let images_ppl = [
 // Dropdown options
 export const sections = [
     { id: "home", name: "Home" },
-    { id: "about", name: "About" },
     { id: "map", name: "VIS" },
-    { id: "research", name: "Research" },
     { id: "people", name: "Team" },
+    { id: "research", name: "Research" },
+    { id: "about", name: "About" },
 ];
 
 

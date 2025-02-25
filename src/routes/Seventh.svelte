@@ -23,43 +23,45 @@
 <div class="actor_types" bind:clientWidth={width}>
     <h2>Mediators by Actor Type</h2>
     <svg {width} {height}>
-        {#each nodes as point}
-            <circle
-                class="node"
-                r={r_scale(point["value"])}
-                fill="steelblue"
-                cx={point.x}
-                cy={point.y}
-                ><title>{point.name}</title>
-            </circle>
-        {/each}
-        {#each nodes as point}
-            {#if point.value > 10}
+        <g transform="translate(50, 0)">
+            {#each nodes as point}
+                <circle
+                    class="node"
+                    r={r_scale(point["value"])}
+                    fill="steelblue"
+                    cx={point.x}
+                    cy={point.y}
+                    ><title>{point.name}</title>
+                </circle>
+            {/each}
+            {#each nodes as point}
+                {#if point.value > 10}
+                    <text
+                        x={point.x}
+                        y={point.y}
+                        dy=".35em"
+                        font-size="12"
+                        text-anchor="middle"
+                        font-weight="500"
+                        fill="white"
+                    >
+                        {point.name}
+                    </text>
+                {/if}
+            {/each}
+            {#each categoryPositions as { category, x }}
                 <text
-                    x={point.x}
-                    y={point.y}
-                    dy=".35em"
-                    font-size="12"
+                    {x}
+                    y={height - 20}
                     text-anchor="middle"
-                    font-weight="500"
+                    font-size="14"
+                    font-weight="600"
                     fill="white"
                 >
-                    {point.name}
+                    {category}
                 </text>
-            {/if}
-        {/each}
-        {#each categoryPositions as { category, x }}
-            <text
-                {x}
-                y={height - 20}
-                text-anchor="middle"
-                font-size="14"
-                font-weight="600"
-                fill="white"
-            >
-                {category}
-            </text>
-        {/each}
+            {/each}
+        </g>
     </svg>
 </div>
 

@@ -222,9 +222,4 @@
         width: 90%;
         margin: 10px auto;
     }
-    .select_group {
-        width: 90%;
-        margin-bottom: 20px;
-        text-align: left;
-    }
 </style>

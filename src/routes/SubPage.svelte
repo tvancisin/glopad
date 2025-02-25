@@ -2,9 +2,6 @@
     import * as d3 from "d3";
     import { onMount } from "svelte";
     import { getCSV, getGeo, fillMissingMonths } from "../utils";
-    import RangeSlider from "svelte-range-slider-pips";
-    import Select from "svelte-select";
-    import filter from "svelte-select/filter";
     import First from "./First.svelte";
     import Second from "./Second.svelte";
     import Third from "./Third.svelte";
@@ -12,7 +9,6 @@
     import Fifth from "./Fifth.svelte";
     import Sixth from "./Sixth.svelte";
     import Seventh from "./Seventh.svelte";
-    import Eight from "./Eight.svelte";
     import Nine from "./Nine.svelte";
 
     let manyBodyStrength = 2;
@@ -40,17 +36,13 @@
     let mediator_counts = [];
     let top_ten_mediators = [];
     let locationList = [];
-    let minYear = 2018;
-    let maxYear = 2024;
     let selectedYears = [2018, 2024];
-    let selectedYearsAgt = [2018, 2024];
     let categories = [
         "international",
         "regional",
         "neighbor",
         "mena",
         "other_state",
-        "other",
     ];
     let margin = { top: 20, right: 20, bottom: 20, left: 40 };
     let innerWidth = 800; // Outer width of the container
@@ -79,7 +71,7 @@
     let path = [
         "./data/mend_all_actors.csv",
         "./data/mena.csv",
-        "./data/mend_full.csv",
+        "./data/mend_latest.csv",
         "./data/ucdp.csv",
         "./data/processes.csv",
         "./data/countries.csv",
@@ -190,6 +182,8 @@
             return item;
         });
 
+        finalData = finalData.filter(item => item.id !== "NM" && item.name !== " NM");
+
         // FILTER TO 2023 and 2024
         const filteredData = mediations;
         // .filter(
@@ -217,9 +211,9 @@
             agt_processed = [...agt_processed]; // Ensure reactivity
         });
 
+        // TOP MEDIAITON LOCATIONS
         let unknown_count = 0;
 
-        // TOP MEDIAITON LOCATIONS
         const locationCounts = filteredData.reduce((acc, item) => {
             let location = item["med_location - MULTISELECT"]; // Use bracket notation for the field name
             let location2 = item["med_loc_x"];
@@ -366,24 +360,10 @@
         top_ten_mediators = updatedIdCounts;
     }
 
+    // MEDIATOR TYPES
     $: initialNodes = finalData.map((d) => ({ ...d }));
     $: simulation = d3.forceSimulation(initialNodes);
     $: nodes = [];
-
-    $: simulation.on("tick", () => {
-        nodes = simulation.nodes();
-    });
-
-    $: x_circle = d3
-        .scaleOrdinal()
-        .domain(categories)
-        .range(d3.range(0, innerWidthAdjusted, innerWidthAdjusted / 6));
-
-    $: r_scale = d3
-        .scaleLinear()
-        .domain([0, d3.max(finalData, (d) => d.value)])
-        .range([3, 60]);
-
     $: {
         simulation
             .force(
@@ -412,6 +392,21 @@
             .alpha(1)
             .restart();
     }
+
+    $: simulation.on("tick", () => {
+        nodes = simulation.nodes();
+    });
+
+    // SCALES
+    $: x_circle = d3
+        .scaleOrdinal()
+        .domain(categories)
+        .range(d3.range(0, innerWidthAdjusted, innerWidthAdjusted/5));
+
+    $: r_scale = d3
+        .scaleLinear()
+        .domain([0, d3.max(finalData, (d) => d.value)])
+        .range([3, 60]);
 
     // UCDP XScale
     $: ucdp_xScale = d3
@@ -473,25 +468,13 @@
     // Path Data
     $: pathData = line(ucdp_final);
 
-    $: if (selectedYears) {
-        filterByYear(selectedYears[0], selectedYears[1]);
-    }
 
-    function filterByYear(startYear, endYear) {
-        mediations_only = only_M;
-        let filtered = mediations_only.filter((d) => {
-            const year = +d.Year;
-            return year >= startYear && year <= endYear;
-        });
-        mediations_only = [...filtered];
-    }
-
+    // MEDIATION TIMELINE
     $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
     $: allYearMonthPairs = years.flatMap((year) =>
         Array.from({ length: 12 }, (_, i) => `${year}-${i + 1}`),
     );
     $: uniqueYears = [...new Set(mediations_only.map((d) => d.Year))];
-
 
     $: xMed = d3
         .scaleBand()
@@ -527,47 +510,6 @@
             group.slice(1).replace(/([a-z])([A-Z])/g, "$1 $2"),
     }));
 
-    // Axis
-    let xAxisGroup;
-    let yAxisGroup;
-    let yMedAxisGroup;
-    let yUCDPAxisGroup;
-    let xAxisGroup1;
-
-    $: {
-        if (yMedAxisGroup) {
-            const yAxis = d3
-                .axisLeft(yMed)
-                .tickSize(-innerWidthAdjusted + margin.right * 3);
-            // .tickFormat((d, i) => mediatorNames[i] || d);
-
-            d3.select(yMedAxisGroup)
-                .call(yAxis)
-                .selectAll(".tick line")
-                .attr("stroke", "#333333")
-                .attr("stroke-dasharray", "5,3");
-
-            d3.select(yMedAxisGroup)
-                .selectAll(".tick text")
-                .attr("font-size", "8")
-                .attr("fill", "gray");
-
-            d3.select(yMedAxisGroup).select(".domain").style("display", "none");
-        }
-    }
-
-    let colorOptions = ["yellow", "red", "blue"];
-
-    // Function to assign colors based on selection order
-    function getColor(grouping) {
-        if (!grouping) return "steelblue"; // Default color for non-selected items
-        let index = selectedGroupings.findIndex(
-            (g) => g.value.toLowerCase() === grouping.toLowerCase(),
-        );
-        return index >= 0
-            ? colorOptions[index % colorOptions.length]
-            : "steelblue";
-    }
     let historical_events = [
         {
             name: "Ouster of Omar al-Bashir",
@@ -633,6 +575,7 @@
 
     <h1>Agreements</h1>
 
+    <!-- agreements per month -->
     <Fourth
         {width}
         {height}
@@ -643,10 +586,12 @@
         {agt_processed}
     />
 
+    <!-- list of agreements -->
     <Fifth {width} {agreements} />
 
     <h1>Mediation</h1>
 
+    <!-- top mediators -->
     <Sixth
         {width}
         {height}
@@ -657,10 +602,13 @@
         {horizontal_mediator_yScale}
     />
 
+    <!-- types of mediators -->
     <Seventh {width} {height} {nodes} {r_scale} {categories} {x_circle} />
 
+    <!-- processes -->
     <!-- <Eight {width} {processes} /> -->
 
+    <!-- mediation timeline -->
     <Nine
         {width}
         {height}
