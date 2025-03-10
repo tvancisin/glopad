@@ -21,7 +21,7 @@
     let mediations;
     let actors;
     let neighbor;
-    let sudan_ucdp;
+    let ucdp;
     let processes = [];
     let countries = [];
     let mediations_only = [];
@@ -43,6 +43,7 @@
         "neighbor",
         "mena",
         "other_state",
+        "other",
     ];
     let margin = { top: 20, right: 20, bottom: 20, left: 40 };
     let innerWidth = 800; // Outer width of the container
@@ -67,12 +68,12 @@
             .borders;
     });
 
-    // load mend data
+    // LOAD MEND 
     let path = [
         "./data/mend_all_actors.csv",
         "./data/mena.csv",
         "./data/mend_latest.csv",
-        "./data/ucdp.csv",
+        "./data/ucdp_all.csv",
         "./data/processes.csv",
         "./data/countries.csv",
     ];
@@ -80,16 +81,19 @@
         actors = glopad[0];
         mena = glopad[1];
         let mend = glopad[2];
-        sudan_ucdp = glopad[3];
+        ucdp = glopad[3];
         processes = glopad[4];
         countries = glopad[5];
 
         if (country === "Sudan") {
             mediations = mend.filter((d) => d.conflict_country === "Sudan");
+            ucdp = ucdp.filter((d) => d.country === "Sudan");
         } else if (country === "Libya") {
             mediations = mend.filter((d) => d.conflict_country === "Libya");
+            ucdp = ucdp.filter((d) => d.country === "Libya");
         } else if (country === "Syria") {
             mediations = mend.filter((d) => d.conflict_country === "Syria");
+            ucdp = ucdp.filter((d) => d.country === "Syria");
         }
     });
 
@@ -99,7 +103,7 @@
         mediations?.length > 0 &&
         actors?.length > 0 &&
         mena?.length > 0 &&
-        sudan_ucdp?.length > 0
+        ucdp?.length > 0
     ) {
         //// ACTOR TYPES
         const thirdPartyCounts = {};
@@ -175,14 +179,18 @@
                 return { ...item, category: "international" };
             } else if (item.category === "Regional IGO") {
                 return { ...item, category: "regional" };
-            } else if (item.category === "Unknown") {
+            } else if (
+                item.category === "Unknown" ||
+                item.category === "Civil Society" ||
+                item.category === "Other"
+            ) {
                 return { ...item, category: "other" };
             }
 
             return item;
         });
 
-        finalData = finalData.filter(item => item.id !== "NM" && item.name !== " NM");
+        // finalData = finalData.filter(item => item.id !== "NM" && item.name !== " NM");
 
         // FILTER TO 2023 and 2024
         const filteredData = mediations;
@@ -248,27 +256,27 @@
 
         // UCDP PER MONTH
         const ucdp_group_date = d3.groups(
-            sudan_ucdp,
+            ucdp,
             (d) => d.year,
             (d) => d.month,
         );
 
-        // Ensure all months are present
-        const filled_ucdp_group_date = ucdp_group_date.map(([year, months]) => {
-            // Convert months to a Map for quick lookup
-            const monthMap = new Map(months);
+        // // Ensure all months are present
+        // const filled_ucdp_group_date = ucdp_group_date.map(([year, months]) => {
+        //     // Convert months to a Map for quick lookup
+        //     const monthMap = new Map(months);
 
-            // Create an array with all 12 months
-            const fullMonths = Array.from({ length: 12 }, (_, i) => {
-                const month = (i + 1).toString(); // Convert 1-12 to string (if needed)
-                return [month, monthMap.get(month) || []]; // Use existing data or empty array
-            });
+        //     // Create an array with all 12 months
+        //     const fullMonths = Array.from({ length: 12 }, (_, i) => {
+        //         const month = (i + 1).toString(); // Convert 1-12 to string (if needed)
+        //         return [month, monthMap.get(month) || []]; // Use existing data or empty array
+        //     });
 
-            return [year, fullMonths];
-        });
+        //     return [year, fullMonths];
+        // });
 
         // formatted ucdp data
-        filled_ucdp_group_date.forEach(([year, months]) => {
+        ucdp_group_date.forEach(([year, months]) => {
             months.forEach(([month, count]) => {
                 let best_count = 0;
 
@@ -360,34 +368,32 @@
         top_ten_mediators = updatedIdCounts;
     }
 
+    $: console.log(finalData);
+
+    // SCALES
+    $: x_circle = d3
+        .scaleOrdinal()
+        .domain(categories)
+        .range(d3.range(0, innerWidthAdjusted, innerWidthAdjusted / 6));
+
+    $: r_scale = d3
+        .scaleLinear()
+        .domain([0, d3.max(finalData, (d) => d.value)])
+        .range([3, 60]);
+
     // MEDIATOR TYPES
     $: initialNodes = finalData.map((d) => ({ ...d }));
     $: simulation = d3.forceSimulation(initialNodes);
     $: nodes = [];
     $: {
+        simulation.nodes(initialNodes);
         simulation
-            .force(
-                "x",
-                d3
-                    .forceX()
-                    .x((d) => {
-                        return x_circle(d["category"]);
-                    })
-                    .strength(0.2),
-            )
-            .force(
-                "center",
-                d3
-                    .forceCenter()
-                    .x(innerWidthAdjusted / 2)
-                    .y(height / 2),
-            ) // Attraction to the center of the svg area
+            .force("x", d3.forceX((d) => x_circle(d.category)).strength(0.3)) // Increase strength
+            .force("y", d3.forceY(height / 2).strength(0.2)) // Add a Y-force to help centering
             .force("charge", d3.forceManyBody().strength(manyBodyStrength))
             .force(
                 "collision",
-                d3.forceCollide().radius((d) => {
-                    return r_scale(d[rKey]) + nodeStrokeWidth / 2; // Divide this by two because an svg stroke is drawn halfway out
-                }),
+                d3.forceCollide((d) => r_scale(d[rKey]) + nodeStrokeWidth / 2),
             )
             .alpha(1)
             .restart();
@@ -397,23 +403,12 @@
         nodes = simulation.nodes();
     });
 
-    // SCALES
-    $: x_circle = d3
-        .scaleOrdinal()
-        .domain(categories)
-        .range(d3.range(0, innerWidthAdjusted, innerWidthAdjusted/5));
-
-    $: r_scale = d3
-        .scaleLinear()
-        .domain([0, d3.max(finalData, (d) => d.value)])
-        .range([3, 60]);
-
     // UCDP XScale
     $: ucdp_xScale = d3
         .scaleBand()
         // .domain(ucdp_final.map((d) => `${d.year}-${d.month}`))
         .domain(processedData.map((d) => `${d.year}-${d.month}`))
-        .range([0, innerWidthAdjusted])
+        .range([0, innerWidthAdjusted - margin.right])
         .padding(0.1);
 
     $: ucdp_yScale = d3
@@ -468,47 +463,6 @@
     // Path Data
     $: pathData = line(ucdp_final);
 
-
-    // MEDIATION TIMELINE
-    $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
-    $: allYearMonthPairs = years.flatMap((year) =>
-        Array.from({ length: 12 }, (_, i) => `${year}-${i + 1}`),
-    );
-    $: uniqueYears = [...new Set(mediations_only.map((d) => d.Year))];
-
-    $: xMed = d3
-        .scaleBand()
-        .domain(allYearMonthPairs) // Ensure all Year-Month pairs are included
-        .range([margin.left, innerWidthAdjusted - margin.right])
-        .padding(0.1); // Adjust padding if needed
-
-    $: yMed = d3
-        .scaleBand()
-        .domain(Object.keys(mediator_counts)) // Extracts keys as an array
-        .range([innerHeight, 0]);
-
-    $: grouping_array_first = Array.from(
-        new Set(
-            mediations_only.flatMap((d) =>
-                d.groupings_mechanisms
-                    ? d.groupings_mechanisms
-                          .toLowerCase()
-                          .split(";")
-                          .map((g) => g.trim().replace(/\s+/g, ""))
-                          .filter((g) => g !== "")
-                    : [],
-            ),
-        ),
-    );
-    $: grouping_array_initial = ["nogrouping", ...grouping_array_first];
-
-    // Transform to the desired format
-    $: grouping_array = grouping_array_initial.map((group) => ({
-        value: group,
-        label:
-            group.charAt(0).toUpperCase() +
-            group.slice(1).replace(/([a-z])([A-Z])/g, "$1 $2"),
-    }));
 
     let historical_events = [
         {
@@ -601,9 +555,17 @@
         {horizontal_yScale}
         {horizontal_mediator_yScale}
     />
-
     <!-- types of mediators -->
-    <Seventh {width} {height} {nodes} {r_scale} {categories} {x_circle} />
+    <Seventh
+        {width}
+        {innerWidthAdjusted}
+        {height}
+        {nodes}
+        {margin}
+        {r_scale}
+        {categories}
+        {x_circle}
+    />
 
     <!-- processes -->
     <!-- <Eight {width} {processes} /> -->
@@ -615,10 +577,7 @@
         {innerHeight}
         {innerWidthAdjusted}
         {margin}
-        {uniqueYears}
-        {grouping_array}
-        {xMed}
-        {yMed}
+        {mediator_counts}
         {mediations_only}
         {only_M}
     />

@@ -725,8 +725,8 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding-top: 50px;
-        padding-bottom: 50px;
+        padding-top: 80px;
+        padding-bottom: 80px;
     }
 
     .image-container-people img {

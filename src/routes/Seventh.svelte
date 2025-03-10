@@ -2,7 +2,9 @@
     import * as d3 from "d3";
 
     export let width;
+    export let innerWidthAdjusted;
     export let height;
+    export let margin;
     export let nodes;
     export let r_scale;
     export let categories;
@@ -17,13 +19,34 @@
 
         return { category, x: avgX };
     });
+
+    function splitText(text, maxChars) {
+        const words = text.split(" ");
+        const lines = [];
+        let currentLine = "";
+
+        words.forEach((word) => {
+            if ((currentLine + word).length > maxChars) {
+                lines.push(currentLine.trim());
+                currentLine = word + " ";
+            } else {
+                currentLine += word + " ";
+            }
+        });
+
+        if (currentLine.trim()) {
+            lines.push(currentLine.trim());
+        }
+
+        return lines;
+    }
 </script>
 
 <!-- text circle packing -->
 <div class="actor_types" bind:clientWidth={width}>
     <h2>Mediators by Actor Type</h2>
     <svg {width} {height}>
-        <g transform="translate(50, 0)">
+        <g transform="translate({innerWidthAdjusted / 6 / 2 + margin.left}, 0)">
             {#each nodes as point}
                 <circle
                     class="node"
@@ -35,20 +58,26 @@
                 </circle>
             {/each}
             {#each nodes as point}
-                {#if point.value > 10}
-                    <text
-                        x={point.x}
-                        y={point.y}
-                        dy=".35em"
-                        font-size="12"
-                        text-anchor="middle"
-                        font-weight="500"
-                        fill="white"
-                    >
-                        {point.name}
-                    </text>
+                {#if point.value > 20}
+                    {#await Promise.resolve(splitText(point.name, 10)) then lines}
+                        <text
+                            x={point.x}
+                            y={point.y - (lines.length - 1) * 6}
+                            font-size="12"
+                            text-anchor="middle"
+                            font-weight="500"
+                            fill="white"
+                        >
+                            {#each lines as line, i}
+                                <tspan x={point.x} dy={i === 0 ? "0" : "1.2em"}
+                                    >{line}</tspan
+                                >
+                            {/each}
+                        </text>
+                    {/await}
                 {/if}
             {/each}
+
             {#each categoryPositions as { category, x }}
                 <text
                     {x}
@@ -68,17 +97,14 @@
 <style>
     .actor_types {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Adds padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
 </style>

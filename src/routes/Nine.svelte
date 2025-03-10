@@ -9,17 +9,55 @@
     export let innerHeight;
     export let innerWidthAdjusted;
     export let margin;
-    export let uniqueYears;
-    export let xMed;
-    export let yMed;
     export let mediations_only;
+    export let mediator_counts;
     export let only_M;
-    export let grouping_array;
 
     let minYear = 2018;
     let maxYear = 2024;
     let selectedYears = [2018, 2024];
     let yMedAxisGroup;
+
+    // MEDIATION TIMELINE
+    $: years = [...new Set(mediations_only.map((d) => d.Year))]; // Extract unique years
+    $: allYearMonthPairs = years.flatMap((year) =>
+        Array.from({ length: 12 }, (_, i) => `${year}-${i + 1}`),
+    );
+    $: uniqueYears = [...new Set(mediations_only.map((d) => d.Year))];
+
+    $: xMed = d3
+        .scaleBand()
+        .domain(allYearMonthPairs) // Ensure all Year-Month pairs are included
+        .range([margin.left, innerWidthAdjusted - margin.right])
+        .padding(0.1); // Adjust padding if needed
+
+    $: yMed = d3
+        .scaleBand()
+        .domain(Object.keys(mediator_counts)) // Extracts keys as an array
+        .range([innerHeight, 0]);
+
+    $: grouping_array_first = Array.from(
+        new Set(
+            mediations_only.flatMap((d) =>
+                d.groupings_mechanisms
+                    ? d.groupings_mechanisms
+                          .toLowerCase()
+                          .split(";")
+                          .map((g) => g.trim().replace(/\s+/g, ""))
+                          .filter((g) => g !== "")
+                    : [],
+            ),
+        ),
+    );
+    $: grouping_array_initial = ["nogrouping", ...grouping_array_first];
+
+    // Transform to the desired format
+    $: grouping_array = grouping_array_initial.map((group) => ({
+        value: group,
+        label:
+            group.charAt(0).toUpperCase() +
+            group.slice(1).replace(/([a-z])([A-Z])/g, "$1 $2"),
+    }));
 
     $: {
         if (yMedAxisGroup) {
@@ -108,7 +146,7 @@
         />
     </div>
     <!-- Dropdown List -->
-    <!-- <div class="select_group">
+    <div class="select_group">
         <Select
             --border-radius="3px"
             --placeholder-color="white"
@@ -126,11 +164,11 @@
             on:filter={handleFilter}
             bind:filterText
         >
-            <div slot="item" let:item>
+            <div style="text-align: left;" slot="item" let:item>
                 {item.label}
             </div>
         </Select>
-    </div> -->
+    </div>
 
     <svg {width} {height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
@@ -218,7 +256,8 @@
         border-radius: 10px; /* Optional: Gives rounded corners */
     }
 
-    .slider-container {
+    .slider-container,
+    .select_group {
         width: 90%;
         margin: 10px auto;
     }
