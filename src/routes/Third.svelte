@@ -28,17 +28,6 @@
                     rx="2"
                 />
                 <text
-                    x={horizontal_xScale(count) - 20}
-                    y={horizontal_yScale(location) +
-                        horizontal_yScale.bandwidth() / 2}
-                    dy=".35em"
-                    font-size="12"
-                    text-anchor="start"
-                    fill="white"
-                >
-                    {count}
-                </text>
-                <text
                     x={horizontal_xScale(count) + 5}
                     y={horizontal_yScale(location) +
                         horizontal_yScale.bandwidth() / 2}
@@ -47,7 +36,7 @@
                     text-anchor="start"
                     fill="white"
                 >
-                    {location}
+                    {location + " (" + count + ")"}
                 </text>
             {/each}
         </g>

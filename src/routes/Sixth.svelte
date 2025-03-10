@@ -23,17 +23,6 @@
                     fill="steelblue"
                 />
                 <text
-                    x={horizontal_xScale(mediator[1]) - 20}
-                    y={horizontal_mediator_yScale(mediator[0]) +
-                        horizontal_yScale.bandwidth() / 2}
-                    dy=".35em"
-                    font-size="12"
-                    text-anchor="start"
-                    fill="white"
-                >
-                    {mediator[1]}
-                </text>
-                <text
                     x={horizontal_xScale(mediator[1]) + 10}
                     y={horizontal_mediator_yScale(mediator[0]) +
                         horizontal_yScale.bandwidth() / 2}
@@ -42,7 +31,7 @@
                     text-anchor="start"
                     fill="white"
                 >
-                    {mediator[0]}
+                    {mediator[0] + " (" + mediator[1] + ")"}
                 </text>
             {/each}
         </g>

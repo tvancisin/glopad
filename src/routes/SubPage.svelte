@@ -48,6 +48,7 @@
     let margin = { top: 20, right: 20, bottom: 20, left: 40 };
     let innerWidth = 800; // Outer width of the container
     let height = 500; // Outer height of the container
+    let historical_events;
 
     // Calculate dimensions reactively
     $: width = innerWidth; // Reactively bound to `clientWidth` for responsiveness
@@ -68,7 +69,7 @@
             .borders;
     });
 
-    // LOAD MEND 
+    // LOAD MEND
     let path = [
         "./data/mend_all_actors.csv",
         "./data/mena.csv",
@@ -88,12 +89,47 @@
         if (country === "Sudan") {
             mediations = mend.filter((d) => d.conflict_country === "Sudan");
             ucdp = ucdp.filter((d) => d.country === "Sudan");
+            historical_events = [
+                {
+                    name: "Ouster of Omar al-Bashir",
+                    year: "2019",
+                    month: "4",
+                },
+                {
+                    name: "Coup",
+                    year: "2021",
+                    month: "10",
+                },
+                {
+                    name: "Civil War",
+                    year: "2023",
+                    month: "4",
+                },
+            ];
         } else if (country === "Libya") {
             mediations = mend.filter((d) => d.conflict_country === "Libya");
             ucdp = ucdp.filter((d) => d.country === "Libya");
+            historical_events = []
         } else if (country === "Syria") {
             mediations = mend.filter((d) => d.conflict_country === "Syria");
             ucdp = ucdp.filter((d) => d.country === "Syria");
+            historical_events = [
+                {
+                    name: "Earthquake",
+                    year: "2023",
+                    month: "6",
+                },
+                {
+                    name: "Reinstated in Arab League",
+                    year: "2023",
+                    month: "7",
+                },
+                {
+                    name: "Assad's Ouster",
+                    year: "2024",
+                    month: "8",
+                },
+            ];
         }
     });
 
@@ -288,6 +324,8 @@
             ucdp_final = [...ucdp_final]; // Ensure reactivity
         });
 
+        console.log(ucdp_final);
+
         // MEDIATIONS PER MONTH
         const groupedData = d3.groups(
             filteredData,
@@ -368,8 +406,6 @@
         top_ten_mediators = updatedIdCounts;
     }
 
-    $: console.log(finalData);
-
     // SCALES
     $: x_circle = d3
         .scaleOrdinal()
@@ -406,7 +442,6 @@
     // UCDP XScale
     $: ucdp_xScale = d3
         .scaleBand()
-        // .domain(ucdp_final.map((d) => `${d.year}-${d.month}`))
         .domain(processedData.map((d) => `${d.year}-${d.month}`))
         .range([0, innerWidthAdjusted - margin.right])
         .padding(0.1);
@@ -414,7 +449,6 @@
     $: ucdp_yScale = d3
         .scaleLinear()
         .domain([0, Math.max(...ucdp_final.map((d) => d.best_count))])
-        // .domain([0, Math.max(...processedData.map((d) => d.count.length * 5))])
         .range([innerHeight, 0]);
 
     // X Scale
@@ -462,25 +496,6 @@
 
     // Path Data
     $: pathData = line(ucdp_final);
-
-
-    let historical_events = [
-        {
-            name: "Ouster of Omar al-Bashir",
-            year: "2019",
-            month: "4",
-        },
-        {
-            name: "Coup",
-            year: "2021",
-            month: "10",
-        },
-        {
-            name: "Civil War",
-            year: "2023",
-            month: "4",
-        },
-    ];
 </script>
 
 <div class="wrapper" bind:clientWidth={width}>
@@ -503,6 +518,7 @@
         {processedM}
         {pathData}
         {ucdp_final}
+        {country}
     />
     <!-- unique actors -->
     <Second
@@ -514,6 +530,7 @@
         {yScale}
         {historical_events}
         {result}
+        {country}
     />
 
     <!-- mediation locations -->

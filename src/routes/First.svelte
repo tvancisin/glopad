@@ -15,6 +15,7 @@
     export let processedM;
     export let pathData;
     export let ucdp_final;
+    export let country;
 
     let xAxisGroup;
     let yAxisGroup;
@@ -38,7 +39,13 @@
             d3.select(yAxisGroup).call(yAxis);
         }
         if (yUCDPAxisGroup) {
-            const yAxis = d3.axisRight(ucdp_yScale);
+            const maxCount = Math.max(...ucdp_final.map((d) => d.best_count));
+
+            const yAxis = d3
+                .axisRight(ucdp_yScale)
+                .ticks(3) // Limits to 3 ticks
+                .tickFormat(d3.format("d")); // Ensures whole numbers
+
             d3.select(yUCDPAxisGroup)
                 .call(yAxis)
                 .selectAll("text")
@@ -83,25 +90,6 @@
                 transform={`translate(${innerWidthAdjusted - margin.right}, 0)`}
             />
 
-            {#each historical_events as event}
-                <line
-                    x1={xScale(`${event.year}-${event.month}`)}
-                    y1={10}
-                    x2={xScale(`${event.year}-${event.month}`)}
-                    y2={innerHeight}
-                    stroke="gray"
-                    stroke-width="1"
-                    stroke-dasharray="4 2"
-                />
-                <text
-                    x={xScale(`${event.year}-${event.month}`)}
-                    y={0}
-                    fill="white"
-                >
-                    {event.name}
-                </text>
-            {/each}
-
             <!-- Bars for Processed Data -->
             {#each processedData as d}
                 <rect
@@ -124,6 +112,25 @@
                     fill="white"
                     rx="2"
                 />
+            {/each}
+
+            {#each historical_events as event, i}
+                <line
+                    x1={xScale(`${event.year}-${event.month}`)}
+                    y1={10 + i * 20}
+                    x2={xScale(`${event.year}-${event.month}`)}
+                    y2={innerHeight}
+                    stroke="gray"
+                    stroke-width="1"
+                    stroke-dasharray="4 2"
+                />
+                <text
+                    x={xScale(`${event.year}-${event.month}`)}
+                    y={i * 20}
+                    fill="white"
+                >
+                    {event.name}
+                </text>
             {/each}
 
             <!-- Line Path -->

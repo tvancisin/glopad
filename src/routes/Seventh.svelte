@@ -87,8 +87,13 @@
                     font-weight="600"
                     fill="white"
                 >
-                    {category}
-                </text>
+                {category === "other" ? "Other" :
+                category === "international" ? "International" :
+                category === "regional" ? "Regional" :
+                category === "neighbor" ? "Neighbor" :
+                category === "mena" ? "Mena" :
+                category === "other_state" ? "Other State" :
+                category}            </text>
             {/each}
         </g>
     </svg>

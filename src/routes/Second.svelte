@@ -9,6 +9,7 @@
     export let yScale;
     export let historical_events;
     export let result;
+    export let country;
 
     let xAxisGroup;
 
@@ -36,10 +37,10 @@
                 bind:this={xAxisGroup}
                 transform={`translate(0, ${innerHeight})`}
             />
-            {#each historical_events as event}
+            {#each historical_events as event, i}
                 <line
                     x1={xScale(`${event.year}-${event.month}`)}
-                    y1={10}
+                    y1={10 + i * 20}
                     x2={xScale(`${event.year}-${event.month}`)}
                     y2={innerHeight}
                     stroke="gray"
@@ -48,7 +49,7 @@
                 />
                 <text
                     x={xScale(`${event.year}-${event.month}`)}
-                    y={0}
+                    y={i * 20}
                     fill="white"
                 >
                     {event.name}
