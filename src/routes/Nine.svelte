@@ -12,6 +12,7 @@
     export let mediations_only;
     export let mediator_counts;
     export let only_M;
+    export let actorLookup;
 
     let minYear = 2018;
     let maxYear = 2024;
@@ -31,10 +32,43 @@
         .range([margin.left, innerWidthAdjusted - margin.right])
         .padding(0.1); // Adjust padding if needed
 
+    // $: yMed = d3
+    //     .scaleBand()
+    //     .domain(Object.keys(mediator_counts)) // Extracts keys as an array
+    //     .range([innerHeight, 0]);
+
     $: yMed = d3
         .scaleBand()
         .domain(Object.keys(mediator_counts)) // Extracts keys as an array
         .range([innerHeight, 0]);
+
+    $: {
+        if (actorLookup instanceof Map && yMedAxisGroup) {
+            // Only create axis after actorLookup is fully initialized
+            const yAxis = d3
+                .axisLeft(yMed)
+                .tickSize(-innerWidthAdjusted + margin.right * 3)
+                .tickFormat((d) => {
+                    const countryName = actorLookup.get(d);
+                    console.log("Actor Lookup for", d, ":", countryName);
+                    return countryName || d; // Fallback to the ID if no country is found
+                });
+
+            // Call the y-axis with the formatted tick labels
+            d3.select(yMedAxisGroup)
+                .call(yAxis)
+                .selectAll(".tick line")
+                .attr("stroke", "#333333")
+                .attr("stroke-dasharray", "5,3");
+
+            d3.select(yMedAxisGroup)
+                .selectAll(".tick text")
+                .attr("font-size", "8")
+                .attr("fill", "gray");
+
+            d3.select(yMedAxisGroup).select(".domain").style("display", "none");
+        }
+    }
 
     $: grouping_array_first = Array.from(
         new Set(
@@ -58,28 +92,6 @@
             group.charAt(0).toUpperCase() +
             group.slice(1).replace(/([a-z])([A-Z])/g, "$1 $2"),
     }));
-
-    $: {
-        if (yMedAxisGroup) {
-            const yAxis = d3
-                .axisLeft(yMed)
-                .tickSize(-innerWidthAdjusted + margin.right * 3);
-            // .tickFormat((d, i) => mediatorNames[i] || d);
-
-            d3.select(yMedAxisGroup)
-                .call(yAxis)
-                .selectAll(".tick line")
-                .attr("stroke", "#333333")
-                .attr("stroke-dasharray", "5,3");
-
-            d3.select(yMedAxisGroup)
-                .selectAll(".tick text")
-                .attr("font-size", "8")
-                .attr("fill", "gray");
-
-            d3.select(yMedAxisGroup).select(".domain").style("display", "none");
-        }
-    }
 
     function filterByYear(startYear, endYear) {
         mediations_only = only_M;

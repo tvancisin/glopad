@@ -82,6 +82,7 @@
                     x={xScale(`${event.year}-${event.month}`)}
                     y={i * 20}
                     fill="white"
+                    text-anchor="middle"
                 >
                     {event.name}
                 </text>

@@ -30,7 +30,7 @@
 
 <!-- unique actors -->
 <div class="unique_actors" bind:clientWidth={width}>
-    <h2>Unique Mediators per Month</h2>
+    <h2>Unique Third-Party Actors per Month</h2>
     <svg {width} {height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
             <g
@@ -51,6 +51,7 @@
                     x={xScale(`${event.year}-${event.month}`)}
                     y={i * 20}
                     fill="white"
+                    text-anchor="middle"
                 >
                     {event.name}
                 </text>

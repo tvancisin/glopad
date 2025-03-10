@@ -4,7 +4,7 @@
 </script>
 
 <div class="agreement_list" bind:clientWidth={width}>
-    <h2>Key Processes (2018-2024)</h2>
+    <h2>Key Processes</h2>
     <div class="table">
         <div class="table_header">Date</div>
         <div class="table_header">Name</div>

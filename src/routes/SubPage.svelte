@@ -9,6 +9,7 @@
     import Fifth from "./Fifth.svelte";
     import Sixth from "./Sixth.svelte";
     import Seventh from "./Seventh.svelte";
+    import Eight from "./Eight.svelte";
     import Nine from "./Nine.svelte";
 
     let manyBodyStrength = 2;
@@ -45,6 +46,7 @@
         "other_state",
         "other",
     ];
+    let actorLookup;
     let margin = { top: 20, right: 20, bottom: 20, left: 40 };
     let innerWidth = 800; // Outer width of the container
     let height = 500; // Outer height of the container
@@ -73,7 +75,7 @@
     let path = [
         "./data/mend_all_actors.csv",
         "./data/mena.csv",
-        "./data/mend_latest.csv",
+        "./data/mend_march.csv",
         "./data/ucdp_all.csv",
         "./data/processes.csv",
         "./data/countries.csv",
@@ -115,19 +117,14 @@
             ucdp = ucdp.filter((d) => d.country === "Syria");
             historical_events = [
                 {
-                    name: "Earthquake",
-                    year: "2023",
-                    month: "6",
-                },
-                {
-                    name: "Reinstated in Arab League",
+                    name: "Reinstated in the Arab League",
                     year: "2023",
                     month: "7",
                 },
                 {
                     name: "Assad's Ouster",
                     year: "2024",
-                    month: "8",
+                    month: "12",
                 },
             ];
         }
@@ -165,7 +162,7 @@
         });
 
         // Create a lookup map for faster access
-        const actorLookup = new Map(
+        actorLookup = new Map(
             actors.map((actor) => [actor.GLOPAD_ID, actor.ActorName]),
         );
 
@@ -324,8 +321,6 @@
             ucdp_final = [...ucdp_final]; // Ensure reactivity
         });
 
-        console.log(ucdp_final);
-
         // MEDIATIONS PER MONTH
         const groupedData = d3.groups(
             filteredData,
@@ -462,7 +457,7 @@
     $: yScale = d3
         .scaleLinear()
         // .domain([0, Math.max(...processedData.map((d) => d.count.length))])
-        .domain([0, 60])
+        .domain([0, 100])
         .range([innerHeight, 0]);
 
     // Scales Horizontal
@@ -585,7 +580,8 @@
     />
 
     <!-- processes -->
-    <!-- <Eight {width} {processes} /> -->
+    <h1>Processes</h1>
+    <Eight {width} {processes} />
 
     <!-- mediation timeline -->
     <Nine
@@ -597,6 +593,7 @@
         {mediator_counts}
         {mediations_only}
         {only_M}
+        {actorLookup}
     />
 </div>
 

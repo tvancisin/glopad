@@ -10,7 +10,7 @@
 
 <!-- top mediators -->
 <div class="mediators" bind:clientWidth={width}>
-    <h2>Top Mediators (2018-2024)</h2>
+    <h2>Top Mediators</h2>
     <svg {width} {height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
             {#each top_ten_mediators as mediator}

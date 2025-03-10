@@ -88,11 +88,11 @@
                     fill="white"
                 >
                 {category === "other" ? "Other" :
-                category === "international" ? "International" :
-                category === "regional" ? "Regional" :
-                category === "neighbor" ? "Neighbor" :
-                category === "mena" ? "Mena" :
-                category === "other_state" ? "Other State" :
+                category === "international" ? "International Organizations" :
+                category === "regional" ? "Regional Organizations" :
+                category === "neighbor" ? "Neighbour States" :
+                category === "mena" ? "MENA States" :
+                category === "other_state" ? "Other States" :
                 category}            </text>
             {/each}
         </g>
