@@ -5,7 +5,7 @@
     export let height;
     export let margin;
     export let mediations;
-    export let locationList;
+    export let topLocations;
     export let horizontal_xScale;
     export let horizontal_yScale;
 </script>
@@ -18,7 +18,7 @@
     </div>
     <svg {width} {height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-            {#each locationList as { location, count }}
+            {#each topLocations as { location, country, count }}
                 <rect
                     x={0}
                     y={horizontal_yScale(location)}
@@ -37,6 +37,9 @@
                     fill="white"
                 >
                     {location + " (" + count + ")"}
+                    {#if country !== location && country !== "Unknown"}
+                    {" [" + country + "]"}
+                {/if}
                 </text>
             {/each}
         </g>

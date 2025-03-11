@@ -50,7 +50,6 @@
                 .tickSize(-innerWidthAdjusted + margin.right * 3)
                 .tickFormat((d) => {
                     const countryName = actorLookup.get(d);
-                    console.log("Actor Lookup for", d, ":", countryName);
                     return countryName || d; // Fallback to the ID if no country is found
                 });
 

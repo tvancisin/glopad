@@ -87,13 +87,20 @@
                     font-weight="600"
                     fill="white"
                 >
-                {category === "other" ? "Other" :
-                category === "international" ? "International Organizations" :
-                category === "regional" ? "Regional Organizations" :
-                category === "neighbor" ? "Neighbour States" :
-                category === "mena" ? "MENA States" :
-                category === "other_state" ? "Other States" :
-                category}            </text>
+                    {category === "other"
+                        ? "Other"
+                        : category === "international"
+                          ? "International Organizations"
+                          : category === "regional"
+                            ? "Regional Organizations"
+                            : category === "neighbor"
+                              ? "Neighbour States"
+                              : category === "mena"
+                                ? "MENA States"
+                                : category === "other_state"
+                                  ? "Other States"
+                                  : category}
+                </text>
             {/each}
         </g>
     </svg>

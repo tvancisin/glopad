@@ -12,6 +12,8 @@
         const year = +d.Year;
         return year >= selectedYearsAgt[0] && year <= selectedYearsAgt[1];
     });
+
+    $: console.log(filteredAgreements);
 </script>
 
 <!-- peace agreements -->
@@ -42,10 +44,22 @@
                 style="display: flex; justify-content: space-between; align-items: center;"
             >
                 <span style="text-align: left;">{row.agmt_name}</span>
-                <img
-                    src={row.agmt_id_PAX === "" ? "new.png" : "pax.jpg"}
-                    style="height: 30px; margin-left: auto;"
-                />
+                {#if row.agmt_id_PAX !== ""}
+                    <a
+                        href={`https://pax.peaceagreements.org/agreements/${row.agmt_id_PAX}`}
+                        target="_blank"
+                    >
+                        <img
+                            src="pax.jpg"
+                            style="height: 30px; margin-left: auto;"
+                        />
+                    </a>
+                {:else}
+                    <img
+                        src="new.png"
+                        style="height: 30px; margin-left: auto;"
+                    />
+                {/if}
             </div>
             <div>{row.third_party}</div>
             <div>{row.groupings_mechanisms}</div>

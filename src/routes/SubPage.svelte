@@ -38,19 +38,22 @@
     let top_ten_mediators = [];
     let locationList = [];
     let selectedYears = [2018, 2024];
+    let header_years;
     let categories = [
         "international",
         "regional",
         "neighbor",
         "mena",
         "other_state",
-        "other",
     ];
     let actorLookup;
     let margin = { top: 20, right: 20, bottom: 20, left: 40 };
     let innerWidth = 800; // Outer width of the container
     let height = 500; // Outer height of the container
     let historical_events;
+    let topLocations = [];
+
+    const darfur = ["Darfur", "El Fasher", "North Darfur", "Nyala"];
 
     // Calculate dimensions reactively
     $: width = innerWidth; // Reactively bound to `clientWidth` for responsiveness
@@ -89,6 +92,7 @@
         countries = glopad[5];
 
         if (country === "Sudan") {
+            header_years = "2018-2024";
             mediations = mend.filter((d) => d.conflict_country === "Sudan");
             ucdp = ucdp.filter((d) => d.country === "Sudan");
             historical_events = [
@@ -109,10 +113,12 @@
                 },
             ];
         } else if (country === "Libya") {
+            header_years = "2023-2024";
             mediations = mend.filter((d) => d.conflict_country === "Libya");
             ucdp = ucdp.filter((d) => d.country === "Libya");
-            historical_events = []
+            historical_events = [];
         } else if (country === "Syria") {
+            header_years = "2023-2024";
             mediations = mend.filter((d) => d.conflict_country === "Syria");
             ucdp = ucdp.filter((d) => d.country === "Syria");
             historical_events = [
@@ -255,37 +261,66 @@
         // TOP MEDIAITON LOCATIONS
         let unknown_count = 0;
 
-        const locationCounts = filteredData.reduce((acc, item) => {
-            let location = item["med_location - MULTISELECT"]; // Use bracket notation for the field name
-            let location2 = item["med_loc_x"];
-            if (location != "") {
-                if (location.includes("Virtual")) {
-                    location = "Virtual";
+        const locationCounts = Object.values(
+            filteredData.reduce((acc, item) => {
+                let location = item["med_location - MULTISELECT"]; // Get location
+                let country = item["med_loc_cty"]; // Get country
+
+                if (location) {
+                    if (location.includes("Virtual")) {
+                        location = "Virtual";
+                    }
+
+                    if (!acc[location]) {
+                        acc[location] = {
+                            location,
+                            country: country || "Unknown",
+                            count: 0,
+                        };
+                    }
+
+                    acc[location].count += 1; // Increment count
                 }
-                acc[location] = (acc[location] || 0) + 1; // Count occurrences
+
+                return acc;
+            }, {}),
+        );
+        // assign sudan to darfur
+        locationCounts.forEach((entry) => {
+            if (entry.location === "Darfur") {
+                entry.country = "Sudan";
             }
-            if (
-                (location2 === "" && location !== "Virtual") ||
-                (location2 === null && location !== "Virtual") ||
-                (location2 === " " && location !== "Virtual")
-            ) {
-                unknown_count += 1;
+        });
+        // filter out unknown locations
+        const filteredLocationCounts = locationCounts.filter(
+            (entry) => entry.location !== "unknown",
+        );
+
+        // Step 2: Sum up all "Darfur" related locations
+        let darfurCount = 0;
+
+        const addDarfur = filteredLocationCounts.filter((entry) => {
+            if (darfur.includes(entry.location)) {
+                darfurCount += entry.count; // Sum counts for "Darfur" locations
+                return false; // Remove these locations from the list
             }
+            return entry.location !== "Unknown"; // Remove "Unknown" locations
+        });
 
-            return acc;
-        }, {});
+        // Step 3: Add the merged "Darfur" entry
+        if (darfurCount > 0) {
+            addDarfur.push({
+                location: "Darfur",
+                country: "Sudan",
+                count: darfurCount,
+            });
+        }
 
-        // locationCounts["Unknown"] = unknown_count;
+        // Step 4: Sort by count in descending order and take the top 10
+        topLocations = addDarfur 
+            .sort((a, b) => b.count - a.count) // Sort descending by count
+            .slice(0, 10); // Keep only the top 10
 
-        locationList = Object.entries(locationCounts)
-            .map(([location, count]) => ({ location, count }))
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 10);
-
-        locationList = locationList.map((item) => ({
-            ...item,
-            location: item.location === "" ? "Unknown/Virtual" : item.location,
-        }));
 
         // UCDP PER MONTH
         const ucdp_group_date = d3.groups(
@@ -405,15 +440,19 @@
     $: x_circle = d3
         .scaleOrdinal()
         .domain(categories)
-        .range(d3.range(0, innerWidthAdjusted, innerWidthAdjusted / 6));
+        .range(d3.range(0, innerWidthAdjusted, innerWidthAdjusted / 5));
 
     $: r_scale = d3
         .scaleLinear()
         .domain([0, d3.max(finalData, (d) => d.value)])
         .range([3, 60]);
 
+    $: console.log(finalData);
+    
+    $: filteredArray = finalData.filter(item => item.category !== "other");
+
     // MEDIATOR TYPES
-    $: initialNodes = finalData.map((d) => ({ ...d }));
+    $: initialNodes = filteredArray.map((d) => ({ ...d }));
     $: simulation = d3.forceSimulation(initialNodes);
     $: nodes = [];
     $: {
@@ -463,12 +502,12 @@
     // Scales Horizontal
     $: horizontal_xScale = d3
         .scaleLinear()
-        .domain([0, Math.max(...locationList.map((d) => d.count))])
+        .domain([0, Math.max(...topLocations.map((d) => d.count))])
         .range([0, width / 2 - margin.left - margin.right]);
 
     $: horizontal_yScale = d3
         .scaleBand()
-        .domain(locationList.map((d) => d.location))
+        .domain(topLocations.map((d) => d.location))  // Access 'location' directly
         .range([0, innerHeight])
         .padding(0.1);
 
@@ -495,7 +534,7 @@
 
 <div class="wrapper" bind:clientWidth={width}>
     <div class="header">
-        <h1 style="font-size: 50px;">{country + " 2018-2024"}</h1>
+        <h1 style="font-size: 50px;">{country + " " + header_years}</h1>
     </div>
     <!-- mediations per month -->
     <First
@@ -534,7 +573,7 @@
         {width}
         {height}
         {margin}
-        {locationList}
+        {topLocations}
         {horizontal_xScale}
         {horizontal_yScale}
     />
