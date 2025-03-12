@@ -13,7 +13,6 @@
         return year >= selectedYearsAgt[0] && year <= selectedYearsAgt[1];
     });
 
-    $: console.log(filteredAgreements);
 </script>
 
 <!-- peace agreements -->

@@ -52,6 +52,7 @@
     let height = 500; // Outer height of the container
     let historical_events;
     let topLocations = [];
+    let abbreviations = [];
 
     const darfur = ["Darfur", "El Fasher", "North Darfur", "Nyala"];
 
@@ -82,6 +83,7 @@
         "./data/ucdp_all.csv",
         "./data/processes.csv",
         "./data/countries.csv",
+        "./data/actors_abbr.csv",
     ];
     getCSV(path).then((glopad) => {
         actors = glopad[0];
@@ -90,6 +92,7 @@
         ucdp = glopad[3];
         processes = glopad[4];
         countries = glopad[5];
+        abbreviations = glopad[6];
 
         if (country === "Sudan") {
             header_years = "2018-2024";
@@ -169,8 +172,9 @@
 
         // Create a lookup map for faster access
         actorLookup = new Map(
-            actors.map((actor) => [actor.GLOPAD_ID, actor.ActorName]),
+            abbreviations.map((actor) => [actor.id_paax, actor.actor_name]),
         );
+
 
         // Replace mediatorIDs with corresponding ActorNames, keeping the ID if not found
         resultz = updatedIdValues;
@@ -447,8 +451,6 @@
         .domain([0, d3.max(finalData, (d) => d.value)])
         .range([3, 60]);
 
-    $: console.log(finalData);
-    
     $: filteredArray = finalData.filter(item => item.category !== "other");
 
     // MEDIATOR TYPES
@@ -633,6 +635,7 @@
         {mediations_only}
         {only_M}
         {actorLookup}
+        {abbreviations}
     />
 </div>
 

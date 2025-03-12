@@ -13,6 +13,7 @@
     export let mediator_counts;
     export let only_M;
     export let actorLookup;
+    export let abbreviations;
 
     let minYear = 2018;
     let maxYear = 2024;
@@ -44,52 +45,112 @@
 
     $: {
         if (actorLookup instanceof Map && yMedAxisGroup) {
-            // Only create axis after actorLookup is fully initialized
+            // Create axis
             const yAxis = d3
                 .axisLeft(yMed)
                 .tickSize(-innerWidthAdjusted + margin.right * 3)
                 .tickFormat((d) => {
-                    const countryName = actorLookup.get(d);
-                    return countryName || d; // Fallback to the ID if no country is found
+                    let countryName;
+                    // Find matching appreciation object
+                    const abbr = abbreviations.find(
+                        (item) => item.id_paax === d,
+                    );
+
+                    if (abbr) {
+                        // Check actor_name length and decide which value to use
+                        countryName =
+                            abbr.actor_name.length > 14
+                                ? abbr.abbreviation
+                                : abbr.actor_name;
+                    }
+
+                    return countryName || d; // Fallback to ID if no country is found
                 });
 
-            // Call the y-axis with the formatted tick labels
+            // Select axis group and apply axis
+            d3.select(yMedAxisGroup).call(yAxis);
+
+            // Style tick lines
             d3.select(yMedAxisGroup)
-                .call(yAxis)
                 .selectAll(".tick line")
                 .attr("stroke", "#333333")
                 .attr("stroke-dasharray", "5,3");
 
+            // Style tick text
             d3.select(yMedAxisGroup)
                 .selectAll(".tick text")
                 .attr("font-size", "8")
-                .attr("fill", "gray");
+                .attr("fill", "gray")
+                .on("mouseover", function (event, d) {
+                    handleTickHover(d, event); // Call function on hover
+                })
+                .on("mouseout", function () {
+                    handleTickLeave(); // Call function on mouseout
+                });
 
+            // Hide domain line
             d3.select(yMedAxisGroup).select(".domain").style("display", "none");
         }
     }
 
+    // Function to handle hover on Y-axis ticks
+    function handleTickHover(d) {
+        console.log("Hovered over:", d);
+
+        // Set opacity 0.2 for all rectangles except those with class d
+        d3.selectAll("rect").style("fill-opacity", function () {
+            return this.classList.contains(d) ? 1 : 0.1;
+        });
+        // Highlight the tick text by changing its color and/or font weight
+        d3.selectAll(".tick text")
+            .style("fill", function (text) {
+                return text === d ? "white" : "gray"; // Highlight the hovered text
+            })
+            .style("font-weight", function (text) {
+                return text === d ? "bold" : "normal"; // Bold the hovered text
+            });
+    }
+
+    // Function to restore opacity on mouse out
+    function handleTickLeave() {
+        d3.selectAll("rect").style("fill-opacity", 0.35); // Reset to default opacity
+        // Restore axis tick text to default style
+        d3.selectAll(".tick text")
+            .style("fill", "gray") // Reset color
+            .style("font-weight", "normal"); // Reset font weight
+    }
+
+    $: grouping_map = new Map();
+
+    // Create a unique set while preserving original values
     $: grouping_array_first = Array.from(
         new Set(
             mediations_only.flatMap((d) =>
                 d.groupings_mechanisms
                     ? d.groupings_mechanisms
-                          .toLowerCase()
                           .split(";")
-                          .map((g) => g.trim().replace(/\s+/g, ""))
+                          .map((g) => {
+                              const trimmed = g.trim();
+                              const formatted = trimmed
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "");
+
+                              // Store the original value for the formatted version
+                              grouping_map.set(formatted, trimmed);
+                              return formatted;
+                          })
                           .filter((g) => g !== "")
                     : [],
             ),
         ),
     );
-    $: grouping_array_initial = ["nogrouping", ...grouping_array_first];
 
-    // Transform to the desired format
+    $: grouping_array_initial = [...grouping_array_first];
+
+    // Transform to the desired format, keeping the original label
     $: grouping_array = grouping_array_initial.map((group) => ({
         value: group,
-        label:
-            group.charAt(0).toUpperCase() +
-            group.slice(1).replace(/([a-z])([A-Z])/g, "$1 $2"),
+        label: grouping_map.get(group) || group, // Get the original value if available
     }));
 
     function filterByYear(startYear, endYear) {
@@ -131,6 +192,8 @@
             ];
         }
     }
+
+    $: console.log(selectedGroupings);
 
     // Handle change when items are selected/deselected
     function handleChange(e) {
@@ -215,10 +278,11 @@
                     .filter((m) => m.trim() !== "") as mediator}
                     <rect
                         x={xMed(`${d.Year}-${d.Month}`)}
-                        y={yMed(mediator)}
+                        y={yMed(mediator) + yMed.bandwidth() / 2}
                         width={xMed.bandwidth()}
                         height={5}
                         fill-opacity="0.35"
+                        class={mediator}
                         fill={(() => {
                             const groupClasses = d.groupings_mechanisms
                                 .toLowerCase()

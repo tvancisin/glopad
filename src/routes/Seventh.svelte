@@ -87,19 +87,24 @@
                     font-weight="600"
                     fill="white"
                 >
-                    {category === "other"
-                        ? "Other"
-                        : category === "international"
-                          ? "International Organizations"
-                          : category === "regional"
-                            ? "Regional Organizations"
-                            : category === "neighbor"
-                              ? "Neighbour States"
-                              : category === "mena"
-                                ? "MENA States"
-                                : category === "other_state"
-                                  ? "Other States"
-                                  : category}
+                    {#if category === "international"}
+                        <tspan {x} dy="-0.6em">International</tspan>
+                        <tspan {x} dy="1.2em">Organizations</tspan>
+                    {:else if category === "regional"}
+                        <tspan {x} dy="-0.6em">Regional</tspan>
+                        <tspan {x} dy="1.2em">Organizations</tspan>
+                    {:else if category === "neighbor"}
+                        <tspan {x} dy="-0.6em">Neighbour</tspan>
+                        <tspan {x} dy="1.2em">States</tspan>
+                    {:else if category === "mena"}
+                        <tspan {x} dy="-0.6em">MENA</tspan>
+                        <tspan {x} dy="1.2em">States</tspan>
+                    {:else if category === "other_state"}
+                        <tspan {x} dy="-0.6em">Other</tspan>
+                        <tspan {x} dy="1.2em">States</tspan>
+                    {:else}
+                        {category}
+                    {/if}
                 </text>
             {/each}
         </g>
