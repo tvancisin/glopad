@@ -104,6 +104,11 @@
             window.removeEventListener("resize", checkScreenSize);
         };
     });
+    let contentVisible = false; // State to toggle content visibility
+
+    function toggleContent() {
+        contentVisible = !contentVisible; // Toggle the content visibility
+    }
 </script>
 
 <div id="wrapper" bind:clientWidth={width}>
@@ -238,6 +243,98 @@
         </div>
     </div> -->
 
+    <div id="about">
+        <h3
+            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
+        >
+            About
+        </h3>
+        <div id="about_content">
+            <p id="first-paragraph">
+                Our research explores fragmentations in the global order and how
+                these impact peace and transition processes. We seek to better
+                understand why and how different third-party actors – state,
+                intergovernmental, and non-governmental actors – intervene in
+                attempts to broker peace, and how they see themselves
+                contributing to reduction of conflict and risks of conflict
+                relapse. We also study how local actors are navigating this
+                multiplicity of mediators and peacebuilders and how this is
+                shaping conflict outcomes and post-conflict governance.
+            </p>
+
+            <!-- Conditional rendering for the additional paragraphs -->
+            {#if contentVisible}
+                <p>
+                    The project produces dedicated case and trends studies as
+                    part of the PeaceRep Global Transitions series and is
+                    developing two complementary datasets.
+                </p>
+                <p style="margin-left: 30px; margin-right: 30px;">
+                    • Third Parties in Peace Agreements dataset. Most formal
+                    agreements in peace processes are supported by parties
+                    external to the armed conflict, in the form of third-party
+                    signature to the agreement. In the PA-X collection of peace
+                    agreements that address inter- and intra- state, or mixed
+                    conflicts, around sixty percent of agreements feature a
+                    signatory which is not one of the main conflict parties, and
+                    around one-third of all agreements feature an international
+                    third-party signatory. The Third Parties in Peace Agreements
+                    dataset draws on the Peace Agreement Actors Dataset (PAA-X)
+                    and is the only existing data resource on third-party
+                    signatories in peace agreements. It allows for an in-depth
+                    examination of the patterns of engagement in peace
+                    agreements and provides valuable insights into what actors
+                    are necessary for conflict parties to commit to a formal,
+                    written agreement. This data is instrumental in discerning
+                    the regional and topical priorities of individual
+                    interveners since 1990, giving us insight into the types of
+                    agreements supported by individual third parties.
+                </p>
+                <p style="margin-left: 30px; margin-right: 30px;">
+                    • Mediation Event and Negotiators Database (MEND) is a new
+                    and growing resource for researchers and practitioners with
+                    a focus on peace and conflict resolution. The dataset
+                    comprehensively covers broader peacemaking efforts within
+                    major armed conflicts, tracking all mediation and
+                    mediation-related events involving external third-party
+                    actors, regardless of whether these events result in a
+                    formal peace agreement. It captures mediation as part of
+                    formal peace initiatives and mediation efforts running in
+                    support or in parallel to these. Each record corresponds to
+                    a unique event, providing detailed metadata about location,
+                    third parties, local actors, and individuals involved. The
+                    MEND dataset facilitates a nuanced understanding of the
+                    roles various actors play in contributing to the peace
+                    processes and in brokering agreements. It also enables the
+                    identification of unsuccessful or spoiler mediation efforts
+                    that may still have influenced the ongoing conflict
+                    management. In an era marked by global fragmentation, this
+                    data plays a crucial role in providing insights into where,
+                    when, how, and why actors engage in mediation activities,
+                    allowing for the mapping of network dynamics between
+                    international and local actors, and identification of the
+                    mediation conditions conducive to the eventual signing of
+                    agreements.
+                </p>
+            {/if}
+
+            <h3>Funding</h3>
+            <p>
+                Our research is supported by the Peace and Conflict Resolution
+                Evidence Platform (PeaceRep), funded by UK International
+                Development from the UK government. However, the views expressed
+                are those of the authors and do not necessarily reflect the UK
+                government’s official policies. We receive additional support
+                from the Universities of St Andrews and Edinburgh.
+            </p>
+
+            <!-- "Read more" button -->
+            <button id="read-more-btn" on:click={toggleContent}>
+                {contentVisible ? "Show Less" : "Read More"}
+            </button>
+        </div>
+    </div>
+
     <!-- research section -->
     <div id="research">
         <h3
@@ -245,7 +342,7 @@
         >
             Research
         </h3>
-        <div class="gallery-container-research">
+        <!-- <div class="gallery-container-research">
             <button
                 class="arrow left"
                 style="border: 2px solid white;"
@@ -278,7 +375,7 @@
                     aria-hidden="true"
                 ></i>
             </button>
-        </div>
+        </div> -->
 
         <div id="publications">
             <h3>2025</h3>
@@ -375,85 +472,6 @@
                     >Global Transitions</a
                 > series, edited by Mateja Peter. This includes publications by the
                 core team and further studies produced in the wider consortium.
-            </p>
-        </div>
-    </div>
-
-    <div id="about">
-        <h3
-            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
-        >
-            About
-        </h3>
-        <div id="about_content">
-            <p>
-                Our research explores fragmentations in the global order and how
-                these impact peace and transition processes. We seek to better
-                understand why and how different third-party actors – state,
-                intergovernmental, and non-governmental actors – intervene in
-                attempts to broker peace, and how they see themselves
-                contributing to reduction of conflict and risks of conflict
-                relapse. We also study how local actors are navigating this
-                multiplicity of mediators and peacebuilders and how this is
-                shaping conflict outcomes and post-conflict governance.
-            </p>
-            <p>
-                The project produces dedicated case and trends studies as part
-                of the PeaceRep Global Transitions series and is developing two
-                complementary datasets.
-            </p>
-            <p style="margin-left: 30px; margin-right: 30px;">
-                • Third Parties in Peace Agreements dataset. Most formal
-                agreements in peace processes are supported by parties external
-                to the armed conflict, in the form of third-party signature to
-                the agreement. In the PA-X collection of peace agreements that
-                address inter- and intra- state, or mixed conflicts, around
-                sixty percent of agreements feature a signatory which is not one
-                of the main conflict parties, and around one-third of all
-                agreements feature an international third-party signatory. The
-                Third Parties in Peace Agreements dataset draws on the Peace
-                Agreement Actors Dataset (PAA-X) and is the only existing data
-                resource on third-party signatories in peace agreements. It
-                allows for an in-depth examination of the patterns of engagement
-                in peace agreements and provides valuable insights into what
-                actors are necessary for conflict parties to commit to a formal,
-                written agreement. This data is instrumental in discerning the
-                regional and topical priorities of individual interveners since
-                1990, giving us insight into the types of agreements supported
-                by individual third parties.
-            </p>
-            <p style="margin-left: 30px; margin-right: 30px;">
-                • Mediation Event and Negotiators Database (MEND) is a new and
-                growing resource for researchers and practitioners with a focus
-                on peace and conflict resolution. The dataset comprehensively
-                covers broader peacemaking efforts within major armed conflicts,
-                tracking all mediation and mediation-related events involving
-                external third-party actors, regardless of whether these events
-                result in a formal peace agreement. It captures mediation as
-                part of formal peace initiatives and mediation efforts running
-                in support or in parallel to these. Each record corresponds to a
-                unique event, providing detailed metadata about location, third
-                parties, local actors, and individuals involved. The MEND
-                dataset facilitates a nuanced understanding of the roles various
-                actors play in contributing to the peace processes and in
-                brokering agreements. It also enables the identification of
-                unsuccessful or spoiler mediation efforts that may still have
-                influenced the ongoing conflict management. In an era marked by
-                global fragmentation, this data plays a crucial role in
-                providing insights into where, when, how, and why actors engage
-                in mediation activities, allowing for the mapping of network
-                dynamics between international and local actors, and
-                identification of the mediation conditions conducive to the
-                eventual signing of agreements.
-            </p>
-            <h3>Funding</h3>
-            <p>
-                Our research is supported by the Peace and Conflict Resolution
-                Evidence Platform (PeaceRep), funded by UK International
-                Development from the UK government. However, the views expressed
-                are those of the authors and do not necessarily reflect the UK
-                government’s official policies. We receive additional support
-                from the Universities of St Andrews and Edinburgh.
             </p>
         </div>
     </div>
@@ -613,14 +631,14 @@
     }
 
     #research {
-        background-color: #003645;
+        background-color: #001c23;
     }
     #people {
         background-color: #001c23;
     }
     #about {
         position: relative;
-        background-color: #001c23;
+        background-color: #003645;
         padding-bottom: 20px;
         font-weight: 200;
     }
@@ -646,7 +664,7 @@
     }
 
     .gallery-container-research {
-        background-color: #003645;
+        background-color: #001c23;
     }
     .gallery-container-people {
         background-color: #001c23;
@@ -770,5 +788,24 @@
 
     .arrow:hover {
         background: rgba(0, 0, 0, 0.8);
+    }
+    /* Initially hide paragraphs */
+    .hidden {
+        display: none;
+    }
+
+    /* Optional: Styling for the button */
+    #read-more-btn {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #read-more-btn:hover {
+        background-color: #0056b3;
     }
 </style>
