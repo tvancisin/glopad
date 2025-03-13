@@ -195,9 +195,9 @@
             About
         </h3>
         <div id="about_content">
-            <p
+            <h3
                 id="first-paragraph"
-                style="font-size: 20px; text-align: justify;"
+                style="text-align: justify;"
             >
                 Our research explores fragmentations in the global order and how
                 these impact peace and transition processes. We seek to better
@@ -208,7 +208,7 @@
                 relapse. We also study how local actors are navigating this
                 multiplicity of mediators and peacebuilders and how this is
                 shaping conflict outcomes and post-conflict governance.
-            </p>
+        </h3>
 
             <!-- Conditional rendering for the additional paragraphs -->
             {#if contentVisible}
@@ -725,8 +725,8 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding-top: 80px;
-        padding-bottom: 80px;
+        padding-top: 100px;
+        padding-bottom: 100px;
     }
 
     .image-container-people img {
