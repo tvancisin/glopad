@@ -492,7 +492,7 @@
     }
 
     img {
-        height: 30px;
+        height: 35px;
         margin-left: 5px;
     }
 
