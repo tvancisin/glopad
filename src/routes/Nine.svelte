@@ -95,10 +95,8 @@
 
     // Function to handle hover on Y-axis ticks
     function handleTickHover(d) {
-        console.log("Hovered over:", d);
-
         // Set opacity 0.2 for all rectangles except those with class d
-        d3.selectAll("rect").style("fill-opacity", function () {
+        d3.selectAll(".rec").style("fill-opacity", function () {
             return this.classList.contains(d) ? 1 : 0.1;
         });
         // Highlight the tick text by changing its color and/or font weight
@@ -113,7 +111,7 @@
 
     // Function to restore opacity on mouse out
     function handleTickLeave() {
-        d3.selectAll("rect").style("fill-opacity", 0.35); // Reset to default opacity
+        d3.selectAll(".rec").style("fill-opacity", 0.35); // Reset to default opacity
         // Restore axis tick text to default style
         d3.selectAll(".tick text")
             .style("fill", "gray") // Reset color
@@ -192,8 +190,6 @@
             ];
         }
     }
-
-    $: console.log(selectedGroupings);
 
     // Handle change when items are selected/deselected
     function handleChange(e) {
@@ -282,7 +278,7 @@
                         width={xMed.bandwidth()}
                         height={5}
                         fill-opacity="0.35"
-                        class={mediator}
+                        class={"rec " + mediator}
                         fill={(() => {
                             const groupClasses = d.groupings_mechanisms
                                 .toLowerCase()

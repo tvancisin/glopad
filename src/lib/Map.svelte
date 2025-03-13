@@ -83,9 +83,11 @@
                 "steelblue",
                 "Libya",
                 "steelblue",
-                "Israel",
-                "steelblue",
                 "Syria",
+                "steelblue",
+                "Afghanistan",
+                "steelblue",
+                "Yemen",
                 "steelblue",
                 "#b3b3b3", // Default color for all other countries
               ],
@@ -109,7 +111,7 @@
             },
           });
 
-          const filteredCountries = ["Sudan", "Libya", "Israel", "Syria"];
+          const filteredCountries = ["Sudan", "Libya", "Afghanistan", "Yemen", "Syria"];
 
           // Create a tooltip element
           const tooltip = document.createElement("div");

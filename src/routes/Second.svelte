@@ -6,12 +6,22 @@
     export let innerHeight;
     export let margin;
     export let xScale;
-    export let yScale;
+    // export let yScale;
     export let historical_events;
     export let result;
     export let country;
 
     let xAxisGroup;
+
+    $: console.log(result);
+
+
+    $: yScale = d3
+        .scaleLinear()
+        .domain([0, 10 + Math.max(...result.map((d) => d.count))])
+        // .domain([0, 100])
+        .range([innerHeight, 0]);
+    
 
     $: {
         if (xAxisGroup) {

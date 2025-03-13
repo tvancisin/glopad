@@ -40,6 +40,7 @@
 
         return lines;
     }
+
 </script>
 
 <!-- text circle packing -->
@@ -58,7 +59,7 @@
                 </circle>
             {/each}
             {#each nodes as point}
-                {#if point.value > 20}
+                {#if point.value > 15}
                     {#await Promise.resolve(splitText(point.name, 10)) then lines}
                         <text
                             x={point.x}

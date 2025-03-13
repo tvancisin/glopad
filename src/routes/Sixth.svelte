@@ -1,11 +1,18 @@
 <script>
+    import * as d3 from "d3";
     export let width;
     export let height;
     export let margin;
     export let top_ten_mediators;
-    export let horizontal_xScale;
+    // export let horizontal_xScale;
     export let horizontal_yScale;
     export let horizontal_mediator_yScale;
+
+    $: horizontal_xScale = d3
+        .scaleLinear()
+        .domain([0, Math.max(...top_ten_mediators.map((d) => d[1]))])
+        .range([0, width / 2 - margin.left - margin.right]);
+    
 </script>
 
 <!-- top mediators -->
@@ -31,7 +38,7 @@
                     text-anchor="start"
                     fill="white"
                 >
-                    {mediator[0] + " (" + mediator[1] + ")"}
+                    {mediator[0] + " [" + mediator[1] + "]"}
                 </text>
             {/each}
         </g>

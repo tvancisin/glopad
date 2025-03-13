@@ -1,6 +1,10 @@
 <script>
+    import { randomWeibull } from "d3";
+
     export let width;
-    export let processes;
+    export let fil_processes;
+    export let country;
+
 </script>
 
 <div class="agreement_list" bind:clientWidth={width}>
@@ -10,17 +14,29 @@
         <div class="table_header">Name</div>
         <div class="table_header">Third-Party Actors</div>
         <div class="table_header">Local Actors</div>
-        {#each processes as row}
-            <div>
-                {row.Start_mth}/{row.Start_y} -
-                {row.End_y
-                    ? (row.End_mth ? row.End_mth + "/" : "") + row.End_y
-                    : "Present"}
-            </div>
-            <div>{row.process}</div>
-            <div>{row.third_parties}</div>
-            <div>{row.local}</div>
-        {/each}
+        {#if country == "Sudan"}
+            {#each fil_processes as row}
+                <div>
+                    {row.Start_mth}/{row.Start_y} -
+                    {row.End_y
+                        ? (row.End_mth ? row.End_mth + "/" : "") + row.End_y
+                        : "Present"}
+                </div>
+                <div>{row.process}</div>
+                <div>{row.third_parties}</div>
+                <div>{row.local}</div>
+            {/each}
+        {/if}
+        {#if country == "Syria"}
+            {#each fil_processes as row}
+                <div>
+                    {row.STARTDATE}
+                </div>
+                <div>{row.groupings_mechanisms}</div>
+                <div>{row.third_party}</div>
+                <div>{row.local_parties}</div>
+            {/each}
+        {/if}
     </div>
 </div>
 

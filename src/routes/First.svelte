@@ -114,6 +114,21 @@
                 />
             {/each}
 
+
+            <!-- Line Path -->
+            <path d={pathData} fill="none" stroke="red" stroke-width="2" />
+
+            <!-- Data Points -->
+            {#each ucdp_final as d}
+                <circle
+                    cx={ucdp_xScale(`${d.year}-${d.month}`) +
+                        ucdp_xScale.bandwidth() / 2}
+                    cy={ucdp_yScale(d.best_count)}
+                    r="3"
+                    fill="red"
+                    stroke="black"
+                />
+            {/each}
             {#each historical_events as event, i}
                 <line
                     x1={xScale(`${event.year}-${event.month}`)}
@@ -132,21 +147,6 @@
                 >
                     {event.name}
                 </text>
-            {/each}
-
-            <!-- Line Path -->
-            <path d={pathData} fill="none" stroke="red" stroke-width="2" />
-
-            <!-- Data Points -->
-            {#each ucdp_final as d}
-                <circle
-                    cx={ucdp_xScale(`${d.year}-${d.month}`) +
-                        ucdp_xScale.bandwidth() / 2}
-                    cy={ucdp_yScale(d.best_count)}
-                    r="3"
-                    fill="red"
-                    stroke="black"
-                />
             {/each}
         </g>
     </svg>

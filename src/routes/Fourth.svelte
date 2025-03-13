@@ -73,7 +73,7 @@
                     x1={xScale(`${event.year}-${event.month}`)}
                     y1={10 + i * 20}
                     x2={xScale(`${event.year}-${event.month}`)}
-                    y2={innerHeight}
+                    y2={innerHeight - 110}
                     stroke="gray"
                     stroke-width="1"
                     stroke-dasharray="4 2"

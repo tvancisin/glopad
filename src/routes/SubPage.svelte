@@ -53,6 +53,8 @@
     let historical_events;
     let topLocations = [];
     let abbreviations = [];
+    let all_processes = [];
+    let fil_processes = [];
 
     const darfur = ["Darfur", "El Fasher", "North Darfur", "Nyala"];
 
@@ -79,11 +81,12 @@
     let path = [
         "./data/mend_all_actors.csv",
         "./data/mena.csv",
-        "./data/mend_march.csv",
-        "./data/ucdp_all.csv",
+        "./data/mend_last_last.csv",
+        "./data/ucdp_last_last.csv",
         "./data/processes.csv",
         "./data/countries.csv",
         "./data/actors_abbr.csv",
+        "./data/all_processes.csv",
     ];
     getCSV(path).then((glopad) => {
         actors = glopad[0];
@@ -93,6 +96,7 @@
         processes = glopad[4];
         countries = glopad[5];
         abbreviations = glopad[6];
+        all_processes = glopad[7];
 
         if (country === "Sudan") {
             header_years = "2018-2024";
@@ -115,11 +119,18 @@
                     month: "4",
                 },
             ];
+            fil_processes = processes
+            // fil_processes = all_processes.filter(
+            //     (d) => d.conflict_country === "Sudan" && d.important == "1",
+            // );
         } else if (country === "Libya") {
             header_years = "2023-2024";
             mediations = mend.filter((d) => d.conflict_country === "Libya");
             ucdp = ucdp.filter((d) => d.country === "Libya");
             historical_events = [];
+            fil_processes = all_processes.filter(
+                (d) => d.conflict_country === "Libya" && d.important == "1",
+            );
         } else if (country === "Syria") {
             header_years = "2023-2024";
             mediations = mend.filter((d) => d.conflict_country === "Syria");
@@ -136,6 +147,17 @@
                     month: "12",
                 },
             ];
+            fil_processes = all_processes.filter(
+                (d) => d.conflict_country === "Syria" && d.important == "1",
+            );
+        } else if (country == "Yemen") {
+            header_years = "2018-2024";
+            mediations = mend.filter((d) => d.conflict_country === "Yemen");
+            ucdp = ucdp.filter((d) => d.country === "Yemen");
+        } else if (country == "Afghanistan") {
+            header_years = "2023-2024";
+            mediations = mend.filter((d) => d.conflict_country === "Afghanistan");
+            ucdp = ucdp.filter((d) => d.country === "Afghanistan"); 
         }
     });
 
@@ -174,7 +196,6 @@
         actorLookup = new Map(
             abbreviations.map((actor) => [actor.id_paax, actor.actor_name]),
         );
-
 
         // Replace mediatorIDs with corresponding ActorNames, keeping the ID if not found
         resultz = updatedIdValues;
@@ -321,10 +342,9 @@
         }
 
         // Step 4: Sort by count in descending order and take the top 10
-        topLocations = addDarfur 
+        topLocations = addDarfur
             .sort((a, b) => b.count - a.count) // Sort descending by count
             .slice(0, 10); // Keep only the top 10
-
 
         // UCDP PER MONTH
         const ucdp_group_date = d3.groups(
@@ -448,10 +468,10 @@
 
     $: r_scale = d3
         .scaleLinear()
-        .domain([0, d3.max(finalData, (d) => d.value)])
+        .domain([0, d3.max(finalData, (d) => d.value) + 10])
         .range([3, 60]);
 
-    $: filteredArray = finalData.filter(item => item.category !== "other");
+    $: filteredArray = finalData.filter((item) => item.category !== "other");
 
     // MEDIATOR TYPES
     $: initialNodes = filteredArray.map((d) => ({ ...d }));
@@ -497,8 +517,8 @@
     // Y Scale
     $: yScale = d3
         .scaleLinear()
-        // .domain([0, Math.max(...processedData.map((d) => d.count.length))])
-        .domain([0, 100])
+        .domain([0, 10 + Math.max(...processedData.map((d) => d.count.length))])
+        // .domain([0, 100])
         .range([innerHeight, 0]);
 
     // Scales Horizontal
@@ -509,7 +529,7 @@
 
     $: horizontal_yScale = d3
         .scaleBand()
-        .domain(topLocations.map((d) => d.location))  // Access 'location' directly
+        .domain(topLocations.map((d) => d.location)) // Access 'location' directly
         .range([0, innerHeight])
         .padding(0.1);
 
@@ -563,7 +583,6 @@
         {innerHeight}
         {margin}
         {xScale}
-        {yScale}
         {historical_events}
         {result}
         {country}
@@ -622,7 +641,7 @@
 
     <!-- processes -->
     <h1>Processes</h1>
-    <Eight {width} {processes} />
+    <Eight {width} {fil_processes} {country} />
 
     <!-- mediation timeline -->
     <Nine

@@ -105,9 +105,14 @@
         };
     });
     let contentVisible = false; // State to toggle content visibility
+    let pubToggle = false; // State to toggle content visibility
 
     function toggleContent() {
         contentVisible = !contentVisible; // Toggle the content visibility
+    }
+
+    function togglePublication() {
+        pubToggle = !pubToggle; // Toggle the content visibility
     }
 </script>
 
@@ -183,66 +188,6 @@
         />
     </main>
 
-    <div id="people">
-        <h3
-            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
-        >
-            Team
-        </h3>
-        <div class="image-grid">
-            {#each images_ppl as { src, name, position } (src)}
-                <div class="image-container-people">
-                    <img loading="lazy" {src} alt={name} />
-                    <p>{name}</p>
-                    <p>{position}</p>
-                </div>
-            {/each}
-        </div>
-    </div>
-
-    <!-- <div id="people">
-        <h3
-            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
-        >
-            Team
-        </h3>
-        <div class="gallery-container-people">
-            <button
-                class="arrow left"
-                style="border: 2px solid white;"
-                aria-label="Scroll left"
-                on:click={() => scrollGalleryPeople(-1)}
-            >
-                <i
-                    class="fa fa-arrow-left"
-                    style="color: white;"
-                    aria-hidden="true"
-                ></i>
-            </button>
-            <div class="image-row-people">
-                {#each images_ppl as { src, name, position } (src)}
-                    <div class="image-container">
-                        <img loading="lazy" {src} alt={name} />
-                        <p>{name}</p>
-                        <p>{position}</p>
-                    </div>
-                {/each}
-            </div>
-            <button
-                class="arrow right"
-                style="border: 2px solid white;"
-                aria-label="Scroll right"
-                on:click={() => scrollGalleryPeople(1)}
-            >
-                <i
-                    class="fa fa-arrow-right"
-                    style="color: white;"
-                    aria-hidden="true"
-                ></i>
-            </button>
-        </div>
-    </div> -->
-
     <div id="about">
         <h3
             style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
@@ -250,7 +195,10 @@
             About
         </h3>
         <div id="about_content">
-            <p id="first-paragraph">
+            <p
+                id="first-paragraph"
+                style="font-size: 20px; text-align: justify;"
+            >
                 Our research explores fragmentations in the global order and how
                 these impact peace and transition processes. We seek to better
                 understand why and how different third-party actors – state,
@@ -316,22 +264,39 @@
                     mediation conditions conducive to the eventual signing of
                     agreements.
                 </p>
+                <h3>Funding</h3>
+                <p>
+                    Our research is supported by the Peace and Conflict
+                    Resolution Evidence Platform (PeaceRep), funded by UK
+                    International Development from the UK government. However,
+                    the views expressed are those of the authors and do not
+                    necessarily reflect the UK government’s official policies.
+                    We receive additional support from the Universities of St
+                    Andrews and Edinburgh.
+                </p>
             {/if}
-
-            <h3>Funding</h3>
-            <p>
-                Our research is supported by the Peace and Conflict Resolution
-                Evidence Platform (PeaceRep), funded by UK International
-                Development from the UK government. However, the views expressed
-                are those of the authors and do not necessarily reflect the UK
-                government’s official policies. We receive additional support
-                from the Universities of St Andrews and Edinburgh.
-            </p>
 
             <!-- "Read more" button -->
             <button id="read-more-btn" on:click={toggleContent}>
                 {contentVisible ? "Show Less" : "Read More"}
             </button>
+        </div>
+    </div>
+
+    <div id="people">
+        <h3
+            style="width: 100px;text-align: left;border-radius: 2px; font-size:20px;"
+        >
+            Team
+        </h3>
+        <div class="image-grid">
+            {#each images_ppl as { src, name, position } (src)}
+                <div class="image-container-people">
+                    <img loading="lazy" {src} alt={name} />
+                    <p>{name}</p>
+                    <p>{position}</p>
+                </div>
+            {/each}
         </div>
     </div>
 
@@ -378,103 +343,111 @@
         </div> -->
 
         <div id="publications">
-            <h3>2025</h3>
-            <p>
-                Elisa D’Amico (2025) Conflict in a Warming World: How Climate
-                Shocks Impact Rebel Demands and Peace Agreement Outcomes.
-                [Climate & Natural Resources Series]. PeaceRep: The Peace and
-                Conflict Resolution Evidence Platform, University of Edinburgh.
-            </p>
-            <h3>2024</h3>
-            <p>
-                Mateja Peter (2024) ‘Global fragmentation and collective
-                security instruments: Weakening the liberal international order
-                from within.’ Politics and Governance, 12 (7357), 1-15.
-            </p>
-            <p>
-                Sanja Badanjak and Mateja Peter (2024) ‘Diversification and
-                Congestion in Peacemaking: What the Data Says’. in Theresa
-                Whitfield (ed.), Still time to talk: Adaptation and innovation
-                in peace mediation, Accord 30. London: Conciliation Resources.
-            </p>
-            <p>
-                Mateja Peter and Kasia Houghton (2024) Russia and China in
-                Liberal Peacebuilding: Perceptions and Engagement with the
-                Dayton Peace Process in Bosnia and Herzegovina. [Global
-                Transitions Series]. PeaceRep: The Peace and Conflict Resolution
-                Evidence Platform, University of Edinburgh.
-            </p>
-            <p>
-                Niamh Henry (2024) Extracting Named Actors from Text: Using
-                Named Entity Recognition (NER) in Peace and Conflict Studies
-                [Peace Analytics Series]. PeaceRep: The Peace and Conflict
-                Resolution Evidence Platform, University of Edinburgh.
-            </p>
-            <p>
-                Elisa D’Amico (2024) Semi-Automated Coding for Conflict
-                Mediation Research: Database Development. Peace Analytics
-                Series, University of Edinburgh: Peace and Conflict Resolution
-                Evidence Platform: November 2024.
-            </p>
-            <p>
-                Kasia Houghton (2024). ‘The Competition over Norms: The Case of
-                the Syrian Conflict.’ In Benjamin Houghton and Kasia Houghton
-                (eds.) China, Russia and the USA in the Middle East: The Contest
-                for Supremacy. London: Routledge, 46-
-            </p>
-            <p>
-                Mateja Peter and Ruoxi Wang (2024) ‘China’s Approach to Human
-                Security within and outside UN Peacekeeping: Drawing Lessons
-                from South Sudan.’ Journal of International Peacekeeping, 27(1),
-                85-114.
-            </p>
-            <h3>2023</h3>
-            <p>
-                Mateja Peter and Kasia Houghton (2023) Congestion and
-                Diversification of Third-Party Mediation in Sudan and South
-                Sudan: First Look at some Longer-Term Trends. [Global
-                Transitions Series]. PeaceRep: The Peace and Conflict Resolution
-                Evidence Platform, University of Edinburgh.
-            </p>
-            <p>
-                Mateja Peter and Marcel Plichta (2023) China and Russia in
-                Sudan: Surveying data on economic and military engagement.
-                [Global Transitions Series]. PeaceRep: The Peace and Conflict
-                Resolution Evidence Platform, University of Edinburgh.th Sudan.’
-                Journal of International Peacekeeping, 27(1), 85-114.
-            </p>
-            <p>
-                Sanja Badanjak (2023) Third Parties in Peace Agreements: First
-                Look at New Data and Key Trends. [Global Transitions Series].
-                PeaceRep: The Peace and Conflict Resolution Evidence Platform,
-                University of Edinburgh.
-            </p>
-            <p>
-                Sanja Badanjak (2023) EU External Action and Development
-                Spending in a Time of Covid-19. [Covid-19 Series]. PeaceRep: The
-                Peace and Conflict Resolution Evidence Platform, University of
-                Edinburgh.
-            </p>
-            <h3>2022</h3>
-            <p>
-                Mateja Peter and Haley Rice (2022) Non-Western approaches to
-                peacemaking and peacebuilding: State-of-the-art and an agenda
-                for research. [Global Transitions Series]. PeaceRep: The Peace
-                and Conflict Resolution Evidence Platform, University of
-                Edinburgh.
-            </p>
-            <h3>Global Transitions Series</h3>
-            <p>
-                As part of the PeaceRep consortium, the project also produces
-                the <a
-                    target="_blank"
-                    href="https://peacerep.org/research/geopolitical-transitions/"
-                    >Global Transitions</a
-                > series, edited by Mateja Peter. This includes publications by the
-                core team and further studies produced in the wider consortium.
-            </p>
+            <div class="publication_content">
+                <h3>2025</h3>
+                <p>
+                    <strong>Elisa D’Amico</strong> (2025) Conflict in a Warming World:
+                    How Climate Shocks Impact Rebel Demands and Peace Agreement Outcomes.
+                    [Climate & Natural Resources Series]. PeaceRep: The Peace and
+                    Conflict Resolution Evidence Platform, University of Edinburgh.
+                </p>
+                <h3>2024</h3>
+                <p>
+                    <strong>Mateja Peter</strong> (2024) ‘Global fragmentation and
+                    collective security instruments: Weakening the liberal international
+                    order from within.’ Politics and Governance, 12 (7357), 1-15.
+                </p>
+                <p>
+                    <strong>Sanja Badanjak and Mateja Peter</strong> (2024) ‘Diversification
+                    and Congestion in Peacemaking: What the Data Says’. in Theresa
+                    Whitfield (ed.), Still time to talk: Adaptation and innovation
+                    in peace mediation, Accord 30. London: Conciliation Resources.
+                </p>
+                <p>
+                    <strong>Mateja Peter and Kasia Houghton</strong> (2024) Russia
+                    and China in Liberal Peacebuilding: Perceptions and Engagement
+                    with the Dayton Peace Process in Bosnia and Herzegovina. [Global
+                    Transitions Series]. PeaceRep: The Peace and Conflict Resolution
+                    Evidence Platform, University of Edinburgh.
+                </p>
+                <p>
+                    <strong>Niamh Henry</strong> (2024) Extracting Named Actors from
+                    Text: Using Named Entity Recognition (NER) in Peace and Conflict
+                    Studies [Peace Analytics Series]. PeaceRep: The Peace and Conflict
+                    Resolution Evidence Platform, University of Edinburgh.
+                </p>
+                <p>
+                    <strong>Elisa D’Amico</strong> (2024) Semi-Automated Coding for
+                    Conflict Mediation Research: Database Development. Peace Analytics
+                    Series, University of Edinburgh: Peace and Conflict Resolution
+                    Evidence Platform: November 2024.
+                </p>
+                <p>
+                    <strong>Kasia Houghton</strong> (2024). ‘The Competition over
+                    Norms: The Case of the Syrian Conflict.’ In Benjamin Houghton
+                    and Kasia Houghton (eds.) China, Russia and the USA in the Middle
+                    East: The Contest for Supremacy. London: Routledge, 46-
+                </p>
+                <p>
+                    <strong>Mateja Peter and Ruoxi Wang</strong> (2024) ‘China’s
+                    Approach to Human Security within and outside UN Peacekeeping:
+                    Drawing Lessons from South Sudan.’ Journal of International Peacekeeping,
+                    27(1), 85-114.
+                </p>
+                {#if pubToggle}
+                <h3>2023</h3>
+                <p>
+                    <strong>Mateja Peter and Kasia Houghton</strong> (2023) Congestion
+                    and Diversification of Third-Party Mediation in Sudan and South
+                    Sudan: First Look at some Longer-Term Trends. [Global Transitions
+                    Series]. PeaceRep: The Peace and Conflict Resolution Evidence
+                    Platform, University of Edinburgh.
+                </p>
+                <p>
+                    <strong>Mateja Peter and Marcel Plichta</strong> (2023) China
+                    and Russia in Sudan: Surveying data on economic and military
+                    engagement. [Global Transitions Series]. PeaceRep: The Peace
+                    and Conflict Resolution Evidence Platform, University of Edinburgh.th
+                    Sudan.’ Journal of International Peacekeeping, 27(1), 85-114.
+                </p>
+                <p>
+                    <strong>Sanja Badanjak</strong> (2023) Third Parties in Peace
+                    Agreements: First Look at New Data and Key Trends. [Global Transitions
+                    Series]. PeaceRep: The Peace and Conflict Resolution Evidence
+                    Platform, University of Edinburgh.
+                </p>
+                <p>
+                    <strong>Sanja Badanjak</strong> (2023) EU External Action and
+                    Development Spending in a Time of Covid-19. [Covid-19 Series].
+                    PeaceRep: The Peace and Conflict Resolution Evidence Platform,
+                    University of Edinburgh.
+                </p>
+                <h3>2022</h3>
+                <p>
+                    <strong>Mateja Peter and Haley Rice</strong> (2022) Non-Western
+                    approaches to peacemaking and peacebuilding: State-of-the-art
+                    and an agenda for research. [Global Transitions Series]. PeaceRep:
+                    The Peace and Conflict Resolution Evidence Platform, University
+                    of Edinburgh.
+                </p>
+                <h3>Global Transitions Series</h3>
+                <p>
+                    As part of the PeaceRep consortium, the project also
+                    produces the <a style="text-decoration: none;"
+                        target="_blank"
+                        href="https://peacerep.org/research/geopolitical-transitions/"
+                        >Global Transitions</a
+                    > series, edited by Mateja Peter. This includes publications
+                    by the core team and further studies produced in the wider consortium.
+                </p>
+                {/if}
+            <button id="read-more-btn-pub" on:click={togglePublication}>
+                {pubToggle ? "Show Less" : "Read More"}
+            </button>
+            </div>
         </div>
     </div>
+    <div id="credit"><p style="text-align: center;">Web and Visualization Development: <strong><a style="text-decoration: none;" href="https://tomasvancisin.co.uk/" target="_blank">Tomas Vancisin</a></strong></p></div>
 
     <!-- Scroll to Top Button -->
     <!-- {#if showScrollToTop}
@@ -627,18 +600,27 @@
     #about_content {
         position: relative;
         margin: auto;
+        width: 60%;
+        padding-top: 100px;
+        padding-bottom: 120px;
+    }
+    .publication_content {
+        position: relative;
+        margin: auto;
         width: 80%;
+        padding-top: 20px;
+        padding-bottom: 20px;
     }
 
     #research {
         background-color: #001c23;
     }
     #people {
-        background-color: #001c23;
+        background-color: #003645;
     }
     #about {
         position: relative;
-        background-color: #003645;
+        background-color: #001c23;
         padding-bottom: 20px;
         font-weight: 200;
     }
@@ -795,7 +777,8 @@
     }
 
     /* Optional: Styling for the button */
-    #read-more-btn {
+    #read-more-btn,
+    #read-more-btn-pub {
         margin-top: 10px;
         padding: 8px 16px;
         background-color: #007bff;
@@ -805,7 +788,8 @@
         cursor: pointer;
     }
 
-    #read-more-btn:hover {
+    #read-more-btn:hover,
+    #read-more-btn-pub:hover {
         background-color: #0056b3;
     }
 </style>
