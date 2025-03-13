@@ -157,7 +157,7 @@
         </div>
 
         <!-- <h1>MEND: Mediation Events and Negotiators Database</h1> -->
-        <h1>Global PeaceHub</h1>
+        <h1 style="font-size: 50px;">Global PeaceHub</h1>
         <h3>
             Understanding shifts in the geopolitical context of peace and
             transition processes
@@ -195,10 +195,7 @@
             About
         </h3>
         <div id="about_content">
-            <h3
-                id="first-paragraph"
-                style="text-align: justify;"
-            >
+            <h3 id="first-paragraph" style="text-align: justify;">
                 Our research explores fragmentations in the global order and how
                 these impact peace and transition processes. We seek to better
                 understand why and how different third-party actors – state,
@@ -208,7 +205,7 @@
                 relapse. We also study how local actors are navigating this
                 multiplicity of mediators and peacebuilders and how this is
                 shaping conflict outcomes and post-conflict governance.
-        </h3>
+            </h3>
 
             <!-- Conditional rendering for the additional paragraphs -->
             {#if contentVisible}
@@ -292,7 +289,12 @@
         <div class="image-grid">
             {#each images_ppl as { src, name, position } (src)}
                 <div class="image-container-people">
-                    <img loading="lazy" {src} alt={name} />
+                    <img
+                        style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
+                        loading="lazy"
+                        {src}
+                        alt={name}
+                    />
                     <p>{name}</p>
                     <p>{position}</p>
                 </div>
@@ -395,59 +397,72 @@
                     27(1), 85-114.
                 </p>
                 {#if pubToggle}
-                <h3>2023</h3>
-                <p>
-                    <strong>Mateja Peter and Kasia Houghton</strong> (2023) Congestion
-                    and Diversification of Third-Party Mediation in Sudan and South
-                    Sudan: First Look at some Longer-Term Trends. [Global Transitions
-                    Series]. PeaceRep: The Peace and Conflict Resolution Evidence
-                    Platform, University of Edinburgh.
-                </p>
-                <p>
-                    <strong>Mateja Peter and Marcel Plichta</strong> (2023) China
-                    and Russia in Sudan: Surveying data on economic and military
-                    engagement. [Global Transitions Series]. PeaceRep: The Peace
-                    and Conflict Resolution Evidence Platform, University of Edinburgh.th
-                    Sudan.’ Journal of International Peacekeeping, 27(1), 85-114.
-                </p>
-                <p>
-                    <strong>Sanja Badanjak</strong> (2023) Third Parties in Peace
-                    Agreements: First Look at New Data and Key Trends. [Global Transitions
-                    Series]. PeaceRep: The Peace and Conflict Resolution Evidence
-                    Platform, University of Edinburgh.
-                </p>
-                <p>
-                    <strong>Sanja Badanjak</strong> (2023) EU External Action and
-                    Development Spending in a Time of Covid-19. [Covid-19 Series].
-                    PeaceRep: The Peace and Conflict Resolution Evidence Platform,
-                    University of Edinburgh.
-                </p>
-                <h3>2022</h3>
-                <p>
-                    <strong>Mateja Peter and Haley Rice</strong> (2022) Non-Western
-                    approaches to peacemaking and peacebuilding: State-of-the-art
-                    and an agenda for research. [Global Transitions Series]. PeaceRep:
-                    The Peace and Conflict Resolution Evidence Platform, University
-                    of Edinburgh.
-                </p>
-                <h3>Global Transitions Series</h3>
-                <p>
-                    As part of the PeaceRep consortium, the project also
-                    produces the <a style="text-decoration: none;"
-                        target="_blank"
-                        href="https://peacerep.org/research/geopolitical-transitions/"
-                        >Global Transitions</a
-                    > series, edited by Mateja Peter. This includes publications
-                    by the core team and further studies produced in the wider consortium.
-                </p>
+                    <h3>2023</h3>
+                    <p>
+                        <strong>Mateja Peter and Kasia Houghton</strong> (2023) Congestion
+                        and Diversification of Third-Party Mediation in Sudan and
+                        South Sudan: First Look at some Longer-Term Trends. [Global
+                        Transitions Series]. PeaceRep: The Peace and Conflict Resolution
+                        Evidence Platform, University of Edinburgh.
+                    </p>
+                    <p>
+                        <strong>Mateja Peter and Marcel Plichta</strong> (2023) China
+                        and Russia in Sudan: Surveying data on economic and military
+                        engagement. [Global Transitions Series]. PeaceRep: The Peace
+                        and Conflict Resolution Evidence Platform, University of
+                        Edinburgh.th Sudan.’ Journal of International Peacekeeping,
+                        27(1), 85-114.
+                    </p>
+                    <p>
+                        <strong>Sanja Badanjak</strong> (2023) Third Parties in Peace
+                        Agreements: First Look at New Data and Key Trends. [Global
+                        Transitions Series]. PeaceRep: The Peace and Conflict Resolution
+                        Evidence Platform, University of Edinburgh.
+                    </p>
+                    <p>
+                        <strong>Sanja Badanjak</strong> (2023) EU External Action
+                        and Development Spending in a Time of Covid-19. [Covid-19
+                        Series]. PeaceRep: The Peace and Conflict Resolution Evidence
+                        Platform, University of Edinburgh.
+                    </p>
+                    <h3>2022</h3>
+                    <p>
+                        <strong>Mateja Peter and Haley Rice</strong> (2022) Non-Western
+                        approaches to peacemaking and peacebuilding: State-of-the-art
+                        and an agenda for research. [Global Transitions Series].
+                        PeaceRep: The Peace and Conflict Resolution Evidence Platform,
+                        University of Edinburgh.
+                    </p>
+                    <h3>Global Transitions Series</h3>
+                    <p>
+                        As part of the PeaceRep consortium, the project also
+                        produces the <a
+                            style="text-decoration: none;"
+                            target="_blank"
+                            href="https://peacerep.org/research/geopolitical-transitions/"
+                            >Global Transitions</a
+                        > series, edited by Mateja Peter. This includes publications
+                        by the core team and further studies produced in the wider
+                        consortium.
+                    </p>
                 {/if}
-            <button id="read-more-btn-pub" on:click={togglePublication}>
-                {pubToggle ? "Show Less" : "Read More"}
-            </button>
+                <button id="read-more-btn-pub" on:click={togglePublication}>
+                    {pubToggle ? "Show Less" : "Read More"}
+                </button>
             </div>
         </div>
     </div>
-    <div id="credit"><p style="text-align: center;">Web and Visualization Development: <strong><a style="text-decoration: none;" href="https://tomasvancisin.co.uk/" target="_blank">Tomas Vancisin</a></strong></p></div>
+    <div id="credit">
+        <p style="text-align: center;">
+            Web and Visualization Development: <strong
+                ><a
+                    style="text-decoration: none;"
+                    href="https://tomasvancisin.co.uk/"
+                    target="_blank">Tomas Vancisin</a
+                ></strong
+            >
+        </p>
+    </div>
 
     <!-- Scroll to Top Button -->
     <!-- {#if showScrollToTop}
@@ -513,19 +528,19 @@
 
     #navigation {
         position: absolute;
-        top: 0px;
+        top: -2px;
         display: flex;
         align-items: center;
-        gap: 2px;
+        gap: 3px;
     }
 
     .menu-button {
         font-family: "Montserrat", sans-serif;
-        background: #252525;
+        background: #635c7e;
         border-radius: 2px;
         border: none;
         padding: 5px;
-        width: 110px;
+        width: 95px;
         font-size: 16px;
         cursor: pointer;
         color: white;
@@ -632,65 +647,6 @@
         font-weight: 200;
     }
 
-    .gallery-container-research,
-    .gallery-container-people {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        overflow: hidden;
-        width: 100%;
-        height: 70vh;
-        padding-top: 50px;
-        padding-bottom: 50px;
-    }
-
-    .gallery-container-research {
-        background-color: #001c23;
-    }
-    .gallery-container-people {
-        background-color: #001c23;
-    }
-
-    .image-row-research,
-    .image-row-people {
-        display: flex;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        scrollbar-width: none; /* Hide scrollbar for Firefox */
-        -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
-        width: 100%;
-        height: 100%;
-        align-items: center; /* Center items vertically */
-    }
-
-    .image-row-research::-webkit-scrollbar {
-        display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
-    }
-
-    .image-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center; /* Center image and text vertically within the container */
-        margin: 0 8px;
-        height: 100%; /* Ensures it takes up the full height of the row */
-    }
-
-    .image-container img {
-        height: 100%;
-        object-fit: cover;
-        border-radius: 3px;
-    }
-
-    .image-container p {
-        margin: 10px 0 0;
-        font-size: 1rem;
-        color: white;
-        text-align: center;
-        line-height: 1.2;
-    }
-
     #people {
         text-align: center;
     }
@@ -742,54 +698,22 @@
         line-height: 1;
     }
 
-    .arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgb(0, 0, 0);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 10;
-    }
-
-    .arrow.left {
-        left: 10px;
-    }
-
-    .arrow.right {
-        right: 10px;
-    }
-
-    .arrow:hover {
-        background: rgba(0, 0, 0, 0.8);
-    }
-    /* Initially hide paragraphs */
-    .hidden {
-        display: none;
-    }
-
     /* Optional: Styling for the button */
     #read-more-btn,
     #read-more-btn-pub {
+        font-family: "Montserrat", sans-serif;
         margin-top: 10px;
         padding: 8px 16px;
-        background-color: #007bff;
+        background-color: #635c7e;
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 2px;
         cursor: pointer;
     }
 
     #read-more-btn:hover,
     #read-more-btn-pub:hover {
-        background-color: #0056b3;
+        background-color: rgb(78, 78, 78);
+        color: white;
     }
 </style>
