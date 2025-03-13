@@ -43,9 +43,9 @@ export let images_ppl = [
 export const sections = [
     { id: "home", name: "Home" },
     { id: "map", name: "VIS" },
+    { id: "about", name: "About" },
     { id: "people", name: "Team" },
     { id: "research", name: "Research" },
-    { id: "about", name: "About" },
 ];
 
 
