@@ -515,7 +515,6 @@
         height: 300px;
         align-content: center;
         text-align: center;
-
         background-color: #001c23;
     }
 
@@ -536,9 +535,9 @@
 
     .menu-button {
         font-family: "Montserrat", sans-serif;
-        background: #635c7e;
+        background: #00303E;
+        border: 1px solid  rgb(78, 78, 78);
         border-radius: 2px;
-        border: none;
         padding: 5px;
         width: 95px;
         font-size: 16px;
