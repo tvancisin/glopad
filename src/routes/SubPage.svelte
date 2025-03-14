@@ -86,7 +86,7 @@
         "./data/processes.csv",
         "./data/countries.csv",
         "./data/actors_abbr.csv",
-        "./data/all_processes.csv",
+        "./data/groups_last_last.csv",
     ];
     getCSV(path).then((glopad) => {
         actors = glopad[0];
@@ -119,10 +119,10 @@
                     month: "4",
                 },
             ];
-            fil_processes = processes
-            // fil_processes = all_processes.filter(
-            //     (d) => d.conflict_country === "Sudan" && d.important == "1",
-            // );
+            // fil_processes = processes
+            fil_processes = all_processes.filter(
+                (d) => d.conflict_country === "Sudan" && d.important == "1",
+            );
         } else if (country === "Libya") {
             header_years = "2023-2024";
             mediations = mend.filter((d) => d.conflict_country === "Libya");

@@ -205,61 +205,66 @@
                 relapse. We also study how local actors are navigating this
                 multiplicity of mediators and peacebuilders and how this is
                 shaping conflict outcomes and post-conflict governance.
+                <br />
+                <br />
+                The project produces dedicated case and trends studies as part of
+                the PeaceRep Global Transitions series and is developing two complementary
+                datasets:
+                <strong
+                    >Third Parties in Peace Agreements Dataset (PAA-X)</strong
+                >
+                and
+                <strong>Mediation Event and Negotiators Database (MEND)</strong
+                >.
             </h3>
 
             <!-- Conditional rendering for the additional paragraphs -->
             {#if contentVisible}
-                <p>
-                    The project produces dedicated case and trends studies as
-                    part of the PeaceRep Global Transitions series and is
-                    developing two complementary datasets.
+                <p style="margin-left: 30px; margin-right: 30px;">
+                    • <strong>Third Parties in Peace Agreements Dataset</strong
+                    >. Most formal agreements in peace processes are supported
+                    by parties external to the armed conflict, in the form of
+                    third-party signature to the agreement. In the PA-X
+                    collection of peace agreements that address inter- and
+                    intra- state, or mixed conflicts, around sixty percent of
+                    agreements feature a signatory which is not one of the main
+                    conflict parties, and around one-third of all agreements
+                    feature an international third-party signatory. The Third
+                    Parties in Peace Agreements dataset draws on the Peace
+                    Agreement Actors Dataset (PAA-X) and is the only existing
+                    data resource on third-party signatories in peace
+                    agreements. It allows for an in-depth examination of the
+                    patterns of engagement in peace agreements and provides
+                    valuable insights into what actors are necessary for
+                    conflict parties to commit to a formal, written agreement.
+                    This data is instrumental in discerning the regional and
+                    topical priorities of individual interveners since 1990,
+                    giving us insight into the types of agreements supported by
+                    individual third parties.
                 </p>
                 <p style="margin-left: 30px; margin-right: 30px;">
-                    • Third Parties in Peace Agreements dataset. Most formal
-                    agreements in peace processes are supported by parties
-                    external to the armed conflict, in the form of third-party
-                    signature to the agreement. In the PA-X collection of peace
-                    agreements that address inter- and intra- state, or mixed
-                    conflicts, around sixty percent of agreements feature a
-                    signatory which is not one of the main conflict parties, and
-                    around one-third of all agreements feature an international
-                    third-party signatory. The Third Parties in Peace Agreements
-                    dataset draws on the Peace Agreement Actors Dataset (PAA-X)
-                    and is the only existing data resource on third-party
-                    signatories in peace agreements. It allows for an in-depth
-                    examination of the patterns of engagement in peace
-                    agreements and provides valuable insights into what actors
-                    are necessary for conflict parties to commit to a formal,
-                    written agreement. This data is instrumental in discerning
-                    the regional and topical priorities of individual
-                    interveners since 1990, giving us insight into the types of
-                    agreements supported by individual third parties.
-                </p>
-                <p style="margin-left: 30px; margin-right: 30px;">
-                    • Mediation Event and Negotiators Database (MEND) is a new
-                    and growing resource for researchers and practitioners with
-                    a focus on peace and conflict resolution. The dataset
-                    comprehensively covers broader peacemaking efforts within
-                    major armed conflicts, tracking all mediation and
-                    mediation-related events involving external third-party
-                    actors, regardless of whether these events result in a
-                    formal peace agreement. It captures mediation as part of
-                    formal peace initiatives and mediation efforts running in
-                    support or in parallel to these. Each record corresponds to
-                    a unique event, providing detailed metadata about location,
-                    third parties, local actors, and individuals involved. The
-                    MEND dataset facilitates a nuanced understanding of the
-                    roles various actors play in contributing to the peace
-                    processes and in brokering agreements. It also enables the
-                    identification of unsuccessful or spoiler mediation efforts
-                    that may still have influenced the ongoing conflict
-                    management. In an era marked by global fragmentation, this
-                    data plays a crucial role in providing insights into where,
-                    when, how, and why actors engage in mediation activities,
-                    allowing for the mapping of network dynamics between
-                    international and local actors, and identification of the
-                    mediation conditions conducive to the eventual signing of
-                    agreements.
+                    • <strong
+                        >Mediation Event and Negotiators Database (MEND)</strong
+                    > is a new and growing resource for researchers and practitioners
+                    with a focus on peace and conflict resolution. The dataset comprehensively
+                    covers broader peacemaking efforts within major armed conflicts,
+                    tracking all mediation and mediation-related events involving
+                    external third-party actors, regardless of whether these events
+                    result in a formal peace agreement. It captures mediation as
+                    part of formal peace initiatives and mediation efforts running
+                    in support or in parallel to these. Each record corresponds to
+                    a unique event, providing detailed metadata about location, third
+                    parties, local actors, and individuals involved. The MEND dataset
+                    facilitates a nuanced understanding of the roles various actors
+                    play in contributing to the peace processes and in brokering
+                    agreements. It also enables the identification of unsuccessful
+                    or spoiler mediation efforts that may still have influenced the
+                    ongoing conflict management. In an era marked by global fragmentation,
+                    this data plays a crucial role in providing insights into where,
+                    when, how, and why actors engage in mediation activities, allowing
+                    for the mapping of network dynamics between international and
+                    local actors, and identification of the mediation conditions
+                    conducive to the eventual signing of agreements.
                 </p>
                 <h3>Funding</h3>
                 <p>
@@ -388,7 +393,7 @@
                     <strong>Kasia Houghton</strong> (2024). ‘The Competition over
                     Norms: The Case of the Syrian Conflict.’ In Benjamin Houghton
                     and Kasia Houghton (eds.) China, Russia and the USA in the Middle
-                    East: The Contest for Supremacy. London: Routledge, 46-
+                    East: The Contest for Supremacy. London: Routledge, 46-64.
                 </p>
                 <p>
                     <strong>Mateja Peter and Ruoxi Wang</strong> (2024) ‘China’s
@@ -452,7 +457,22 @@
             </div>
         </div>
     </div>
-    <div id="credit">
+
+    <div id="funding">
+        <div id="funding_content">
+            <h3>Funding</h3>
+            <p>
+                Our research is supported by the Peace and Conflict Resolution
+                Evidence Platform (PeaceRep), funded by UK International
+                Development from the UK government. However, the views expressed
+                are those of the authors and do not necessarily reflect the UK
+                government’s official policies. We receive additional support
+                from the Universities of St Andrews and Edinburgh.
+            </p>
+        </div>
+    </div>
+
+    <div id="credit" style="background-color: #001c23;">
         <p style="text-align: center;">
             Web and Visualization Development: <strong
                 ><a
@@ -535,8 +555,8 @@
 
     .menu-button {
         font-family: "Montserrat", sans-serif;
-        background: #00303E;
-        border: 1px solid  rgb(78, 78, 78);
+        background: #00303e;
+        border: 1px solid rgb(78, 78, 78);
         border-radius: 2px;
         padding: 5px;
         width: 95px;
@@ -614,7 +634,7 @@
     #about_content {
         position: relative;
         margin: auto;
-        width: 60%;
+        width: 70%;
         padding-top: 100px;
         padding-bottom: 120px;
     }
@@ -624,6 +644,13 @@
         width: 80%;
         padding-top: 20px;
         padding-bottom: 20px;
+    }
+    #funding_content {
+        position: relative;
+        margin: auto;
+        width: 65%;
+        padding-top: 40px;
+        padding-bottom: 40px;
     }
 
     #research {
@@ -643,6 +670,14 @@
         margin: auto;
         width: 80%;
         padding: 20px;
+        font-weight: 200;
+    }
+    #credit {
+        position: relative;
+        margin: auto;
+        width: 100%;
+        padding: 10px;
+        background-color: #001c23;
         font-weight: 200;
     }
 

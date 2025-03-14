@@ -45,7 +45,7 @@
 
 <!-- text circle packing -->
 <div class="actor_types" bind:clientWidth={width}>
-    <h2>Mediators by Actor Type</h2>
+    <h2>Actors Involved in Mediation & Mediation-Related Activities by Type</h2>
     <svg {width} {height}>
         <g transform="translate({innerWidthAdjusted / 6 / 2 + margin.left}, 0)">
             {#each nodes as point}

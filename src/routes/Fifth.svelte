@@ -44,7 +44,7 @@
             >
                 <span style="text-align: left;">{row.agmt_name}</span>
                 {#if row.agmt_id_PAX !== ""}
-                    <a
+                    <a style="margin-left: auto;"
                         href={`https://pax.peaceagreements.org/agreements/${row.agmt_id_PAX}`}
                         target="_blank"
                     >
