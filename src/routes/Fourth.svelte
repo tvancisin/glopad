@@ -89,15 +89,17 @@
             {/each}
             {#each agt_processed as d}
                 {#each d.count as item, i}
-                    <circle
-                        cx={xScale(`${d.year}-${d.month}`) +
-                            xScale.bandwidth() / 2}
-                        cy={innerHeight - 110 - i * 13}
-                        r={5}
-                        fill={item.agmt_id_PAX === "" ? "red" : "steelblue"}
-                        on:mouseover={(e) => showTooltip(e, item.agmt_name)}
-                        on:mouseleave={hideTooltip}
-                    />
+                <circle
+                cx={xScale(`${d.year}-${d.month}`) + xScale.bandwidth() / 2}
+                cy={innerHeight - 110 - i * 13}
+                r={5}
+                fill={item.agmt_id_PAX === "" ? "red" : "steelblue"}
+                on:mouseover={(e) => showTooltip(e, item.agmt_name)}
+                on:mouseleave={hideTooltip}
+                on:focus={(e) => showTooltip(e, item.agmt_name)}
+                role="img"
+                aria-label={`Tooltip for ${item.agmt_name}`}
+            />
                 {/each}
             {/each}
         </g>
@@ -107,18 +109,15 @@
 <style>
     .agreement_per_month {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Adds padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
     .legend {
         display: flex;
@@ -126,8 +125,8 @@
         gap: 15px;
         padding: 20px;
         font-family: Arial, sans-serif;
-        align-self: flex-start; /* Aligns to the left */
-        width: 100%; /* Optional: Ensures it spans the container */
+        align-self: flex-start;
+        width: 100%;
     }
 
     .legend-item {
@@ -160,6 +159,6 @@
         padding: 5px 10px;
         border-radius: 5px;
         font-size: 14px;
-        pointer-events: none; /* Prevents tooltip from interfering with hover */
+        pointer-events: none;
     }
 </style>

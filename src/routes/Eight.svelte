@@ -1,9 +1,6 @@
 <script>
-    import { randomWeibull } from "d3";
-
     export let width;
     export let fil_processes;
-    export let country;
 </script>
 
 <div class="agreement_list" bind:clientWidth={width}>
@@ -30,40 +27,36 @@
 <style>
     .agreement_list {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Add padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
     .table {
         display: grid;
-        grid-template-columns: 0.5fr 2fr 1fr 1fr; /* Adjust columns as needed */
+        grid-template-columns: 0.5fr 2fr 1fr 1fr;
         border: 1px solid #595959;
     }
     .table div {
         padding: 8px;
         border: 1px solid #605f5f;
         text-align: left;
-        word-break: break-word; /* Break long words */
-        overflow-wrap: anywhere; /* Allow breaking at any point */
-        white-space: normal; /* Allow wrapping */
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        white-space: normal;
     }
 
-    /* Optional: Explicitly tell it to break on semicolons */
     .table div {
         word-break: break-word;
     }
 
     .table div::before {
-        content: "\200B"; /* Insert a zero-width space before */
+        content: "\200B";
     }
 
     .table_header {

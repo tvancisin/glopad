@@ -127,9 +127,17 @@
         <div id="navigation">
             <!-- Hamburger Icon (Mobile) -->
             <i
-                style="padding: 5px;"
+                style="padding: 5px; cursor: pointer;"
                 class="fa fa-bars menu-icon"
+                role="button"
+                tabindex="0"
+                aria-label="Toggle menu"
                 on:click={() => (isMenuOpen = !isMenuOpen)}
+                on:keydown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        isMenuOpen = !isMenuOpen;
+                    }
+                }}
             ></i>
 
             <!-- Individual Buttons (Desktop) -->
@@ -148,8 +156,14 @@
             {#if isSmallScreen && isMenuOpen}
                 <ul class="dropdown">
                     {#each sections as section}
-                        <li on:click={() => scrollToSection(section.id)}>
-                            {section.name}
+                        <li>
+                            <button
+                                style="background: none; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;"
+                                on:click={() => scrollToSection(section.id)}
+                                class="menu-item"
+                            >
+                                {section.name}
+                            </button>
                         </li>
                     {/each}
                 </ul>
@@ -195,7 +209,7 @@
             About
         </h3>
         <div id="about_content">
-            <h3 id="first-paragraph" style="text-align: justify;">
+            <p id="first-paragraph" style="text-align: justify;">
                 Our research explores fragmentations in the global order and how
                 these impact peace and transition processes. We seek to better
                 understand why and how different third-party actors – state,
@@ -216,7 +230,7 @@
                 and
                 <strong>Mediation Event and Negotiators Database (MEND)</strong
                 >.
-            </h3>
+            </p>
 
             <!-- Conditional rendering for the additional paragraphs -->
             {#if contentVisible}

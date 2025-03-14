@@ -15,7 +15,6 @@
     export let processedM;
     export let pathData;
     export let ucdp_final;
-    export let country;
 
     let xAxisGroup;
     let yAxisGroup;
@@ -114,7 +113,6 @@
                 />
             {/each}
 
-
             <!-- Line Path -->
             <path d={pathData} fill="none" stroke="red" stroke-width="2" />
 
@@ -183,18 +181,15 @@
 <style>
     .mediation_type {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Adds padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
 
     .legend {
@@ -203,8 +198,8 @@
         gap: 15px;
         padding: 20px;
         font-family: Arial, sans-serif;
-        align-self: flex-start; /* Aligns to the left */
-        width: 100%; /* Optional: Ensures it spans the container */
+        align-self: flex-start;
+        width: 100%;
     }
 
     .legend-item {
@@ -236,11 +231,11 @@
     }
 
     .text {
-        max-width: 800px; /* Optional: Restricts text width for better readability */
+        max-width: 800px;
         margin: 20px auto;
         padding: 10px;
         line-height: 1.2;
         font-weight: 300;
-        text-align: left; /* Ensures text is evenly aligned */
+        text-align: left;
     }
 </style>

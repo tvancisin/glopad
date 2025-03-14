@@ -6,22 +6,16 @@
     export let innerHeight;
     export let margin;
     export let xScale;
-    // export let yScale;
     export let historical_events;
     export let result;
-    export let country;
 
     let xAxisGroup;
-
-    $: console.log(result);
-
 
     $: yScale = d3
         .scaleLinear()
         .domain([0, 10 + Math.max(...result.map((d) => d.count))])
         // .domain([0, 100])
         .range([innerHeight, 0]);
-    
 
     $: {
         if (xAxisGroup) {
@@ -93,17 +87,14 @@
 <style>
     .unique_actors {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Adds padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
 </style>

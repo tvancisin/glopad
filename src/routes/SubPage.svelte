@@ -574,7 +574,6 @@
         {processedM}
         {pathData}
         {ucdp_final}
-        {country}
     />
     <!-- unique actors -->
     <Second
@@ -585,7 +584,6 @@
         {xScale}
         {historical_events}
         {result}
-        {country}
     />
 
     <!-- mediation locations -->
@@ -623,7 +621,6 @@
         {height}
         {margin}
         {top_ten_mediators}
-        {horizontal_xScale}
         {horizontal_yScale}
         {horizontal_mediator_yScale}
     />
@@ -641,7 +638,7 @@
 
     <!-- processes -->
     <h1>Processes</h1>
-    <Eight {width} {fil_processes} {country} />
+    <Eight {width} {fil_processes} />
 
     <!-- mediation timeline -->
     <Nine

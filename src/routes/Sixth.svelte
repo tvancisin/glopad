@@ -4,7 +4,6 @@
     export let height;
     export let margin;
     export let top_ten_mediators;
-    // export let horizontal_xScale;
     export let horizontal_yScale;
     export let horizontal_mediator_yScale;
 
@@ -12,7 +11,6 @@
         .scaleLinear()
         .domain([0, Math.max(...top_ten_mediators.map((d) => d[1]))])
         .range([0, width / 2 - margin.left - margin.right]);
-    
 </script>
 
 <!-- top mediators -->
@@ -48,17 +46,14 @@
 <style>
     .mediators {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Adds padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
 </style>

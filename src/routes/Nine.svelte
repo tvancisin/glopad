@@ -33,11 +33,6 @@
         .range([margin.left, innerWidthAdjusted - margin.right])
         .padding(0.1); // Adjust padding if needed
 
-    // $: yMed = d3
-    //     .scaleBand()
-    //     .domain(Object.keys(mediator_counts)) // Extracts keys as an array
-    //     .range([innerHeight, 0]);
-
     $: yMed = d3
         .scaleBand()
         .domain(Object.keys(mediator_counts)) // Extracts keys as an array
@@ -313,18 +308,15 @@
 <style>
     .actor_types {
         max-width: 100%;
-        margin: 20px auto; /* Adds spacing between sections */
-        display: flex; /* Makes content alignment easier */
-        flex-direction: column; /* Stacks content vertically */
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: var(
-            --bg-color,
-            #001c23
-        ); /* Allows easy customization of background */
-        padding: 20px; /* Add padding for better visuals */
+        background-color: var(--bg-color, #001c23);
+        padding: 20px;
         box-sizing: border-box;
-        border-radius: 10px; /* Optional: Gives rounded corners */
+        border-radius: 10px;
     }
 
     .slider-container,
