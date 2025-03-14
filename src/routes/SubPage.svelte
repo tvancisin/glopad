@@ -81,7 +81,7 @@
     let path = [
         "./data/mend_all_actors.csv",
         "./data/mena.csv",
-        "./data/mend_last_last.csv",
+        "./data/mend_last_last_last.csv",
         "./data/ucdp_last_last.csv",
         "./data/processes.csv",
         "./data/countries.csv",
@@ -119,10 +119,10 @@
                     month: "4",
                 },
             ];
-            // fil_processes = processes
-            fil_processes = all_processes.filter(
-                (d) => d.conflict_country === "Sudan" && d.important == "1",
-            );
+            fil_processes = processes
+            // fil_processes = all_processes.filter(
+            //     (d) => d.conflict_country === "Sudan" && d.important == "1",
+            // );
         } else if (country === "Libya") {
             header_years = "2023-2024";
             mediations = mend.filter((d) => d.conflict_country === "Libya");
@@ -638,7 +638,7 @@
 
     <!-- processes -->
     <h1>Processes</h1>
-    <Eight {width} {fil_processes} />
+    <Eight {width} {fil_processes} {country} />
 
     <!-- mediation timeline -->
     <Nine
