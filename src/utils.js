@@ -31,11 +31,11 @@ export let images = [
 ];
 
 export let images_ppl = [
-    { src: "./img/mateja-min.png", name: "Mateja Peter", position: "Research Lead" }, 
+    { src: "./img/mateja.JPG", name: "Mateja Peter", position: "Research Lead" }, 
     { src: "./img/sanja-min.png", name: "Sanja Badanjak",position: "Research Co-Lead" },
-    { src: "./img/elisa-min.png", name: "Elisa D'Amico", position: "Postdoc Researcher" },
-    { src: "./img/kasia-min.png", name: "Kasia Houghton", position: "Postdoc Researcher" },
-    { src: "./img/niamh-min.png", name: "Niamh Henry", position: "Research Fellow"  },
+    { src: "./img/elisa.jpg", name: "Elisa D'Amico", position: "Postdoc Researcher" },
+    { src: "./img/kasia.jpg", name: "Kasia Houghton", position: "Postdoc Researcher" },
+    { src: "./img/niamh.jpg", name: "Niamh Henry", position: "Research Fellow"  },
     { src: "./img/tom-min.png", name: "Tomas Vancisin", position: "Research Associate" },
 ];
 
