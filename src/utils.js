@@ -32,7 +32,7 @@ export let images = [
 
 export let images_ppl = [
     { src: "./img/mateja.JPG", name: "Mateja Peter", position: "Research Lead" }, 
-    { src: "./img/sanja-min.png", name: "Sanja Badanjak",position: "Research Co-Lead" },
+    { src: "./img/sanja.jpg", name: "Sanja Badanjak",position: "Research Co-Lead" },
     { src: "./img/elisa.jpg", name: "Elisa D'Amico", position: "Postdoc Researcher" },
     { src: "./img/kasia.jpg", name: "Kasia Houghton", position: "Postdoc Researcher" },
     { src: "./img/niamh.jpg", name: "Niamh Henry", position: "Research Fellow"  },
