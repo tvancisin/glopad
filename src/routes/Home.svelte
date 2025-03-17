@@ -278,16 +278,6 @@
                     local actors, and identification of the mediation conditions
                     conducive to the eventual signing of agreements.
                 </p>
-                <h3>Funding</h3>
-                <p>
-                    Our research is supported by the Peace and Conflict
-                    Resolution Evidence Platform (PeaceRep), funded by UK
-                    International Development from the UK government. However,
-                    the views expressed are those of the authors and do not
-                    necessarily reflect the UK government’s official policies.
-                    We receive additional support from the Universities of St
-                    Andrews and Edinburgh.
-                </p>
             {/if}
 
             <!-- "Read more" button -->
@@ -532,8 +522,8 @@
     </div>
 
     <div id="funding">
+        <h3 style="padding: 10px;">Funding</h3>
         <div id="funding_content">
-            <h3>Funding</h3>
             <p>
                 Our research is supported by the Peace and Conflict Resolution
                 Evidence Platform (PeaceRep), funded by UK International
@@ -723,7 +713,7 @@
         margin: auto;
         width: 65%;
         padding-top: 40px;
-        padding-bottom: 40px;
+        padding-bottom: 80px;
     }
 
     #research {
