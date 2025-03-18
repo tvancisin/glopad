@@ -19,16 +19,16 @@ export async function getCSV(paths) {
     // return loadedData
 }
 
-// export let images = [
-//     { src: "./img/c1-min.png", name: "" },
-//     { src: "./img/c2-min.png", name: "" },
-//     { src: "./img/c3-min.png", name: "" },
-//     { src: "./img/c4-min.png", name: "" },
-//     { src: "./img/c5-min.png", name: "" },
-//     { src: "./img/m1-min.png", name: "" },
-//     { src: "./img/m2-min.png", name: "" },
-//     { src: "./img/m3-min.png", name: "" },
-// ];
+export let images = [
+    { src: "./img/c1-min.png", name: "" },
+    { src: "./img/c2-min.png", name: "" },
+    { src: "./img/c3-min.png", name: "" },
+    { src: "./img/c4-min.png", name: "" },
+    { src: "./img/c5-min.png", name: "" },
+    { src: "./img/m1-min.png", name: "" },
+    { src: "./img/m2-min.png", name: "" },
+    { src: "./img/m3-min.png", name: "" },
+];
 
 export let images_ppl = [
     { src: "./img/mateja.JPG", name: "Mateja Peter", position: "Research Lead" }, 
